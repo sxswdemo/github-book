@@ -1,0 +1,55 @@
+<div class="layout-root layout-content">
+  <div class="navbar-fixed-top">
+    {{! Add a sign-out button }}
+    <div id="layout-auth" class="pull-right"></div>
+    {{! Insert a slot for editing the title }}
+    <h3>
+      <button id="layout-back" class="btn btn-link" title="Back"><i class="icon-arrow-left"></i></button>
+      <span id="layout-title" rel="tooltip" title="Click to Change the Title" data-placement="bottom">Content Editor</span>
+    </h3>
+
+    <div class="navbar">
+      <div id="layout-toolbar" class="navbar-inner"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="sidebar span1"><!-- Used for padding because phil is lazy --></div>
+    <div class="span11">
+
+      <!-- <div id="sidebar-right" class="span2" style="float: right;"></div> -->
+      <div class="body-above">
+        <h1 id="layout-title2" class="content-title" rel="tooltip" title="Click to Change the Title" data-placement="bottom">Content Editor</h1>
+        {{! The accordion }}
+        <div class="accordion" id="accordion-metadata">
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <button class="accordion-toggle btn-link" data-toggle="collapse" data-parent="#accordion-metadata" href="#collapse-metadata">
+                Metadata
+              </button>
+            </div>
+            <div id="collapse-metadata" class="accordion-body collapse">
+              <div id="layout-metadata" class="accordion-inner">
+                {{! Content will be replaced by a view}}
+              </div>
+            </div>
+          </div>
+          <div class="accordion-group">
+            <div class="accordion-heading">
+              <button class="accordion-toggle btn-link" data-toggle="collapse" data-parent="#accordion-metadata" href="#collapse-roles">
+                Roles
+              </button>
+            </div>
+            <div id="collapse-roles" class="accordion-body collapse">
+              <div id="layout-roles" class="accordion-inner">
+                {{! Content will be replaced by a view}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="layout-body"></div>
+
+    </div>
+  </div>
+</div>

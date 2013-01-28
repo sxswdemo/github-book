@@ -1,0 +1,686 @@
+{
+  "ar-ae": {
+    "english": "Arabic (United Arab Emirates)"
+  },
+  "ar-bh": {
+    "english": "Arabic (Bahrain)"
+  },
+  "ar-dz": {
+    "english": "Arabic (Algeria)"
+  },
+  "ar-eg": {
+    "english": "Arabic (Egypt)"
+  },
+  "ar-il": {
+    "english": "Arabic (Israel)"
+  },
+  "ar-iq": {
+    "english": "Arabic (Iraq)"
+  },
+  "ar-jo": {
+    "english": "Arabic (Jordan)"
+  },
+  "ar-kw": {
+    "english": "Arabic (Kuwait)"
+  },
+  "ar-lb": {
+    "english": "Arabic (Lebanon)"
+  },
+  "ar-ly": {
+    "english": "Arabic (Libya)"
+  },
+  "ar-ma": {
+    "english": "Arabic (Morocco)"
+  },
+  "ar-mr": {
+    "english": "Arabic (Mauritania)"
+  },
+  "ar-om": {
+    "english": "Arabic (Oman)"
+  },
+  "ar-ps": {
+    "english": "Arabic (Palestinian West Bank and Gaza)"
+  },
+  "ar-qa": {
+    "english": "Arabic (Qatar)"
+  },
+  "ar-sa": {
+    "english": "Arabic (Saudi Arabia)"
+  },
+  "ar-sd": {
+    "english": "Arabic (Sudan)"
+  },
+  "ar-so": {
+    "english": "Arabic (Somalia)"
+  },
+  "ar-sy": {
+    "english": "Arabic (Syria)"
+  },
+  "ar-td": {
+    "english": "Arabic (Chad)"
+  },
+  "ar-tn": {
+    "english": "Arabic (Tunisia)"
+  },
+  "ar-ye": {
+    "english": "Arabic (Yemen)"
+  },
+  "bn-bd": {
+    "english": "Bengali (Bangladesh)"
+  },
+  "bn-in": {
+    "english": "Bengali (India)"
+  },
+  "bn-sg": {
+    "english": "Bengali (Singapore)"
+  },
+  "ch-gu": {
+    "english": "Chamorro (Guam)"
+  },
+  "ch-mp": {
+    "english": "Chamorro (Northern Mariana Islands)"
+  },
+  "da-dk": {
+    "english": "Danish (Denmark)"
+  },
+  "da-gl": {
+    "english": "Danish (Greenland)"
+  },
+  "de-at": {
+    "english": "German (Austria)",
+    "native": "Deutsch (Österreich)"
+  },
+  "de-be": {
+    "english": "German (Belgium)"
+  },
+  "de-ch": {
+    "english": "German (Switzerland)"
+  },
+  "de-de": {
+    "english": "German (Germany)"
+  },
+  "de-dk": {
+    "english": "German (Denmark)"
+  },
+  "de-li": {
+    "english": "German (Liechtenstein)"
+  },
+  "de-lu": {
+    "english": "German (Luxembourg)"
+  },
+  "el-cy": {
+    "english": "Greek (Cyprus)"
+  },
+  "el-gr": {
+    "english": "Greek (Greece)"
+  },
+  "en-ag": {
+    "english": "English (Antigua and Barbuda)"
+  },
+  "en-ai": {
+    "english": "English (Anguilla)"
+  },
+  "en-as": {
+    "english": "English (American Samoa)"
+  },
+  "en-au": {
+    "english": "English (Australia)"
+  },
+  "en-bb": {
+    "english": "English (Barbados)"
+  },
+  "en-bm": {
+    "english": "English (Bermuda)"
+  },
+  "en-bn": {
+    "english": "English (Brunei)"
+  },
+  "en-bs": {
+    "english": "English (Bahamas)"
+  },
+  "en-bw": {
+    "english": "English (Botswana)"
+  },
+  "en-bz": {
+    "english": "English (Belize)"
+  },
+  "en-ca": {
+    "english": "English (Canada)"
+  },
+  "en-ck": {
+    "english": "English (Cook Islands)"
+  },
+  "en-cm": {
+    "english": "English (Cameroon)"
+  },
+  "en-dm": {
+    "english": "English (Dominica)"
+  },
+  "en-er": {
+    "english": "English (Eritrea)"
+  },
+  "en-et": {
+    "english": "English (Ethiopia)"
+  },
+  "en-fj": {
+    "english": "English (Fiji)"
+  },
+  "en-fk": {
+    "english": "English (Falkland Islands)"
+  },
+  "en-fm": {
+    "english": "English (Micronesia)"
+  },
+  "en-gb": {
+    "english": "English (United Kingdom)"
+  },
+  "en-gd": {
+    "english": "English (Grenada)"
+  },
+  "en-gh": {
+    "english": "English (Ghana)"
+  },
+  "en-gi": {
+    "english": "English (Gibraltar)"
+  },
+  "en-gm": {
+    "english": "English (Gambia)"
+  },
+  "en-gu": {
+    "english": "English (Guam)"
+  },
+  "en-gy": {
+    "english": "English (Guyana)"
+  },
+  "en-ie": {
+    "english": "English (Ireland)"
+  },
+  "en-il": {
+    "english": "English (Israel)"
+  },
+  "en-io": {
+    "english": "English (British Indian Ocean Territory)"
+  },
+  "en-jm": {
+    "english": "English (Jamaica)"
+  },
+  "en-ke": {
+    "english": "English (Kenya)"
+  },
+  "en-ki": {
+    "english": "English (Kiribati)"
+  },
+  "en-kn": {
+    "english": "English (St. Kitts-Nevis)"
+  },
+  "en-ky": {
+    "english": "English (Cayman Islands)"
+  },
+  "en-lc": {
+    "english": "English (St. Lucia)"
+  },
+  "en-lr": {
+    "english": "English (Liberia)"
+  },
+  "en-ls": {
+    "english": "English (Lesotho)"
+  },
+  "en-mp": {
+    "english": "English (Northern Mariana Islands)"
+  },
+  "en-ms": {
+    "english": "English (Montserrat)"
+  },
+  "en-mt": {
+    "english": "English (Malta)"
+  },
+  "en-mu": {
+    "english": "English (Mauritius)"
+  },
+  "en-mw": {
+    "english": "English (Malawi)"
+  },
+  "en-na": {
+    "english": "English (Namibia)"
+  },
+  "en-nf": {
+    "english": "English (Norfolk Island)"
+  },
+  "en-ng": {
+    "english": "English (Nigeria)"
+  },
+  "en-nr": {
+    "english": "English (Nauru)"
+  },
+  "en-nu": {
+    "english": "English (Niue)"
+  },
+  "en-nz": {
+    "english": "English (New Zealand)"
+  },
+  "en-pg": {
+    "english": "English (Papua New Guinea)"
+  },
+  "en-ph": {
+    "english": "English (Philippines)"
+  },
+  "en-pk": {
+    "english": "English (Pakistan)"
+  },
+  "en-pn": {
+    "english": "English (Pitcairn)"
+  },
+  "en-pr": {
+    "english": "English (Puerto Rico)"
+  },
+  "en-pw": {
+    "english": "English (Palau)"
+  },
+  "en-rw": {
+    "english": "English (Rwanda)"
+  },
+  "en-sb": {
+    "english": "English (Solomon Islands)"
+  },
+  "en-sc": {
+    "english": "English (Seychelles)"
+  },
+  "en-sg": {
+    "english": "English (Singapore)"
+  },
+  "en-sh": {
+    "english": "English (St. Helena)"
+  },
+  "en-sl": {
+    "english": "English (Sierra Leone)"
+  },
+  "en-so": {
+    "english": "English (Somalia)"
+  },
+  "en-sz": {
+    "english": "English (Swaziland)"
+  },
+  "en-tc": {
+    "english": "English (Turks and Caicos Islands)"
+  },
+  "en-tk": {
+    "english": "English (Tokelau)"
+  },
+  "en-to": {
+    "english": "English (Tonga)"
+  },
+  "en-tt": {
+    "english": "English (Trinidad and Tobago)"
+  },
+  "en-ug": {
+    "english": "English (Uganda)"
+  },
+  "en-us": {
+    "english": "English (USA)"
+  },
+  "en-vc": {
+    "english": "English (St. Vincent and the Grenadi)"
+  },
+  "en-vg": {
+    "english": "English (British Virgin Islands)"
+  },
+  "en-vi": {
+    "english": "English (U.S. Virgin Islands)"
+  },
+  "en-vu": {
+    "english": "English (Vanuatu)"
+  },
+  "en-ws": {
+    "english": "English (Western Samoa)"
+  },
+  "en-za": {
+    "english": "English (South Africa)"
+  },
+  "en-zm": {
+    "english": "English (Zambia)"
+  },
+  "en-zw": {
+    "english": "English (Zimbabwe)"
+  },
+  "es-ar": {
+    "english": "Spanish (Argentina)"
+  },
+  "es-bo": {
+    "english": "Spanish (Bolivia)"
+  },
+  "es-cl": {
+    "english": "Spanish (Chile)"
+  },
+  "es-co": {
+    "english": "Spanish (Colombia)"
+  },
+  "es-cr": {
+    "english": "Spanish (Costa Rica)"
+  },
+  "es-cu": {
+    "english": "Spanish (Cuba)"
+  },
+  "es-do": {
+    "english": "Spanish (Dominican Republic)"
+  },
+  "es-ec": {
+    "english": "Spanish (Ecuador)"
+  },
+  "es-es": {
+    "english": "Spanish (Spain)"
+  },
+  "es-gq": {
+    "english": "Spanish (Equatorial Guinea)"
+  },
+  "es-gt": {
+    "english": "Spanish (Guatemala)"
+  },
+  "es-hn": {
+    "english": "Spanish (Honduras)"
+  },
+  "es-mx": {
+    "english": "Spanish (Mexico)"
+  },
+  "es-ni": {
+    "english": "Spanish (Nicaragua)"
+  },
+  "es-pa": {
+    "english": "Spanish (Panama)"
+  },
+  "es-pe": {
+    "english": "Spanish (Peru)"
+  },
+  "es-pr": {
+    "english": "Spanish (Puerto Rico)"
+  },
+  "es-py": {
+    "english": "Spanish (Paraguay)"
+  },
+  "es-sv": {
+    "english": "Spanish (El Salvador)"
+  },
+  "es-us": {
+    "english": "Spanish (USA)"
+  },
+  "es-uy": {
+    "english": "Spanish (Uruguay)"
+  },
+  "es-ve": {
+    "english": "Spanish (Venezuela)"
+  },
+  "fr-ad": {
+    "english": "French (Andorra)"
+  },
+  "fr-be": {
+    "english": "French (Belgium)"
+  },
+  "fr-bf": {
+    "english": "French (Burkina Faso)"
+  },
+  "fr-bi": {
+    "english": "French (Burundi)"
+  },
+  "fr-bj": {
+    "english": "French (Benin)"
+  },
+  "fr-ca": {
+    "english": "French (Canada)"
+  },
+  "fr-cd": {
+    "english": "French (Democratic Republic of Congo)"
+  },
+  "fr-cf": {
+    "english": "French (Central African Republic)"
+  },
+  "fr-cg": {
+    "english": "French (Congo)"
+  },
+  "fr-ch": {
+    "english": "French (Switzerland)"
+  },
+  "fr-ci": {
+    "english": "French (Cote d\"Ivoire)"
+  },
+  "fr-cm": {
+    "english": "French (Cameroon)"
+  },
+  "fr-dj": {
+    "english": "French (Djibouti)"
+  },
+  "fr-fr": {
+    "english": "French (France)"
+  },
+  "fr-ga": {
+    "english": "French (Gabon)"
+  },
+  "fr-gb": {
+    "english": "French (United Kingdom)"
+  },
+  "fr-gf": {
+    "english": "French (French Guiana)"
+  },
+  "fr-gn": {
+    "english": "French (Guinea)"
+  },
+  "fr-gp": {
+    "english": "French (Guadeloupe)"
+  },
+  "fr-ht": {
+    "english": "French (Haiti)"
+  },
+  "fr-it": {
+    "english": "French (Italy)"
+  },
+  "fr-km": {
+    "english": "French (Comoros Islands)"
+  },
+  "fr-lb": {
+    "english": "French (Lebanon)"
+  },
+  "fr-lu": {
+    "english": "French (Luxembourg)"
+  },
+  "fr-mc": {
+    "english": "French (Monaco)"
+  },
+  "fr-mg": {
+    "english": "French (Madagascar)"
+  },
+  "fr-ml": {
+    "english": "French (Mali)"
+  },
+  "fr-mq": {
+    "english": "French (Martinique)"
+  },
+  "fr-nc": {
+    "english": "French (New Caledonia)"
+  },
+  "fr-pf": {
+    "english": "French (French Polynesia)"
+  },
+  "fr-pm": {
+    "english": "French (St. Pierre and Miquelon)"
+  },
+  "fr-re": {
+    "english": "French (Reunion)"
+  },
+  "fr-rw": {
+    "english": "French (Rwanda)"
+  },
+  "fr-sc": {
+    "english": "French (Seychelles)"
+  },
+  "fr-td": {
+    "english": "French (Chad)"
+  },
+  "fr-tg": {
+    "english": "French (Togo)"
+  },
+  "fr-vu": {
+    "english": "French (Vanuatu)"
+  },
+  "fr-wf": {
+    "english": "French (Wallis and Futuna)"
+  },
+  "fr-yt": {
+    "english": "French (Mayotte)"
+  },
+  "hr-ba": {
+    "english": "Croatian (Bosnia-Herzegovina)"
+  },
+  "hr-hr": {
+    "english": "Croatian (Croatia)"
+  },
+  "hu-hu": {
+    "english": "Hungarian (Hungary)"
+  },
+  "hu-si": {
+    "english": "Hungarian (Slovenia)"
+  },
+  "it-ch": {
+    "english": "Italian (Switzerland)"
+  },
+  "it-hr": {
+    "english": "Italian (Croatia)"
+  },
+  "it-it": {
+    "english": "Italian (Italy)"
+  },
+  "it-si": {
+    "english": "Italian (Slovenia)"
+  },
+  "it-sm": {
+    "english": "Italian (San Marino)"
+  },
+  "ko-kp": {
+    "english": "Korean (Korea, North)"
+  },
+  "ko-kr": {
+    "english": "Korean (Korea, South)"
+  },
+  "ln-cd": {
+    "english": "Lingala (Democratic Republic of Congo)"
+  },
+  "ln-cg": {
+    "english": "Lingala (Congo)"
+  },
+  "ms-bn": {
+    "english": "Malay (Brunei)"
+  },
+  "ms-my": {
+    "english": "Malay (Malaysia)"
+  },
+  "ms-sg": {
+    "english": "Malay (Singapore)"
+  },
+  "nl-an": {
+    "english": "Dutch (Netherlands Antilles)"
+  },
+  "nl-aw": {
+    "english": "Dutch (Aruba)"
+  },
+  "nl-be": {
+    "english": "Dutch (Belgium)"
+  },
+  "nl-nl": {
+    "english": "Dutch (Netherlands)"
+  },
+  "nl-sr": {
+    "english": "Dutch (Suriname)"
+  },
+  "pt-ao": {
+    "english": "Português (Angola)"
+  },
+  "pt-br": {
+    "native": "Português (Brasil)",
+    "english": "Brazilian Portuguese"
+  },
+  "pt-cv": {
+    "english": "Português (Ilhas Cabo Verde)"
+  },
+  "pt-gw": {
+    "english": "Português (Guiné-Bissau)"
+  },
+  "pt-mz": {
+    "english": "Português (Moçambique)"
+  },
+  "pt-pt": {
+    "english": "Português (Portugal)"
+  },
+  "pt-st": {
+    "english": "Português (São Tomé e Príncipe)"
+  },
+  "sd-in": {
+    "english": "Sindhi (India)"
+  },
+  "sd-pk": {
+    "english": "Sindhi (Pakistan)"
+  },
+  "sr-ba": {
+    "english": "Serbian (Bosnia-Herzegovina)"
+  },
+  "sr-yu": {
+    "english": "Serbian (Yugoslavia)"
+  },
+  "ss-sz": {
+    "english": "Swati (Swaziland)"
+  },
+  "ss-za": {
+    "english": "Swati (South Africa)"
+  },
+  "sv-fi": {
+    "english": "Swedish (Finland)"
+  },
+  "sv-se": {
+    "english": "Swedish (Sweden)"
+  },
+  "sw-ke": {
+    "english": "Swahili (Kenya)"
+  },
+  "sw-tz": {
+    "english": "Swahili (Tanzania)"
+  },
+  "ta-in": {
+    "english": "Tamil (India)"
+  },
+  "ta-sg": {
+    "english": "Tamil (Singapore)"
+  },
+  "tn-bw": {
+    "english": "Tswana (Botswana)"
+  },
+  "tn-za": {
+    "english": "Tswana (South Africa)"
+  },
+  "tr-bg": {
+    "english": "Turkish (Bulgaria)"
+  },
+  "tr-cy": {
+    "english": "Turkish (Cyprus)"
+  },
+  "tr-tr": {
+    "english": "Turkish (Turkey)"
+  },
+  "ur-in": {
+    "english": "Urdu (India)"
+  },
+  "ur-pk": {
+    "english": "Urdu (Pakistan)"
+  },
+  "zh-cn": {
+    "english": "Chinese (China)",
+    "native": "简体中文(中国)"
+  },
+  "zh-hk": {
+    "english": "Chinese (Hongkong)",
+    "native": "繁體中文(香港)"
+  },
+  "zh-sg": {
+    "english": "Chinese (Singapore)",
+    "native": "简体中文(新加坡)"
+  },
+  "zh-tw": {
+    "english": "Chinese (Taiwan)",
+    "native": "繁體中文(臺灣)"
+  }
+}
