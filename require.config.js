@@ -10,8 +10,8 @@
       json: 'lib/requirejs-plugins/json',
       hbs: 'lib/require-handlebars-plugin/hbs',
       jquery: 'lib/jquery-1.8.3',
-      underscore: 'lib/underscore-1.4.3',
-      backbone: 'lib/backbone-0.9.9',
+      underscore: 'node_modules/underscore/underscore',
+      backbone: 'node_modules/backbone/backbone',
       marionette: 'lib/backbone.marionette',
       aloha: '../cdn/aloha/src/lib/aloha',
       bootstrap: 'lib/bootstrap/js/bootstrap',
@@ -66,7 +66,7 @@
     },
     map: {
       '*': {
-        text: 'lib/require-text',
+        text: 'lib/require-text/text',
         css: 'lib/require-css/css',
         less: 'lib/require-less/less',
         json: 'lib/requirejs-plugins/src/json'

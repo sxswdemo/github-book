@@ -7,7 +7,7 @@
     paths: {
       jasmine: 'lib/jasmine/jasmine',
       'jasmine-html': 'lib/jasmine/jasmine-html',
-      'jquery-mockjax': 'lib/jquery.mockjax'
+      'jquery-mockjax': 'lib/jquery-mockjax/jquery.mockjax'
     },
     shim: {
       jasmine: {

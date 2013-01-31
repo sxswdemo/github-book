@@ -16,8 +16,8 @@ require.config
 
     # ## Core Libraries
     jquery: 'lib/jquery-1.8.3'
-    underscore: 'lib/underscore-1.4.3'
-    backbone: 'lib/backbone-0.9.9'
+    underscore: 'node_modules/underscore/underscore'
+    backbone: 'node_modules/backbone/backbone'
     # Layout manager for backbone
     marionette: 'lib/backbone.marionette'
 
@@ -89,7 +89,7 @@ require.config
   # Maps prefixes (like `less!path/to/less-file`) to use the LESS CSS plugin
   map:
     '*':
-      text: 'lib/require-text'
+      text: 'lib/require-text/text'
       css: 'lib/require-css/css'
       less: 'lib/require-less/less'
       json: 'lib/requirejs-plugins/src/json'
