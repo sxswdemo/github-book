@@ -117,8 +117,7 @@ define [
       @listenTo @collection, 'remove',  => @render()
 
 
-
-  AlohaEditView = Marionette.ItemView.extend
+  exports.AlohaEditView = Marionette.ItemView.extend
     # **NOTE:** This template is not wrapped in an element
     template: () -> throw 'You need to specify a template, modelKey, and optionally alohaOptions'
     modelKey: null
@@ -171,12 +170,12 @@ define [
 
 
   # ## Edit Content Body
-  exports.ContentEditView = AlohaEditView.extend
+  exports.ContentEditView = exports.AlohaEditView.extend
     # **NOTE:** This template is not wrapped in an element
     template: (serialized_model) -> "#{serialized_model.body or 'This module is empty. Please change it'}"
     modelKey: 'body'
 
-  exports.TitleEditView = AlohaEditView.extend
+  exports.TitleEditView = exports.AlohaEditView.extend
     # **NOTE:** This template is not wrapped in an element
     template: (serialized_model) -> "#{serialized_model.title or 'Untitled'}"
     modelKey: 'title'

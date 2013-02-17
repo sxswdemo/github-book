@@ -2,7 +2,7 @@
 (function() {
 
   define(['exports', 'underscore', 'backbone', 'marionette', 'jquery', 'aloha', 'app/urls', 'app/controller', './languages', 'hbs!app/views/content-list', 'hbs!app/views/content-list-item', 'hbs!app/views/modal-wrapper', 'hbs!app/views/edit-metadata', 'hbs!app/views/edit-roles', 'hbs!app/views/language-variants', 'hbs!app/views/aloha-toolbar', 'hbs!app/views/sign-in-out', 'i18n!app/nls/strings', 'bootstrap', 'select2', 'css!font-awesome'], function(exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, __) {
-    var AlohaEditView, DELAY_BEFORE_SAVING, LANGUAGES, METADATA_SUBJECTS, SELECT2_AJAX_HANDLER, SELECT2_MAKE_SORTABLE, languageCode, value, _ref;
+    var DELAY_BEFORE_SAVING, LANGUAGES, METADATA_SUBJECTS, SELECT2_AJAX_HANDLER, SELECT2_MAKE_SORTABLE, languageCode, value, _ref;
     DELAY_BEFORE_SAVING = 3000;
     SELECT2_AJAX_HANDLER = function(url) {
       return {
@@ -96,7 +96,7 @@
         });
       }
     });
-    AlohaEditView = Marionette.ItemView.extend({
+    exports.AlohaEditView = Marionette.ItemView.extend({
       template: function() {
         throw 'You need to specify a template, modelKey, and optionally alohaOptions';
       },
@@ -145,13 +145,13 @@
         return this.$el.on('blur', updateModelAndSave);
       }
     });
-    exports.ContentEditView = AlohaEditView.extend({
+    exports.ContentEditView = exports.AlohaEditView.extend({
       template: function(serialized_model) {
         return "" + (serialized_model.body || 'This module is empty. Please change it');
       },
       modelKey: 'body'
     });
-    exports.TitleEditView = AlohaEditView.extend({
+    exports.TitleEditView = exports.AlohaEditView.extend({
       template: function(serialized_model) {
         return "" + (serialized_model.title || 'Untitled');
       },
