@@ -111,10 +111,7 @@ define [
     itemView: exports.SearchResultItemView
 
     initialize: ->
-      @listenTo @collection, 'reset',   => @render()
-      @listenTo @collection, 'update',  => @render()
-      @listenTo @collection, 'add',     => @render()
-      @listenTo @collection, 'remove',  => @render()
+      @listenTo @collection, 'all',   => @render()
 
 
   exports.AlohaEditView = Marionette.ItemView.extend
