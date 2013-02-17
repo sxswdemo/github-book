@@ -1,5 +1,7 @@
 # # Backbone Models
 # This module contains backbone models used throughout the application
+#
+# It also has some hardcoded URLs for syncing with the server (GET/POST/PUT URLs)
 define ['backbone', 'exports', 'app/urls', 'i18n!app/nls/strings'], (Backbone, exports, URLS, __) ->
 
   # The `Content` model contains the following members:
@@ -9,7 +11,7 @@ define ['backbone', 'exports', 'app/urls', 'i18n!app/nls/strings'], (Backbone, e
   # * `subjects` - an array of strings (eg `['Mathematics', 'Business']`)
   # * `keywords` - an array of keywords (eg `['constant', 'boltzmann constant']`)
   # * `authors` - an `Collection` of `User`s that are attributed as authors
-  exports.Content = Backbone.Model.extend
+  Content = Backbone.Model.extend
     defaults:
       title: __('Untitled')
       subjects: []
@@ -49,8 +51,33 @@ define ['backbone', 'exports', 'app/urls', 'i18n!app/nls/strings'], (Backbone, e
       type: 'content'
       title: 'BUG_UNSPECIFIED_TITLE'
 
+    getContent: ->
+      exports.getContent @get('id')
+
   exports.Workspace = Backbone.Collection.extend
     model: exports.SearchResultItem
     url: URLS.WORKSPACE
+
+
+
+  # This should be read-only by others
+  # New content models should be created by calling `newContent(id)`
+  ALL_CONTENT = new Backbone.Collection()
+
+  # Wither returns an existing model or creates a new one and fills it with content (via `.fetch()`)
+  factory = (constructor, key) ->
+    model = ALL_CONTENT.get key
+    if not model
+      model = new constructor {id: key}
+      ALL_CONTENT.add model
+      model.fetch
+        error: => alert "Problem fetching #{key}"
+        success: -> model._loaded = true
+    ALL_CONTENT.get key
+
+
+  exports.getContent = (href) -> factory(ALL_CONTENT, Content, href)
+  # Should only be used for creating new content...
+  exports.Content = Content
 
   return exports
