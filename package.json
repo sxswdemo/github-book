@@ -1,7 +1,7 @@
 {
   "name": "atc",
   "version": "0.0.0",
-  "description": "Authoring Tools Client (Javascript EPUB Editor)",
+  "description": "Authoring Tools Client (Javascript Book Editor)",
   "main": "app.js",
   "directories": {
     "test": "test"
@@ -29,6 +29,5 @@
     "readium",
     "writium"
   ],
-  "author": "Philip Schatz",
-  "license": "CC-BY"
+  "author": "Philip Schatz"
 }
