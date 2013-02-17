@@ -1,2 +1,6 @@
 {{! The initial context is an array so the 1st thing we do is loop over each item using '#.' }}
+{{#if type}}
+<td><a href="#{{type}}/{{id}}">{{{title}}}</a></td><td><!-- modified --></td>
+{{else}}
 <td><a href="#content/{{id}}">{{{title}}}</a></td><td><!-- modified --></td>
+{{/if}}
