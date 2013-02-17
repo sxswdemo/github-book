@@ -393,6 +393,9 @@ define [
       @listenTo @model, 'change', => @render()
       @listenTo @model, 'change:userid', => @render()
 
+    signIn: ->
+      # The browser will go to the login page because `#sign-in` is a link
+
     # Clicking on the link will redirect to the logoff page
     # Before it does, update the model
     signOut: -> @model.signOut()

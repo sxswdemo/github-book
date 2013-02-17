@@ -402,6 +402,7 @@
           return _this.render();
         });
       },
+      signIn: function() {},
       signOut: function() {
         return this.model.signOut();
       }
