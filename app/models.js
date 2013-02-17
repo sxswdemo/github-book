@@ -39,7 +39,7 @@
     });
     exports.SearchResultItem = Backbone.Model.extend({
       defaults: {
-        type: 'BUG_UNSPECIFIED_TYPE',
+        type: 'content',
         title: 'BUG_UNSPECIFIED_TITLE'
       }
     });
