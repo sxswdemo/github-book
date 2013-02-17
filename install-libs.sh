@@ -19,7 +19,7 @@ curl -o ${TEMP} http://twitter.github.com/bootstrap/assets/bootstrap.zip && unzi
 
 echo "Downloading Font-Awesome"
 ##git clone https://github.com/FortAwesome/Font-Awesome.git
-curl -o ${TEMP} https://nodeload.github.com/FortAwesome/Font-Awesome/zip/master && unzip ${TEMP}
+curl -o ${TEMP} https://nodeload.github.com/FortAwesome/Font-Awesome/zip/master && unzip ${TEMP} && mv Font-Awesome-master Font-Awesome
 
 git clone https://github.com/ivaynberg/select2.git
 git clone https://github.com/pivotal/jasmine.git
