@@ -1,9 +1,6 @@
 # Configure paths to all the JS libs
 require.config
 
-  # Since `master.html` is served from `/` we need to set the base to the static dir
-  # This should probably become `/static/`
-  baseUrl: 'static/'
   urlArgs: '' # If you want to force a reload every time use this: `cb=#{Math.random()}` (you lose JS breakpoints though)
 
   # # Configure Library Locations
