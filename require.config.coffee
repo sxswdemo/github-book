@@ -22,8 +22,7 @@ require.config
     marionette: 'lib/backbone.marionette'
 
     # ## UI libraries
-    # **FIXME:** Replace `../cdn/` with `lib/` when aloha is moved into `static/`
-    aloha: '../cdn/aloha/src/lib/aloha'
+    aloha: 'lib/Aloha-Editor/src/lib/aloha'
     bootstrap: 'lib/bootstrap/js/bootstrap'
     select2: 'lib/select2/select2'
     spin: 'lib/spin'
@@ -83,7 +82,7 @@ require.config
     #
     # Also, configure Aloha for the application using the `aloha-config` module.
     aloha:
-      deps: ['bootstrap', 'aloha-config', 'css!../cdn/aloha/src/css/aloha']
+      deps: ['bootstrap', 'aloha-config', 'css!lib/Aloha-Editor/src/css/aloha']
       exports: 'Aloha'
 
   # Maps prefixes (like `less!path/to/less-file`) to use the LESS CSS plugin

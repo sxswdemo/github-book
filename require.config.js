@@ -13,7 +13,7 @@
       underscore: 'node_modules/underscore/underscore',
       backbone: 'node_modules/backbone/backbone',
       marionette: 'lib/backbone.marionette',
-      aloha: '../cdn/aloha/src/lib/aloha',
+      aloha: 'lib/Aloha-Editor/src/lib/aloha',
       bootstrap: 'lib/bootstrap/js/bootstrap',
       select2: 'lib/select2/select2',
       spin: 'lib/spin',
@@ -60,7 +60,7 @@
         }
       },
       aloha: {
-        deps: ['bootstrap', 'aloha-config', 'css!../cdn/aloha/src/css/aloha'],
+        deps: ['bootstrap', 'aloha-config', 'css!lib/Aloha-Editor/src/css/aloha'],
         exports: 'Aloha'
       }
     },

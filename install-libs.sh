@@ -25,4 +25,6 @@ git clone https://github.com/ivaynberg/select2.git
 git clone https://github.com/pivotal/jasmine.git
 git clone https://github.com/appendto/jquery-mockjax.git
 
+git clone https://github.com/wysiwhat/Aloha-Editor.git
+
 rm ${TEMP}
