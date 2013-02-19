@@ -6,7 +6,7 @@ require.config
   # # Configure Library Locations
   paths:
     # ## Requirejs plugins
-    i18n: 'i18n-custom'
+    i18n: 'helpers/i18n-custom'
     text: 'lib/require-text/text'
     json: 'lib/requirejs-plugins/json'
     hbs: 'lib/require-handlebars-plugin/hbs'
@@ -30,6 +30,9 @@ require.config
     handlebars: 'lib/require-handlebars-plugin/Handlebars'
     i18nprecompile: 'lib/require-handlebars-plugin/hbs/i18nprecompile'
     json2: 'lib/require-handlebars-plugin/hbs/json2'
+
+    # A Handlebars helper for making recursive templates (rendering trees)
+    'template/helpers/recursive': 'helpers/hbs-helper-recursive'
 
     'font-awesome': 'lib/font-awesome/css/font-awesome'
 

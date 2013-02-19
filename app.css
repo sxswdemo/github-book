@@ -4,6 +4,53 @@
    @import url('lib/bootstrap/css/bootstrap.css');
  */
 
+
+
+/* Mustache does not allow logic in their templates so
+ * we set the correct character based on the 'type' of content.
+ *
+ * Show the document icon by default.
+ */
+i.iconic.search-result-icon:before { content:'\e000'; /* document_alt_stroke */ }
+i.iconic.search-result-icon.collection:before { content:'\e06a'; /* book_alt2 */ }
+
+/* Buttons on the fork dialog should span the whole width of the dialog */
+.modal .btn.fork {
+  font-weight: bold;
+  width: 100%;
+}
+
+
+.editor-drop-zone-before {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.editor-node > a:hover,
+.editor-node > span:hover {
+  background-color: rgba(0, 0, 255, 0.25);
+}
+.editor-node > a,
+.editor-node > span {
+  display: block;
+}
+
+.editor-drop-zone {
+  min-height: 3px;
+}
+.editor-drop-zone-active {
+  background-color: #eee;
+}
+
+.editor-drop-zone-hover {
+  background-color: rgba(0, 0, 255, 0.25);
+}
+
+
+
+
+
+
+
 .layout-content .content-title:before {
   content: "Title: ";
   opacity: 0.5;

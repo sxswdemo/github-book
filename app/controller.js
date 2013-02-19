@@ -41,8 +41,7 @@
       },
       workspace: function() {
         var view, workspace;
-        workspace = new Models.Workspace();
-        workspace.fetch();
+        workspace = new Models.SearchResults();
         view = new Views.WorkspaceView({
           collection: workspace
         });
@@ -63,22 +62,36 @@
         this._editContent(content);
         return Backbone.history.navigate('content');
       },
-      editContent: function(id) {
-        var content,
-          _this = this;
-        content = new Models.Content();
-        content.set('id', id);
-        return content.fetch({
-          error: function() {
-            return alert("Problem getting content " + id);
-          },
-          success: function() {
-            _this._editContent(content);
-            return Backbone.history.navigate("content/" + id);
-          }
+      editModelId: function(id) {
+        var model;
+        model = Models.ALL_CONTENT.get(id);
+        if (!model) {
+          return console.warn('Could not find content with that id');
+        }
+        return this.editModel(model);
+      },
+      editModel: function(model) {
+        switch (model.get('mediaType')) {
+          case 'text/x-module':
+            return this.editContent(model);
+          case 'text/x-collection':
+            return this.editBook(model);
+          default:
+            throw 'BUG: Invalid mediaType';
+        }
+      },
+      editBook: function(model) {
+        var _this = this;
+        return model.deferred(function(err) {
+          var view;
+          view = new Views.BookNavigationDocumentEditView({
+            model: model
+          });
+          mainRegion.show(contentLayout);
+          return contentLayout.body.show(view);
         });
       },
-      _editContent: function(content) {
+      editContent: function(content) {
         var configAccordionDialog, view;
         mainRegion.show(contentLayout);
         configAccordionDialog = function(region, view) {
@@ -129,7 +142,8 @@
         view = new Views.ContentEditView({
           model: content
         });
-        return contentLayout.body.show(view);
+        contentLayout.body.show(view);
+        return Backbone.history.navigate("content/" + (model.get('id')));
       }
     };
     ContentRouter = Marionette.AppRouter.extend({
@@ -138,7 +152,7 @@
         '': 'workspace',
         'workspace': 'workspace',
         'content': 'createContent',
-        'content/:id': 'editContent'
+        'content/:id': 'editModelId'
       }
     });
     new ContentRouter();

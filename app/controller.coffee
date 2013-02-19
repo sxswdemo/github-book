@@ -76,8 +76,7 @@ define [
     # Shows the workspace listing and updates the URL
     workspace: ->
       # List the workspace
-      workspace = new Models.Workspace()
-      workspace.fetch()
+      workspace = new Models.SearchResults()
       view = new Views.WorkspaceView {collection: workspace}
       mainRegion.show workspaceLayout
       workspaceLayout.body.show view
@@ -102,21 +101,27 @@ define [
     # ### Edit existing content
     # Calling this method directly will start editing an existing piece of content
     # and will update the URL.
-    editContent: (id) ->
-      content = new Models.Content()
-      content.set 'id', id
-      # **FIXME:** display a spinner while we fetch the content and then call `@_editContent`
-      content.fetch
-        error: => alert "Problem getting content #{id}"
-        success: =>
-          @_editContent content
-          # Update the URL
-          Backbone.history.navigate "content/#{id}"
+    editModelId: (id) ->
+      model = Models.ALL_CONTENT.get id
+      return console.warn 'Could not find content with that id' if not model
+      @editModel model
 
+    editModel: (model) ->
+      switch model.get 'mediaType'
+        when 'text/x-module' then @editContent model
+        when 'text/x-collection' then @editBook model
+        else throw 'BUG: Invalid mediaType'
+
+    editBook: (model) ->
+      model.deferred (err) =>
+        view = new Views.BookNavigationDocumentEditView {model: model}
+
+        mainRegion.show contentLayout
+        contentLayout.body.show view
 
     # Internal method that updates the metadata/roles links so they
     # refer to the correct Content Model
-    _editContent: (content) ->
+    editContent: (content) ->
       # ## Bind Metadata Dialogs
       mainRegion.show contentLayout
 
@@ -165,6 +170,8 @@ define [
       view = new Views.ContentEditView(model: content)
       contentLayout.body.show view
 
+      # Update the URL
+      Backbone.history.navigate "content/#{model.get 'id'}"
 
   # ## Bind Routes
   ContentRouter = Marionette.AppRouter.extend
@@ -173,7 +180,7 @@ define [
       '':             'workspace' # Show the workspace list of content
       'workspace':    'workspace'
       'content':      'createContent' # Create a new piece of content
-      'content/:id':  'editContent' # Edit an existing piece of content
+      'content/:id':  'editModelId' # Edit an existing piece of content
 
   # Start listening to URL changes
   new ContentRouter()

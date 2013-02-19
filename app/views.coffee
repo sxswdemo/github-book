@@ -32,6 +32,7 @@ define [
   'hbs!app/views/language-variants'
   'hbs!app/views/aloha-toolbar'
   'hbs!app/views/sign-in-out'
+  'hbs!app/views/nav-edit'
   # Load internationalized strings
   'i18n!app/nls/strings'
   # `bootstrap` and `select2` add to jQuery and don't export anything of their own
@@ -40,7 +41,7 @@ define [
   'select2'
   # Include CSS icons used by the toolbar
   'css!font-awesome'
-], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, __) ->
+], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, NAV_EDIT, __) ->
 
   # **FIXME:** Move this delay into a common module so the mock AJAX code can use them too
   DELAY_BEFORE_SAVING = 3000
@@ -100,9 +101,7 @@ define [
     tagName: 'tr'
     template: SEARCH_RESULT_ITEM
     onRender: ->
-      @$el.on 'click', =>
-        id = @model.get 'id'
-        Controller.editContent(id)
+      @$el.on 'click', => Controller.editModel(@model)
 
   # This can also be thought of as the Workspace view
   exports.SearchResultView = Marionette.CompositeView.extend
@@ -399,6 +398,73 @@ define [
     # Clicking on the link will redirect to the logoff page
     # Before it does, update the model
     signOut: -> @model.signOut()
+
+
+  # Use this to generate HTML with extra divs for Drag/Drop
+  exports.BookNavigationDocumentEditView = Marionette.ItemView.extend
+    template: NAV_EDIT
+    events:
+      'click a': 'editModel'
+    initialize: ->
+      @listenTo @model, 'all', => @render()
+    editModel: (evt) ->
+      evt.preventDefault()
+      Controller.editModel @model
+    onRender: ->
+      # Since we use jqueryui's draggable which is loaded when Aloha loads
+      # delay until Aloha is finished loading
+      Aloha.ready =>
+        model = @model # keep reference to model for drop event
+        @$el.find('.editor-node').draggable
+          revert: 'invalid'
+          helper: (evt) ->
+            $clone = jQuery(evt.target).clone(true)
+            $clone.children('ol').remove()
+            $clone
+        @$el.find('.editor-drop-zone').droppable
+          accept: '.editor-node'
+          activeClass: 'editor-drop-zone-active'
+          hoverClass: 'editor-drop-zone-hover'
+          drop: (evt, ui) =>
+            # Possible drop cases:
+            #
+            # - On the node
+            # - Before the node
+            # - After the node
+
+            findNode = (node, id) ->
+              return node if node.id == id
+              for child in node.children
+                found = findNode(child, id)
+                return found if found
+
+            $drag = ui.draggable
+            $drop = jQuery(evt.target)
+            $root = $drop.parents('nav')
+            $li = $drop.parent()
+
+            # Perform all of these DOM cleanup events once jQueryUI is finished with its events
+            delay = =>
+              $drag.parent().remove() if $drag.parent().children().length == 1
+
+              if $drop.hasClass 'editor-drop-zone-before'
+                # If `$drag` is the only child in a `<ol>` then remove the `ol`
+                $drag.insertBefore $li
+              if $drop.hasClass 'editor-drop-zone-after'
+                $drag.insertAfter $li
+              if $drop.hasClass 'editor-drop-zone-in'
+                # create an `ol` in the drop target if necessary
+                $li.append '<ol></ol>' if not $li.children('ol')[0]
+                $ol = $li.children('ol')
+                $ol.append $drag
+
+              # Serialize it back to HTML
+              # Remove the drag node (a clone of the element that's being dragged)
+              $root.find('.ui-draggable-dragging').remove()
+
+              @model.set 'navTree', @model.parseNavTree($root).children
+
+            setTimeout delay, 10
 
 
   exports.WorkspaceView = exports.SearchResultView

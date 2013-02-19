@@ -4,7 +4,7 @@
   require.config({
     urlArgs: '',
     paths: {
-      i18n: 'i18n-custom',
+      i18n: 'helpers/i18n-custom',
       text: 'lib/require-text/text',
       json: 'lib/requirejs-plugins/json',
       hbs: 'lib/require-handlebars-plugin/hbs',
@@ -19,6 +19,7 @@
       handlebars: 'lib/require-handlebars-plugin/Handlebars',
       i18nprecompile: 'lib/require-handlebars-plugin/hbs/i18nprecompile',
       json2: 'lib/require-handlebars-plugin/hbs/json2',
+      'template/helpers/recursive': 'helpers/hbs-helper-recursive',
       'font-awesome': 'lib/font-awesome/css/font-awesome'
     },
     shim: {

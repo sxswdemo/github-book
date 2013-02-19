@@ -1,0 +1,22 @@
+<nav>
+{{#with navTree}}
+  <ol>
+  {{#recursive .}}
+    <li class="editor-node">
+      <div class="editor-drop-zone editor-drop-zone-before"></div>
+      {{#if href}}
+        <a class="editor-drop-zone editor-drop-zone-in" href="{{href}}">{{title}}</a>
+      {{else}}
+        <span class="editor-drop-zone editor-drop-zone-in">{{title}}</span>
+      {{/if}}
+      <div class="editor-drop-zone editor-drop-zone-after"></div>
+      {{#if children}}
+        <ol>
+          {{{recursive children}}}
+        </ol>
+      {{/if}}
+    </li>
+  {{/recursive}}
+  </ol>
+{{/with}}
+</nav>

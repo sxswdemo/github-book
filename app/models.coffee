@@ -2,7 +2,64 @@
 # This module contains backbone models used throughout the application
 #
 # It also has some hardcoded URLs for syncing with the server (GET/POST/PUT URLs)
-define ['backbone', 'exports', 'app/urls', 'i18n!app/nls/strings'], (Backbone, exports, URLS, __) ->
+define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) ->
+
+  # Contains a mapping from mime-type to a `Backbone.Model` constructor
+  # Different plugins (Markdown, ASCIIDoc, cnxml) can add themselves to this
+  MediaTypes = Backbone.Collection.extend
+    # Just a glorified JSON holder
+    model: Backbone.Model.extend
+      sync: -> throw 'This model cannot be syncd'
+    sync: -> throw 'This model cannot be syncd'
+
+  MEDIA_TYPES = new MediaTypes()
+
+
+  BaseContent = Backbone.Model.extend
+    initialize: ->
+      mediaType = @get 'mediaType'
+      throw 'BUG: No mediaType set' if not mediaType
+      throw 'BUG: No mediaType not registered' if not MEDIA_TYPES.get mediaType
+
+      # Mixin the subclasses fields
+      mediaTypeConfig = MEDIA_TYPES.get mediaType
+      proto = mediaTypeConfig.get('constructor').prototype
+      for key, value of proto
+        @[key] = value
+
+      # Call the mixed-in constructor
+      proto.initialize.apply(this, arguments)
+
+  # This should be read-only by others
+  # New content models should be created by calling `newContent(id)`
+  AllContent = Backbone.Collection.extend
+    model: BaseContent
+
+  ALL_CONTENT = new AllContent()
+
+
+  # A model representing a piece of content may not have been fetched yet
+  # Once it is loaded (fetched) call the callbacks.
+
+  deferred= (cb) ->
+    return cb(null, @) if @loaded
+    @_defer = @fetch() if not @_defer
+    @_defer
+    .done (value) =>
+      @loaded = true
+      @_defer = null
+      cb(null, @)
+    .fail (err) =>
+      @loaded = false
+      @_defer = null
+      cb(err, @)
+
+  Deferrable = Backbone.Model.extend
+    deferred: () -> deferred.apply(@, arguments)
+
+  DeferrableCollection = Backbone.Collection.extend
+    deferred: () -> deferred.apply(@, arguments)
+
 
   # The `Content` model contains the following members:
   #
@@ -11,7 +68,7 @@ define ['backbone', 'exports', 'app/urls', 'i18n!app/nls/strings'], (Backbone, e
   # * `subjects` - an array of strings (eg `['Mathematics', 'Business']`)
   # * `keywords` - an array of keywords (eg `['constant', 'boltzmann constant']`)
   # * `authors` - an `Collection` of `User`s that are attributed as authors
-  Content = Backbone.Model.extend
+  Content = Deferrable.extend
     defaults:
       title: __('Untitled')
       subjects: []
@@ -31,53 +88,51 @@ define ['backbone', 'exports', 'app/urls', 'i18n!app/nls/strings'], (Backbone, e
       return 'ERROR_EMPTY_TITLE' if isEmpty(attrs.title)
       return 'ERROR_UNTITLED_TITLE' if attrs.title == __('Untitled')
 
-  # The `SearchResultItem` model contains the following members:
-  #
-  # * `title` - a short title of the item
-  # * `type` - the type of the result
-  #   This needs to match the prefix used to GET the item
-  #   (ie `type="content"` so `GET /#{type}/#{id}` returns an element)
-  #
-  # Depending on the `type` the result can have additional members.
-  #
-  # ## type="content"
-  #
-  # * `created` - Timestamp
-  # * `modified` - Timestamp
-  # * `modifiedBy` - User that last modified the content (maybe just the user id for now)
-  # * `icon?` - for collections (optional) that have a custom book cover
-  exports.SearchResultItem = Backbone.Model.extend
+
+  # This represents a collection but is called a book so as not to confuse with Backbone.Collection
+  Book = Deferrable.extend
     defaults:
-      type: 'content'
-      title: 'BUG_UNSPECIFIED_TITLE'
+      manifest: null
+      navTree: null
 
-    getContent: ->
-      exports.getContent @get('id')
+    # Also used by the DnD edit view
+    parseNavTree: (li) ->
+      $li = jQuery(li)
 
-  exports.Workspace = Backbone.Collection.extend
-    model: exports.SearchResultItem
-    url: URLS.WORKSPACE
+      $a = $li.children 'a'
+      $span = $li.children 'span'
+      $ol = $li.children 'ol'
 
+      if $a[0]
+        obj = {href: $a.attr('href'), title: $a.text()}
+      else
+        obj = {title: $span.text()}
 
+      obj.children = (@parseNavTree(li) for li in $ol.children()) if $ol[0]
+      return obj
 
-  # This should be read-only by others
-  # New content models should be created by calling `newContent(id)`
-  ALL_CONTENT = new Backbone.Collection()
-
-  # Wither returns an existing model or creates a new one and fills it with content (via `.fetch()`)
-  factory = (constructor, key) ->
-    model = ALL_CONTENT.get key
-    if not model
-      model = new constructor {id: key}
-      ALL_CONTENT.add model
-      model.fetch
-        error: => alert "Problem fetching #{key}"
-        success: -> model._loaded = true
-    ALL_CONTENT.get key
+    deferred: () -> deferred.apply(@, arguments)
+    initialize: ->
+      @manifest = new Backbone.Collection()
+      @manifest.on 'add', (model) ->
+        ALL_CONTENT.add model
 
 
-  exports.getContent = (href) -> factory(ALL_CONTENT, Content, href)
-  # Should only be used for creating new content...
-  exports.Content = Content
+  SearchResults = DeferrableCollection.extend
+    defaults:
+      parameters: []
 
+
+  MEDIA_TYPES.add
+    id: 'text/x-module'
+    constructor: Content
+
+  MEDIA_TYPES.add
+    id: 'text/x-collection'
+    constructor: Book
+
+
+  exports.ALL_CONTENT = ALL_CONTENT
+  exports.MEDIA_TYPES = MEDIA_TYPES
+  exports.SearchResults = SearchResults
   return exports
