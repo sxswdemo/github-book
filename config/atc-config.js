@@ -15,12 +15,11 @@
       aloha: 'lib/Aloha-Editor/src/lib/aloha',
       bootstrap: 'lib/bootstrap/js/bootstrap',
       select2: 'lib/select2/select2',
-      spin: 'lib/spin',
+      'font-awesome': 'lib/Font-Awesome/css/font-awesome',
       handlebars: 'lib/require-handlebars-plugin/Handlebars',
       i18nprecompile: 'lib/require-handlebars-plugin/hbs/i18nprecompile',
       json2: 'lib/require-handlebars-plugin/hbs/json2',
-      'template/helpers/recursive': 'helpers/hbs-helper-recursive',
-      'font-awesome': 'lib/Font-Awesome/css/font-awesome'
+      'template/helpers/recursive': 'helpers/hbs-helper-recursive'
     },
     shim: {
       jquery: {
@@ -60,7 +59,7 @@
         }
       },
       aloha: {
-        deps: ['bootstrap', 'aloha-config', 'css!lib/Aloha-Editor/src/css/aloha'],
+        deps: ['bootstrap', 'config/aloha-config'],
         exports: 'Aloha'
       }
     },

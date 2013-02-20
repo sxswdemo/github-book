@@ -22,9 +22,10 @@ require.config
     aloha: 'lib/Aloha-Editor/src/lib/aloha'
     bootstrap: 'lib/bootstrap/js/bootstrap'
     select2: 'lib/select2/select2'
-    spin: 'lib/spin'
 
-    # ## Handlebars modules
+    'font-awesome': 'lib/Font-Awesome/css/font-awesome'
+
+    # ## Handlebars Dependencies
     # The requirejs plugin to support handlebars has several dependencies
     # that need to be loaded
     handlebars: 'lib/require-handlebars-plugin/Handlebars'
@@ -34,7 +35,6 @@ require.config
     # A Handlebars helper for making recursive templates (rendering trees)
     'template/helpers/recursive': 'helpers/hbs-helper-recursive'
 
-    'font-awesome': 'lib/Font-Awesome/css/font-awesome'
 
   # # Shims
   # To support libraries that were not written for AMD
@@ -82,7 +82,7 @@ require.config
     #
     # Also, configure Aloha for the application using the `aloha-config` module.
     aloha:
-      deps: ['bootstrap', 'aloha-config', 'css!lib/Aloha-Editor/src/css/aloha']
+      deps: ['bootstrap', 'config/aloha-config']
       exports: 'Aloha'
 
   # Maps prefixes (like `less!path/to/less-file`) to use the LESS CSS plugin

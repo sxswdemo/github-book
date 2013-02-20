@@ -9,14 +9,7 @@ require.config
   paths:
     aloha: ALOHA_PATH + '/src/lib/aloha'
 
-  shim:
-    # Some of the Aloha plugins depend on bootstrap being initialized on jQuery
-    # (like the popover plugin).
-    #
-    # Also, configure Aloha for the application using the `aloha-config` module.
-    aloha:
-      deps: ['bootstrap', 'aloha-config', 'css!' + ALOHA_PATH + '/src/css/aloha']
-      exports: 'Aloha'
+
 
 
 require ['atc/models'], (Models) ->

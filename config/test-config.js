@@ -11,12 +11,6 @@
   require.config({
     paths: {
       aloha: ALOHA_PATH + '/src/lib/aloha'
-    },
-    shim: {
-      aloha: {
-        deps: ['bootstrap', 'aloha-config', 'css!' + ALOHA_PATH + '/src/css/aloha'],
-        exports: 'Aloha'
-      }
     }
   });
 
