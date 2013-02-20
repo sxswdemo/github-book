@@ -114,9 +114,35 @@ define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) 
     deferred: () -> deferred.apply(@, arguments)
     initialize: ->
       @manifest = new Backbone.Collection()
-      @manifest.on 'add', (model) ->
-        ALL_CONTENT.add model
+      @manifest.on 'change:title', (model, newValue, oldValue) =>
+        navTree = @getNavTree()
+        # Find the node that has a href to this model
+        recFind = (nodes) ->
+          for node in nodes
+            return node if model.id == node.href
+            return recFind children if node.children
+        node = recFind(navTree)
+        throw 'BUG: There is an entry in the tree but no corresponding model in the manifest' if not node
+        node.title = newValue
+        @set 'navTree', navTree
 
+      @manifest.on 'add', (model) -> ALL_CONTENT.add model
+      @on 'change:navTree', (navTree) =>
+        # **TODO:** Remove manifest entries if they are not referred to by the navTree or any modules in the book.
+        recAdd = (nodes) =>
+          for node in nodes
+            if node.href
+              ALL_CONTENT.add {id: node.href, mediaType: 'text/x-module'}
+              contentModel = ALL_CONTENT.get node.href
+              @manifest.add contentModel
+            recAdd children if node.children
+        recAdd(navTree) if navTree
+
+      @trigger 'change:navTree', @getNavTree()
+
+
+    getNavTree: (tree) ->
+      return JSON.parse JSON.stringify(@get 'navTree')
 
   SearchResults = DeferrableCollection.extend
     defaults:

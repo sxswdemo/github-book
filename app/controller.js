@@ -22,6 +22,7 @@
       template: LAYOUT_MAIN,
       regionType: HidingRegion,
       regions: {
+        back: '#layout-main-back',
         toolbar: '#layout-main-toolbar',
         auth: '#layout-main-auth',
         sidebar: '#layout-main-sidebar',
@@ -35,7 +36,6 @@
     ContentLayout = Marionette.Layout.extend({
       template: LAYOUT_CONTENT,
       regions: {
-        auth: '#layout-auth',
         toolbar: '#layout-toolbar',
         title: '#layout-title',
         title2: '#layout-title2',
@@ -52,6 +52,10 @@
         mainLayout.auth.show(new Views.AuthView({
           model: Auth
         }));
+        mainLayout.back.ensureEl();
+        mainLayout.back.$el.on('click', function() {
+          return Backbone.history.history.back();
+        });
         mainSidebar.onClose();
         mainArea.onClose();
         return Backbone.history.start();
@@ -106,8 +110,7 @@
           view = new Views.BookView({
             model: model
           });
-          mainSidebar.show(view);
-          return mainArea.close();
+          return mainSidebar.show(view);
         });
       },
       editBook: function(model) {
@@ -117,7 +120,9 @@
           if (err) {
             return alert('Problem connecting to server');
           }
-          view = new Views.BookAddContentView();
+          view = new Views.BookAddContentView({
+            model: model
+          });
           mainSidebar.show(view);
           view = new Views.BookEditView({
             model: model
@@ -127,7 +132,7 @@
       },
       editContent: function(content) {
         var configAccordionDialog, view;
-        mainRegion.show(contentLayout);
+        mainArea.show(contentLayout);
         configAccordionDialog = function(region, view) {
           var dialog,
             _this = this;
@@ -156,22 +161,10 @@
           model: content
         });
         contentLayout.title.show(view);
-        view = new Views.TitleEditView({
-          model: content
-        });
-        contentLayout.title2.show(view);
-        view = new Views.AuthView({
-          model: Auth
-        });
-        contentLayout.auth.show(view);
         contentLayout.title.$el.popover({
           trigger: 'hover',
           placement: 'right',
           content: __('Click to change title')
-        });
-        contentLayout.back.ensureEl();
-        contentLayout.back.$el.on('click', function() {
-          return Backbone.history.history.back();
         });
         view = new Views.ContentEditView({
           model: content

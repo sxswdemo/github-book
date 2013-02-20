@@ -32,6 +32,7 @@ define [
   'hbs!app/views/language-variants'
   'hbs!app/views/aloha-toolbar'
   'hbs!app/views/sign-in-out'
+  'hbs!app/views/book-view'
   'hbs!app/views/nav-edit'
   'hbs!app/views/book-add-content'
   # Load internationalized strings
@@ -42,7 +43,7 @@ define [
   'select2'
   # Include CSS icons used by the toolbar
   'css!font-awesome'
-], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, NAV_EDIT, BOOK_ADD_CONTENT, __) ->
+], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_VIEW, NAV_EDIT, BOOK_ADD_CONTENT, __) ->
 
   # **FIXME:** Move this delay into a common module so the mock AJAX code can use them too
   DELAY_BEFORE_SAVING = 3000
@@ -155,7 +156,6 @@ define [
           alohaEditable = Aloha.getEditableById(alohaId)
           editableBody = alohaEditable.getContents()
           @model.set @modelKey, editableBody
-          @model.save() if @model.changedAttributes()
 
       # Grr, the `aloha-smart-content-changed` can only be listened to globally
       # (via `Aloha.bind`) instead of on each editable.
@@ -401,16 +401,27 @@ define [
     signOut: -> @model.signOut()
 
 
-  exports.BookAddContentView = Marionette.View.extend
+  exports.BookAddContentView = Marionette.ItemView.extend
     template: BOOK_ADD_CONTENT
+    events:
+      'click .add-section': 'prependSection'
+      'click .add-content': 'prependContent'
+    _prepend: (cfg) ->
+      navTree = @model.getNavTree()
+      navTree.unshift cfg
+      @model.set 'navTree', navTree
+
+    prependSection: -> @_prepend {title: 'Untitled Section'}
+    prependContent: -> @_prepend {title: 'Untitled Content', href: 'new123'}
+
 
   # Use this to generate HTML with extra divs for Drag/Drop
   exports.BookView = Marionette.ItemView.extend
-    template: NAV_EDIT
+    template: BOOK_VIEW
     events:
-      'click .edit-book': 'edit'
+      'click .edit': 'editBook'
       'click a': 'editModel'
-    edit: -> Controller.editBook @model
+    editBook: -> Controller.editBook @model
     editModel: (evt) ->
       evt.preventDefault()
       evt.stopPropagation()
@@ -421,12 +432,16 @@ define [
 
   # Use this to generate HTML with extra divs for Drag/Drop
   exports.BookEditView = exports.BookView.extend
+    template: NAV_EDIT
+    events:
+      'click .save': 'showBook'
+      'click a': 'editModel'
+    showBook: -> Controller.showBook @model
     onRender: ->
       # Since we use jqueryui's draggable which is loaded when Aloha loads
       # delay until Aloha is finished loading
       Aloha.ready =>
         model = @model # keep reference to model for drop event
-        @$el.addClass 'editing'
         @$el.find('.editor-node').draggable
           revert: 'invalid'
           helper: (evt) ->

@@ -19,7 +19,7 @@
   height: 100%;
   -webkit-box-sizing: border-box;
   position: relative;
-  width: 200px;
+  width: 250px;
 
   background-color: #f0f0f0;
   border-right: 1px solid #ccc;
@@ -28,7 +28,7 @@
   -webkit-transition: 0.5s ease-in-out;
 }
 #layout-main-sidebar.hidden {
-  margin-left: -200px;
+  margin-left: -250px;
 }
 
 
@@ -56,27 +56,27 @@ i.iconic.search-result-icon.collection:before { content:'\e06a'; /* book_alt2 */
 
 
 
-.editing .editor-drop-zone-before {
+.editor-drop-zone-before {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.editing .editor-node > a:hover,
-.editing .editor-node > span:hover {
+.editor-node > a:hover,
+.editor-node > span:hover {
   background-color: rgba(0, 0, 255, 0.25);
 }
-.editing .editor-node > a,
-.editing .editor-node > span {
+.editor-node > a,
+.editor-node > span {
   display: block;
 }
 
-.editing .editor-drop-zone {
+.editor-drop-zone {
   min-height: 3px;
 }
-.editing .editor-drop-zone-active {
+.editor-drop-zone-active {
   background-color: #eee;
 }
 
-.editing .editor-drop-zone-hover {
+.editor-drop-zone-hover {
   background-color: rgba(0, 0, 255, 0.25);
 }
 

@@ -136,10 +136,64 @@
         return deferred.apply(this, arguments);
       },
       initialize: function() {
+        var _this = this;
         this.manifest = new Backbone.Collection();
-        return this.manifest.on('add', function(model) {
+        this.manifest.on('change:title', function(model, newValue, oldValue) {
+          var navTree, node, recFind;
+          navTree = _this.getNavTree();
+          recFind = function(nodes) {
+            var node, _i, _len;
+            for (_i = 0, _len = nodes.length; _i < _len; _i++) {
+              node = nodes[_i];
+              if (model.id === node.href) {
+                return node;
+              }
+              if (node.children) {
+                return recFind(children);
+              }
+            }
+          };
+          node = recFind(navTree);
+          if (!node) {
+            throw 'BUG: There is an entry in the tree but no corresponding model in the manifest';
+          }
+          node.title = newValue;
+          return _this.set('navTree', navTree);
+        });
+        this.manifest.on('add', function(model) {
           return ALL_CONTENT.add(model);
         });
+        this.on('change:navTree', function(navTree) {
+          var recAdd;
+          recAdd = function(nodes) {
+            var contentModel, node, _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = nodes.length; _i < _len; _i++) {
+              node = nodes[_i];
+              if (node.href) {
+                ALL_CONTENT.add({
+                  id: node.href,
+                  mediaType: 'text/x-module'
+                });
+                contentModel = ALL_CONTENT.get(node.href);
+                _this.manifest.add(contentModel);
+              }
+              if (node.children) {
+                _results.push(recAdd(children));
+              } else {
+                _results.push(void 0);
+              }
+            }
+            return _results;
+          };
+          if (navTree) {
+            return recAdd(navTree);
+          }
+        });
+        return this.trigger('change:navTree', this.getNavTree());
+      },
+      getNavTree: function(tree) {
+        return JSON.parse(JSON.stringify(this.get('navTree')));
       }
     });
     SearchResults = DeferrableCollection.extend({

@@ -41,6 +41,7 @@ define [
     template: LAYOUT_MAIN
     regionType: HidingRegion
     regions:
+      back:         '#layout-main-back'
       toolbar:      '#layout-main-toolbar'
       auth:         '#layout-main-auth'
       sidebar:      '#layout-main-sidebar'
@@ -53,7 +54,6 @@ define [
   ContentLayout = Marionette.Layout.extend
     template: LAYOUT_CONTENT
     regions:
-      auth:         '#layout-auth'
       toolbar:      '#layout-toolbar'
       title:        '#layout-title'  # Title shows up twice; once on top of the page
       title2:       '#layout-title2' # and at the top of the document. Both are editable
@@ -80,6 +80,10 @@ define [
     start: ->
       mainRegion.show mainLayout
       mainLayout.auth.show new Views.AuthView {model: Auth}
+
+      mainLayout.back.ensureEl() # Not sure why this particular region needs this...
+      mainLayout.back.$el.on 'click', -> Backbone.history.history.back()
+
 
       # Hide the regions if they are not being used
       mainSidebar.onClose()
@@ -136,13 +140,11 @@ define [
         view = new Views.BookView {model: model}
         mainSidebar.show view
 
-        mainArea.close()
-
     editBook: (model) ->
       model.deferred (err) =>
         return alert 'Problem connecting to server' if err
 
-        view = new Views.BookAddContentView()
+        view = new Views.BookAddContentView {model: model}
         mainSidebar.show view
 
         view = new Views.BookEditView {model: model}
@@ -152,7 +154,7 @@ define [
     # refer to the correct Content Model
     editContent: (content) ->
       # ## Bind Metadata Dialogs
-      mainRegion.show contentLayout
+      mainArea.show contentLayout
 
       # Load the various views:
       #
@@ -181,20 +183,11 @@ define [
       view = new Views.TitleEditView(model: content)
       contentLayout.title.show view
 
-      view = new Views.TitleEditView(model: content)
-      contentLayout.title2.show view
-
-      view = new Views.AuthView {model: Auth}
-      contentLayout.auth.show view
-
       # Enable the tooltip letting the user know to edit
       contentLayout.title.$el.popover
         trigger: 'hover'
         placement: 'right'
         content: __('Click to change title')
-
-      contentLayout.back.ensureEl() # Not sure why this particular region needs this...
-      contentLayout.back.$el.on 'click', -> Backbone.history.history.back()
 
       view = new Views.ContentEditView(model: content)
       contentLayout.body.show view
