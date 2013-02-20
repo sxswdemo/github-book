@@ -14,11 +14,13 @@ define [
   # There is a cyclic dependency between views and controllers
   # So we use the `exports` module to get around that problem.
   'app/views'
+  'hbs!app/layouts/main'
+  'hbs!app/layouts/book-view'
   'hbs!app/layouts/content'
   'hbs!app/layouts/workspace'
   'exports'
   'i18n!app/nls/strings'
-], (jQuery, Backbone, Marionette, Auth, Models, Views, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) ->
+], (jQuery, Backbone, Marionette, Auth, Models, Views, LAYOUT_MAIN, LAYOUT_BOOK_VIEW, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) ->
 
   # Squirrel away the original contents of the main div (content HTML when viewing the content page for example)
   $main = jQuery('#main')
@@ -31,14 +33,22 @@ define [
   # ## Layouts
   # There are 2 major page layouts; the workspace and content editing.
 
-  WorkspaceLayout = Marionette.Layout.extend
-    template: LAYOUT_WORKSPACE
-    regions:
-      toolbar:      '#layout-toolbar'
-      body:         '#layout-body'
-      auth:         '#layout-auth'
-  workspaceLayout = new WorkspaceLayout()
+  HidingRegion = Marionette.Region.extend
+    onShow: ->  @$el.removeClass 'hidden'
+    onClose: -> @ensureEl(); @$el.addClass    'hidden'
 
+  MainLayout = Marionette.Layout.extend
+    template: LAYOUT_MAIN
+    regionType: HidingRegion
+    regions:
+      toolbar:      '#layout-main-toolbar'
+      auth:         '#layout-main-auth'
+      sidebar:      '#layout-main-sidebar'
+      area:         '#layout-main-area'
+  mainLayout = new MainLayout()
+  mainToolbar = mainLayout.toolbar
+  mainSidebar = mainLayout.sidebar
+  mainArea = mainLayout.area
 
   ContentLayout = Marionette.Layout.extend
     template: LAYOUT_CONTENT
@@ -54,6 +64,7 @@ define [
       roles:        '#layout-roles'
   contentLayout = new ContentLayout()
 
+
   # ## Main Controller
   # Changes all the regions on the page to begin editing a new/existing
   # piece of content.
@@ -66,7 +77,14 @@ define [
   mainController =
     # Begin monitoring URL changes and match the current route
     # In here so App can call it once it has completed loading
-    start: -> Backbone.history.start()
+    start: ->
+      mainRegion.show mainLayout
+      mainLayout.auth.show new Views.AuthView {model: Auth}
+
+      # Hide the regions if they are not being used
+      mainSidebar.onClose()
+      mainArea.onClose()
+      Backbone.history.start()
 
     # Provide the main region that this controller uses.
     # Useful for applications that want to extend this editor.
@@ -78,11 +96,10 @@ define [
       # List the workspace
       workspace = new Models.SearchResults()
       view = new Views.WorkspaceView {collection: workspace}
-      mainRegion.show workspaceLayout
-      workspaceLayout.body.show view
+      mainArea.show view
 
-      view = new Views.AuthView {model: Auth}
-      workspaceLayout.auth.show view
+      mainSidebar.close()
+
       # Update the URL
       Backbone.history.navigate 'workspace'
 
@@ -109,15 +126,27 @@ define [
     editModel: (model) ->
       switch model.get 'mediaType'
         when 'text/x-module' then @editContent model
-        when 'text/x-collection' then @editBook model
+        when 'text/x-collection' then @showBook model
         else throw 'BUG: Invalid mediaType'
+
+    showBook: (model) ->
+      model.deferred (err) =>
+        return alert 'Problem connecting to server' if err
+
+        view = new Views.BookView {model: model}
+        mainSidebar.show view
+
+        mainArea.close()
 
     editBook: (model) ->
       model.deferred (err) =>
-        view = new Views.BookNavigationDocumentEditView {model: model}
+        return alert 'Problem connecting to server' if err
 
-        mainRegion.show contentLayout
-        contentLayout.body.show view
+        view = new Views.BookAddContentView()
+        mainSidebar.show view
+
+        view = new Views.BookEditView {model: model}
+        mainArea.show view
 
     # Internal method that updates the metadata/roles links so they
     # refer to the correct Content Model
@@ -171,7 +200,7 @@ define [
       contentLayout.body.show view
 
       # Update the URL
-      Backbone.history.navigate "content/#{model.get 'id'}"
+      Backbone.history.navigate "content/#{content.get 'id'}"
 
   # ## Bind Routes
   ContentRouter = Marionette.AppRouter.extend

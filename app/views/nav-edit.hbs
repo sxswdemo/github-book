@@ -1,3 +1,4 @@
+<button class="btn edit-book">Edit</button>
 <nav>
 {{#with navTree}}
   <ol>
@@ -5,7 +6,7 @@
     <li class="editor-node">
       <div class="editor-drop-zone editor-drop-zone-before"></div>
       {{#if href}}
-        <a class="editor-drop-zone editor-drop-zone-in" href="{{href}}">{{title}}</a>
+        <a class="editor-drop-zone editor-drop-zone-in" href="{{href}}" data-id="{{href}}">{{title}}</a>
       {{else}}
         <span class="editor-drop-zone editor-drop-zone-in">{{title}}</span>
       {{/if}}

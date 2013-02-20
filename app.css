@@ -4,6 +4,40 @@
    @import url('lib/bootstrap/css/bootstrap.css');
  */
 
+/* Used for hiding the sidebar. `HidingRegion` uses this class */
+.hidden { }
+
+.below-toolbar {
+  height: 100%;
+  -webkit-box-flex: 1;
+  -webkit-box-sizing: border-box;
+  -webkit-box-orient: horizontal;
+  display: -webkit-box;
+}
+
+#layout-main-sidebar {
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  position: relative;
+  width: 200px;
+
+  background-color: #f0f0f0;
+  border-right: 1px solid #ccc;
+
+  /* Slide the sidebar off screen when hiding it */
+  -webkit-transition: 0.5s ease-in-out;
+}
+#layout-main-sidebar.hidden {
+  margin-left: -200px;
+}
+
+
+#layout-main-area {
+  height: 100%;
+  -webkit-box-flex: 1;
+  -webkit-box-sizing: border-box;
+  position: relative;
+}
 
 
 /* Mustache does not allow logic in their templates so
@@ -21,27 +55,28 @@ i.iconic.search-result-icon.collection:before { content:'\e06a'; /* book_alt2 */
 }
 
 
-.editor-drop-zone-before {
+
+.editing .editor-drop-zone-before {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.editor-node > a:hover,
-.editor-node > span:hover {
+.editing .editor-node > a:hover,
+.editing .editor-node > span:hover {
   background-color: rgba(0, 0, 255, 0.25);
 }
-.editor-node > a,
-.editor-node > span {
+.editing .editor-node > a,
+.editing .editor-node > span {
   display: block;
 }
 
-.editor-drop-zone {
+.editing .editor-drop-zone {
   min-height: 3px;
 }
-.editor-drop-zone-active {
+.editing .editor-drop-zone-active {
   background-color: #eee;
 }
 
-.editor-drop-zone-hover {
+.editing .editor-drop-zone-hover {
   background-color: rgba(0, 0, 255, 0.25);
 }
 
@@ -120,7 +155,7 @@ i.iconic.search-result-icon.collection:before { content:'\e06a'; /* book_alt2 */
 
 /* Used to visually disable editable areas and views until their contents have loaded */
 .disabled { opacity: 0.5; }
-.hidden { display: none !important; }
+/*.hidden { display: none !important; }*/
 
 .select2-container {
   min-width: 15em;

@@ -33,6 +33,7 @@ define [
   'hbs!app/views/aloha-toolbar'
   'hbs!app/views/sign-in-out'
   'hbs!app/views/nav-edit'
+  'hbs!app/views/book-add-content'
   # Load internationalized strings
   'i18n!app/nls/strings'
   # `bootstrap` and `select2` add to jQuery and don't export anything of their own
@@ -41,7 +42,7 @@ define [
   'select2'
   # Include CSS icons used by the toolbar
   'css!font-awesome'
-], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, NAV_EDIT, __) ->
+], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, NAV_EDIT, BOOK_ADD_CONTENT, __) ->
 
   # **FIXME:** Move this delay into a common module so the mock AJAX code can use them too
   DELAY_BEFORE_SAVING = 3000
@@ -400,21 +401,32 @@ define [
     signOut: -> @model.signOut()
 
 
+  exports.BookAddContentView = Marionette.View.extend
+    template: BOOK_ADD_CONTENT
+
   # Use this to generate HTML with extra divs for Drag/Drop
-  exports.BookNavigationDocumentEditView = Marionette.ItemView.extend
+  exports.BookView = Marionette.ItemView.extend
     template: NAV_EDIT
     events:
+      'click .edit-book': 'edit'
       'click a': 'editModel'
-    initialize: ->
-      @listenTo @model, 'all', => @render()
+    edit: -> Controller.editBook @model
     editModel: (evt) ->
       evt.preventDefault()
-      Controller.editModel @model
+      evt.stopPropagation()
+      id = jQuery(evt.target).attr 'data-id'
+      Controller.editModelId id
+    initialize: ->
+      @listenTo @model, 'all', => @render()
+
+  # Use this to generate HTML with extra divs for Drag/Drop
+  exports.BookEditView = exports.BookView.extend
     onRender: ->
       # Since we use jqueryui's draggable which is loaded when Aloha loads
       # delay until Aloha is finished loading
       Aloha.ready =>
         model = @model # keep reference to model for drop event
+        @$el.addClass 'editing'
         @$el.find('.editor-node').draggable
           revert: 'invalid'
           helper: (evt) ->
