@@ -25,11 +25,11 @@ define [
 
   # ## Authenticated User
   # Find out whether the user is authenticated
-  Auth.fetch()
-
   #
-  # The controller begins listening to route changes
-  # and loads the initial views based on the URL.
+  #     Auth.fetch()
+
+  # Begin listening to route changes
+  # and load the initial views based on the URL.
   Controller.start()
 
 

@@ -20,7 +20,6 @@ define [
   'marionette'
   'jquery'
   'aloha'
-  'atc/urls'
   'atc/controller'
   './languages'
   # Load the Handlebar templates
@@ -44,7 +43,7 @@ define [
   'select2'
   # Include CSS icons used by the toolbar
   'css!font-awesome'
-], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_BOX, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_VIEW, BOOK_EDIT, BOOK_ADD_CONTENT, __) ->
+], (exports, _, Backbone, Marionette, jQuery, Aloha, Controller, Languages, SEARCH_BOX, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_VIEW, BOOK_EDIT, BOOK_ADD_CONTENT, __) ->
 
   # **FIXME:** Move this delay into a common module so the mock AJAX code can use them too
   DELAY_BEFORE_SAVING = 3000
@@ -282,7 +281,7 @@ define [
         tags: @model.get('keywords') or []
         tokenSeparators: [',']
         separator: '|' # String used to delimit ids in $('input').val()
-        ajax: SELECT2_AJAX_HANDLER(URLS.KEYWORDS)
+        #ajax: SELECT2_AJAX_HANDLER(URLS.KEYWORDS)
         initSelection: (element, callback) ->
           data = []
           _.each element.val().split('|'), (str) -> data.push {id: str, text: str}

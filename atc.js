@@ -2,7 +2,6 @@
 (function() {
 
   define(['jquery', 'underscore', 'backbone', 'marionette', 'aloha', 'atc/auth', 'atc/controller', 'css!atc'], function(jQuery, _, Backbone, Marionette, Aloha, Auth, Controller) {
-    Auth.fetch();
     Controller.start();
     this.jQuery = this.$ = function() {
       console.warn('You should add "jquery" to your dependencies in define() instead of using the global jQuery!');
