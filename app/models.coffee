@@ -102,7 +102,7 @@ define ['exports', 'jquery', 'backbone', 'i18n!app/nls/strings'], (exports, jQue
       $a = $li.children 'a, span'
       $ol = $li.children 'ol'
 
-      obj = {href: $a.attr('href') or $a.data('id'), title: $a.text()}
+      obj = {id: $a.attr('href') or $a.data('id'), title: $a.text()}
 
       # The custom class is either set on the $span (if parsing from the editor) or on the $a (if parsing from an EPUB)
       obj.class = $a.data('class') or $a.not('span').attr('class')
@@ -115,10 +115,10 @@ define ['exports', 'jquery', 'backbone', 'i18n!app/nls/strings'], (exports, jQue
       @manifest = new Backbone.Collection()
       @manifest.on 'change:title', (model, newValue, oldValue) =>
         navTree = @getNavTree()
-        # Find the node that has a href to this model
+        # Find the node that has an id to this model
         recFind = (nodes) ->
           for node in nodes
-            return node if model.id == node.href
+            return node if model.id == node.id
             return recFind node.children if node.children
         node = recFind(navTree)
         throw 'BUG: There is an entry in the tree but no corresponding model in the manifest' if not node
@@ -130,9 +130,9 @@ define ['exports', 'jquery', 'backbone', 'i18n!app/nls/strings'], (exports, jQue
         # **TODO:** Remove manifest entries if they are not referred to by the navTree or any modules in the book.
         recAdd = (nodes) =>
           for node in nodes
-            if node.href
-              ALL_CONTENT.add {id: node.href, title: node.title, mediaType: 'text/x-module'}
-              contentModel = ALL_CONTENT.get node.href
+            if node.id
+              ALL_CONTENT.add {id: node.id, title: node.title, mediaType: 'text/x-module'}
+              contentModel = ALL_CONTENT.get node.id
               @manifest.add contentModel
             recAdd node.children if node.children
         recAdd(navTree) if navTree
@@ -146,7 +146,7 @@ define ['exports', 'jquery', 'backbone', 'i18n!app/nls/strings'], (exports, jQue
       ALL_CONTENT.add config
       newContent = ALL_CONTENT.get config.id
       navTree = @getNavTree()
-      navTree.unshift {href: config.id, title: config.title}
+      navTree.unshift {id: config.id, title: config.title}
       @set 'navTree', navTree
 
 

@@ -5,8 +5,8 @@
   {{#recursive .}}
     <li class="editor-node {{class}}">
       <div class="editor-drop-zone editor-drop-zone-before"></div>
-      {{#if href}}
-        <span class="editor-drop-zone editor-drop-zone-in" data-id="{{href}}" data-class="{{class}}">{{title}}</span>
+      {{#if id}}
+        <span class="editor-drop-zone editor-drop-zone-in" data-id="{{id}}" data-class="{{class}}">{{title}}</span>
       {{else}}
         <span class="editor-drop-zone editor-drop-zone-in" data-class="{{class}}">{{title}}</span>
       {{/if}}

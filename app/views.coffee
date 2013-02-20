@@ -463,12 +463,6 @@ define [
             # - Before the node
             # - After the node
 
-            findNode = (node, id) ->
-              return node if node.id == id
-              for child in node.children
-                found = findNode(child, id)
-                return found if found
-
             $drag = ui.draggable
             $drop = jQuery(evt.target)
             $root = $drop.parents('nav[data-type="toc"]')

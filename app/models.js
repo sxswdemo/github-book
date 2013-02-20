@@ -108,7 +108,7 @@
         $a = $li.children('a, span');
         $ol = $li.children('ol');
         obj = {
-          href: $a.attr('href') || $a.data('id'),
+          id: $a.attr('href') || $a.data('id'),
           title: $a.text()
         };
         obj["class"] = $a.data('class') || $a.not('span').attr('class');
@@ -139,7 +139,7 @@
             var node, _i, _len;
             for (_i = 0, _len = nodes.length; _i < _len; _i++) {
               node = nodes[_i];
-              if (model.id === node.href) {
+              if (model.id === node.id) {
                 return node;
               }
               if (node.children) {
@@ -164,13 +164,13 @@
             _results = [];
             for (_i = 0, _len = nodes.length; _i < _len; _i++) {
               node = nodes[_i];
-              if (node.href) {
+              if (node.id) {
                 ALL_CONTENT.add({
-                  id: node.href,
+                  id: node.id,
                   title: node.title,
                   mediaType: 'text/x-module'
                 });
-                contentModel = ALL_CONTENT.get(node.href);
+                contentModel = ALL_CONTENT.get(node.id);
                 _this.manifest.add(contentModel);
               }
               if (node.children) {
@@ -203,7 +203,7 @@
         newContent = ALL_CONTENT.get(config.id);
         navTree = this.getNavTree();
         navTree.unshift({
-          href: config.id,
+          id: config.id,
           title: config.title
         });
         return this.set('navTree', navTree);

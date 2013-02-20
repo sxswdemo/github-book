@@ -477,21 +477,7 @@
             activeClass: 'editor-drop-zone-active',
             hoverClass: 'editor-drop-zone-hover',
             drop: function(evt, ui) {
-              var $drag, $drop, $li, $root, delay, findNode;
-              findNode = function(node, id) {
-                var child, found, _i, _len, _ref1;
-                if (node.id === id) {
-                  return node;
-                }
-                _ref1 = node.children;
-                for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-                  child = _ref1[_i];
-                  found = findNode(child, id);
-                  if (found) {
-                    return found;
-                  }
-                }
-              };
+              var $drag, $drop, $li, $root, delay;
               $drag = ui.draggable;
               $drop = jQuery(evt.target);
               $root = $drop.parents('nav[data-type="toc"]');
