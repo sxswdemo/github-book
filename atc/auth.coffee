@@ -3,7 +3,7 @@
 #
 # If the user logs in/out listeners are fired so views that depend on the
 # state are updated (enabled and loaded or disabled).
-define ['underscore', 'backbone', 'app/urls'], (_, Backbone, URLS) ->
+define ['underscore', 'backbone', 'atc/urls'], (_, Backbone, URLS) ->
 
   # For the UI, provide a backbone "interface" to the auth piece
   AuthModel = Backbone.Model.extend

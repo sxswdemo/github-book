@@ -2,7 +2,7 @@
 # This module contains backbone models used throughout the application
 #
 # It also has some hardcoded URLs for syncing with the server (GET/POST/PUT URLs)
-define ['exports', 'jquery', 'backbone', 'i18n!app/nls/strings'], (exports, jQuery, Backbone, __) ->
+define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQuery, Backbone, __) ->
 
   # Contains a mapping from mime-type to a `Backbone.Model` constructor
   # Different plugins (Markdown, ASCIIDoc, cnxml) can add themselves to this

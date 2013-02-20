@@ -13,7 +13,7 @@
 # (all strings should be wrapped with that function)
 #
 # ## Example Use:
-#     define ['jquery', ..., 'i18n!app/nls/strings'], ($, ..., __) ->
+#     define ['jquery', ..., 'i18n!atc/nls/strings'], ($, ..., __) ->
 #       alert __('Hello World')
 define 'root':
   'gray': 'grey'

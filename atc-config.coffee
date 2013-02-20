@@ -94,7 +94,7 @@ require.config
       json: 'lib/requirejs-plugins/src/json'
 
   # ## Module and requirejs Plugin Configuration
-  # This configures `requirejs` plugins (like `'hbs!...'`) and our modules (like `'app/views'`).
+  # This configures `requirejs` plugins (like `'hbs!...'`) and our modules (like `'atc/views'`).
   #
   # Modules can get to the configuration by including the `module` dependency
   # and then calling `module.config()`

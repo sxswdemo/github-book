@@ -19,7 +19,7 @@ require.config
       exports: 'Aloha'
 
 
-require ['app/models'], (Models) ->
+require ['atc/models'], (Models) ->
   Models.ALL_CONTENT.add
     id: 'test1'
     mediaType: 'text/x-module'

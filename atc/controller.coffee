@@ -9,17 +9,17 @@ define [
   'jquery'
   'backbone'
   'marionette'
-  'app/auth'
-  'app/models'
+  'atc/auth'
+  'atc/models'
   # There is a cyclic dependency between views and controllers
   # So we use the `exports` module to get around that problem.
-  'app/views'
-  'hbs!app/layouts/main'
-  'hbs!app/layouts/book-view'
-  'hbs!app/layouts/content'
-  'hbs!app/layouts/workspace'
+  'atc/views'
+  'hbs!atc/layouts/main'
+  'hbs!atc/layouts/book-view'
+  'hbs!atc/layouts/content'
+  'hbs!atc/layouts/workspace'
   'exports'
-  'i18n!app/nls/strings'
+  'i18n!atc/nls/strings'
 ], (jQuery, Backbone, Marionette, Auth, Models, Views, LAYOUT_MAIN, LAYOUT_BOOK_VIEW, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) ->
 
   # Squirrel away the original contents of the main div (content HTML when viewing the content page for example)

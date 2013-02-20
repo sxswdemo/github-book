@@ -20,7 +20,7 @@
     }
   });
 
-  require(['app/models'], function(Models) {
+  require(['atc/models'], function(Models) {
     Models.ALL_CONTENT.add({
       id: 'test1',
       mediaType: 'text/x-module',
