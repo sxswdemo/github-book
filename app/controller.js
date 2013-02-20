@@ -65,8 +65,9 @@
       },
       workspace: function() {
         var view, workspace;
+        mainToolbar.close();
         workspace = new Models.SearchResults();
-        view = new Views.WorkspaceView({
+        view = new Views.SearchResultsView({
           collection: workspace
         });
         mainArea.show(view);
@@ -107,6 +108,7 @@
           if (err) {
             return alert('Problem connecting to server');
           }
+          mainToolbar.close();
           view = new Views.BookView({
             model: model
           });
@@ -120,6 +122,7 @@
           if (err) {
             return alert('Problem connecting to server');
           }
+          mainToolbar.close();
           view = new Views.BookAddContentView({
             model: model
           });
@@ -156,7 +159,7 @@
         view = new Views.ContentToolbarView({
           model: content
         });
-        contentLayout.toolbar.show(view);
+        mainToolbar.show(view);
         view = new Views.TitleEditView({
           model: content
         });

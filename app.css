@@ -19,18 +19,20 @@
   height: 100%;
   -webkit-box-sizing: border-box;
   position: relative;
-  width: 250px;
+  width: 20em;
 
   background-color: #f0f0f0;
+  padding: 1em;
   border-right: 1px solid #ccc;
 
   /* Slide the sidebar off screen when hiding it */
   -webkit-transition: 0.5s ease-in-out;
 }
 #layout-main-sidebar.hidden {
-  margin-left: -250px;
+  margin-left: -20em;
 }
 
+#layout-main-toolbar { display: inline-block; }
 
 #layout-main-area {
   height: 100%;
@@ -42,10 +44,13 @@
 
 #layout-main-sidebar .edit { float: right; }
 
+/* Enable scrolling inside the side bar */
+#layout-main-sidebar nav {
+  height: 100%;
+  overflow: auto;
+}
 
 .addable { margin-left: 1em; }
-/* Style TOC sections different from content */
-.editor-drop-zone-in:not([data-id]) { font-weight: bold; }
 
 
 
@@ -55,24 +60,19 @@
  *
  * Show the document icon by default.
  */
-i.iconic.search-result-icon:before { content:'\e000'; /* document_alt_stroke */ }
-i.iconic.search-result-icon.collection:before { content:'\e06a'; /* book_alt2 */ }
-
-/* Buttons on the fork dialog should span the whole width of the dialog */
-.modal .btn.fork {
-  font-weight: bold;
-  width: 100%;
-}
+.search-results *[data-media-type]                     .icon-content { margin-right: 0.5em; }
+.search-results *[data-media-type='text/x-module']     .icon-content:before { content:"\f0f6"; /* icon-file-alt */ }
+.search-results *[data-media-type='text/x-collection'] .icon-content:before { content:"\f02d"; /* icon-book */ }
 
 
+/* Style TOC sections different from content */
+.editor-drop-zone-in:not([data-id]) { font-weight: bold; }
 
-.editor-drop-zone-before {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
 
+.editor-node { cursor: move; }
 .editor-node > a:hover,
 .editor-node > span:hover {
-  background-color: rgba(0, 0, 255, 0.25);
+  background-color: #eee;
 }
 .editor-node > a,
 .editor-node > span {
@@ -87,7 +87,10 @@ i.iconic.search-result-icon.collection:before { content:'\e06a'; /* book_alt2 */
 }
 
 .editor-drop-zone-hover {
-  background-color: rgba(0, 0, 255, 0.25);
+  background-color: #ccc;
+}
+.editor-drop-zone-before {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 
@@ -102,14 +105,12 @@ i.iconic.search-result-icon.collection:before { content:'\e06a'; /* book_alt2 */
 }
 
 /* Add some space because the toolbar floats */
-.layout-content.layout-root {
+#layout-main-area {
   background-color: #ebebeb;
-  margin-top: 55px;
+  padding: 2em;
 }
 
-.layout-content.layout-root > .row > .span11 {
-  /* give the document a little space below the toolbar */
-  margin-top: 10px;
+#layout-main-area > * {
   padding: 1em;
   background-color: white;
   border: 1px solid black;
@@ -263,12 +264,10 @@ table td:first-child { min-width: 1em; }
   z-index: 1;
 }
 
-figure { counter-increment: figure; }
-figure figcaption::before { content: "Figure 1." counter(figure) " "; font-weight: bold; }
 
 body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+  padding-top: 41px;
+  padding-bottom: 0;
 }
 
 #editorspan {

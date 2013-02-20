@@ -24,8 +24,8 @@ define [
   'app/controller'
   './languages'
   # Load the Handlebar templates
-  'hbs!app/views/content-list'
-  'hbs!app/views/content-list-item'
+  'hbs!app/views/search-results'
+  'hbs!app/views/search-results-item'
   'hbs!app/views/modal-wrapper'
   'hbs!app/views/edit-metadata'
   'hbs!app/views/edit-roles'
@@ -33,7 +33,7 @@ define [
   'hbs!app/views/aloha-toolbar'
   'hbs!app/views/sign-in-out'
   'hbs!app/views/book-view'
-  'hbs!app/views/nav-edit'
+  'hbs!app/views/book-edit'
   'hbs!app/views/book-add-content'
   # Load internationalized strings
   'i18n!app/nls/strings'
@@ -43,7 +43,7 @@ define [
   'select2'
   # Include CSS icons used by the toolbar
   'css!font-awesome'
-], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_VIEW, NAV_EDIT, BOOK_ADD_CONTENT, __) ->
+], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_VIEW, BOOK_EDIT, BOOK_ADD_CONTENT, __) ->
 
   # **FIXME:** Move this delay into a common module so the mock AJAX code can use them too
   DELAY_BEFORE_SAVING = 3000
@@ -99,17 +99,17 @@ define [
   #
   # Since we don't really distinguish between a search result view and a workspace/collection/etc
   # just consider them the same.
-  exports.SearchResultItemView = Marionette.ItemView.extend
+  exports.SearchResultsItemView = Marionette.ItemView.extend
     tagName: 'tr'
     template: SEARCH_RESULT_ITEM
     onRender: ->
       @$el.on 'click', => Controller.editModel(@model)
 
   # This can also be thought of as the Workspace view
-  exports.SearchResultView = Marionette.CompositeView.extend
+  exports.SearchResultsView = Marionette.CompositeView.extend
     template: SEARCH_RESULT
     itemViewContainer: 'tbody'
-    itemView: exports.SearchResultItemView
+    itemView: exports.SearchResultsItemView
 
     initialize: ->
       @listenTo @collection, 'all',   => @render()
@@ -436,7 +436,7 @@ define [
 
   # Use this to generate HTML with extra divs for Drag/Drop
   exports.BookEditView = exports.BookView.extend
-    template: NAV_EDIT
+    template: BOOK_EDIT
     events:
       'click .save': 'showBook'
       'click a': 'editModel'
@@ -492,5 +492,4 @@ define [
             setTimeout delay, 10
 
 
-  exports.WorkspaceView = exports.SearchResultView
   return exports
