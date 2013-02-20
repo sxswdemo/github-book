@@ -2,10 +2,7 @@
 (function() {
 
   define(['jquery', 'backbone', 'marionette', 'atc/auth', 'atc/models', 'atc/views', 'hbs!atc/layouts/main', 'hbs!atc/layouts/book-view', 'hbs!atc/layouts/content', 'hbs!atc/layouts/workspace', 'exports', 'i18n!atc/nls/strings'], function(jQuery, Backbone, Marionette, Auth, Models, Views, LAYOUT_MAIN, LAYOUT_BOOK_VIEW, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) {
-    var $main, $originalContents, ContentLayout, ContentRouter, HidingRegion, MainLayout, contentLayout, mainArea, mainController, mainLayout, mainRegion, mainSidebar, mainToolbar;
-    $main = jQuery('#main');
-    $originalContents = $main.contents();
-    $main.empty();
+    var ContentLayout, ContentRouter, HidingRegion, MainLayout, contentLayout, mainArea, mainController, mainLayout, mainRegion, mainSidebar, mainToolbar;
     mainRegion = new Marionette.Region({
       el: '#main'
     });
@@ -36,11 +33,8 @@
     ContentLayout = Marionette.Layout.extend({
       template: LAYOUT_CONTENT,
       regions: {
-        toolbar: '#layout-toolbar',
         title: '#layout-title',
-        title2: '#layout-title2',
         body: '#layout-body',
-        back: '#layout-back',
         metadata: '#layout-metadata',
         roles: '#layout-roles'
       }

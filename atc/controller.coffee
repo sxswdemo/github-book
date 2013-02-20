@@ -22,11 +22,6 @@ define [
   'i18n!atc/nls/strings'
 ], (jQuery, Backbone, Marionette, Auth, Models, Views, LAYOUT_MAIN, LAYOUT_BOOK_VIEW, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) ->
 
-  # Squirrel away the original contents of the main div (content HTML when viewing the content page for example)
-  $main = jQuery('#main')
-  $originalContents = $main.contents()
-  $main.empty()
-
   mainRegion = new Marionette.Region
     el: '#main'
 
@@ -54,11 +49,8 @@ define [
   ContentLayout = Marionette.Layout.extend
     template: LAYOUT_CONTENT
     regions:
-      toolbar:      '#layout-toolbar'
-      title:        '#layout-title'  # Title shows up twice; once on top of the page
-      title2:       '#layout-title2' # and at the top of the document. Both are editable
+      title:        '#layout-title'
       body:         '#layout-body'
-      back:         '#layout-back'
       # Specific to content
       metadata:     '#layout-metadata'
       roles:        '#layout-roles'
