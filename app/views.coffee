@@ -24,6 +24,7 @@ define [
   'app/controller'
   './languages'
   # Load the Handlebar templates
+  'hbs!app/views/search-box'
   'hbs!app/views/search-results'
   'hbs!app/views/search-results-item'
   'hbs!app/views/modal-wrapper'
@@ -43,7 +44,7 @@ define [
   'select2'
   # Include CSS icons used by the toolbar
   'css!font-awesome'
-], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_VIEW, BOOK_EDIT, BOOK_ADD_CONTENT, __) ->
+], (exports, _, Backbone, Marionette, jQuery, Aloha, URLS, Controller, Languages, SEARCH_BOX, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_VIEW, BOOK_EDIT, BOOK_ADD_CONTENT, __) ->
 
   # **FIXME:** Move this delay into a common module so the mock AJAX code can use them too
   DELAY_BEFORE_SAVING = 3000
@@ -113,6 +114,18 @@ define [
 
     initialize: ->
       @listenTo @collection, 'all',   => @render()
+
+  # This can also be thought of as the Workspace view
+  exports.SearchBoxView = Marionette.ItemView.extend
+    template: SEARCH_BOX
+    events:
+      'keyup #search': 'setFilter'
+      'change #search': 'setFilter'
+    setFilter: (evt) ->
+      $searchBox = jQuery(@$el).find '#search'
+      filterStr = $searchBox.val()
+      filterStr = '' if filterStr.length < 2
+      @model.setFilter filterStr
 
 
   exports.AlohaEditView = Marionette.ItemView.extend

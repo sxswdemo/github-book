@@ -100,10 +100,13 @@ define [
       mainToolbar.close()
       # List the workspace
       workspace = new Models.SearchResults()
+      workspace = new Models.FilteredCollection null, {collection: workspace}
+
+      view = new Views.SearchBoxView {model: workspace}
+      mainToolbar.show view
+
       view = new Views.SearchResultsView {collection: workspace}
       mainArea.show view
-
-      mainSidebar.close()
 
       # Update the URL
       Backbone.history.navigate 'workspace'
@@ -138,6 +141,8 @@ define [
       model.deferred (err) =>
         return alert 'Problem connecting to server' if err
         mainToolbar.close()
+        mainArea.close()
+
 
         view = new Views.BookView {model: model}
         mainSidebar.show view
