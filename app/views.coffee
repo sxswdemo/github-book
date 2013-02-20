@@ -401,6 +401,9 @@ define [
     signOut: -> @model.signOut()
 
 
+  # **FIXME:** Don't generate uuid's inside a view; that's just dumb.
+  # Generate UUIDv4 id's (from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript)
+
   exports.BookAddContentView = Marionette.ItemView.extend
     template: BOOK_ADD_CONTENT
     events:
@@ -412,7 +415,8 @@ define [
       @model.set 'navTree', navTree
 
     prependSection: -> @_prepend {title: 'Untitled Section'}
-    prependContent: -> @_prepend {title: 'Untitled Content', href: 'new123'}
+    prependContent: ->
+      @model.prependNewContent {title: 'Untitled Content', mediaType: 'text/x-module'}
 
 
   # Use this to generate HTML with extra divs for Drag/Drop

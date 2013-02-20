@@ -420,9 +420,9 @@
         });
       },
       prependContent: function() {
-        return this._prepend({
+        return this.model.prependNewContent({
           title: 'Untitled Content',
-          href: 'new123'
+          mediaType: 'text/x-module'
         });
       }
     });

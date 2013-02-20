@@ -99,12 +99,12 @@ define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) 
     parseNavTree: (li) ->
       $li = jQuery(li)
 
-      $a = $li.children 'a'
+      $a = $li.children 'a, *[data-id]'
       $span = $li.children 'span'
       $ol = $li.children 'ol'
 
       if $a[0]
-        obj = {href: $a.attr('href'), title: $a.text()}
+        obj = {href: $a.attr('href') or $a.data('id'), title: $a.text()}
       else
         obj = {title: $span.text()}
 
@@ -139,6 +139,16 @@ define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) 
         recAdd(navTree) if navTree
 
       @trigger 'change:navTree', @getNavTree()
+
+    prependNewContent: (config) ->
+      uuid = b = (a) ->
+        (if a then (a ^ Math.random() * 16 >> a / 4).toString(16) else ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b))
+      config.id = uuid() if not config.id
+      ALL_CONTENT.add config
+      newContent = ALL_CONTENT.get config.id
+      navTree = @getNavTree()
+      navTree.unshift {href: config.id, title: config.title}
+      @set 'navTree', navTree
 
 
     getNavTree: (tree) ->

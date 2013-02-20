@@ -105,12 +105,12 @@
       parseNavTree: function(li) {
         var $a, $li, $ol, $span, obj;
         $li = jQuery(li);
-        $a = $li.children('a');
+        $a = $li.children('a, *[data-id]');
         $span = $li.children('span');
         $ol = $li.children('ol');
         if ($a[0]) {
           obj = {
-            href: $a.attr('href'),
+            href: $a.attr('href') || $a.data('id'),
             title: $a.text()
           };
         } else {
@@ -191,6 +191,27 @@
           }
         });
         return this.trigger('change:navTree', this.getNavTree());
+      },
+      prependNewContent: function(config) {
+        var b, navTree, newContent, uuid;
+        uuid = b = function(a) {
+          if (a) {
+            return (a ^ Math.random() * 16 >> a / 4).toString(16);
+          } else {
+            return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b);
+          }
+        };
+        if (!config.id) {
+          config.id = uuid();
+        }
+        ALL_CONTENT.add(config);
+        newContent = ALL_CONTENT.get(config.id);
+        navTree = this.getNavTree();
+        navTree.unshift({
+          href: config.id,
+          title: config.title
+        });
+        return this.set('navTree', navTree);
       },
       getNavTree: function(tree) {
         return JSON.parse(JSON.stringify(this.get('navTree')));
