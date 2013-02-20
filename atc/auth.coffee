@@ -3,7 +3,7 @@
 #
 # If the user logs in/out listeners are fired so views that depend on the
 # state are updated (enabled and loaded or disabled).
-define ['underscore', 'backbone', 'atc/urls'], (_, Backbone, URLS) ->
+define ['underscore', 'backbone'], (_, Backbone) ->
 
   # For the UI, provide a backbone "interface" to the auth piece
   AuthModel = Backbone.Model.extend
@@ -20,9 +20,6 @@ define ['underscore', 'backbone', 'atc/urls'], (_, Backbone, URLS) ->
 
     signOut: ->
       @set 'id', null, {unset: true}
-
-    # To see who the current user is, make an AJAX call to `/me`
-    url: -> URLS.ME
 
   # Create a singleton model that represents the authenticated user.
   return new AuthModel()
