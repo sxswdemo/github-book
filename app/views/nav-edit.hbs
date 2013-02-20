@@ -1,14 +1,14 @@
 <button class="btn btn-primary save">Done</button>
-<nav>
+<nav data-type="toc">
 {{#with navTree}}
   <ol>
   {{#recursive .}}
-    <li class="editor-node">
+    <li class="editor-node {{class}}">
       <div class="editor-drop-zone editor-drop-zone-before"></div>
       {{#if href}}
-        <span class="editor-drop-zone editor-drop-zone-in" data-id="{{href}}">{{title}}</span>
+        <span class="editor-drop-zone editor-drop-zone-in" data-id="{{href}}" data-class="{{class}}">{{title}}</span>
       {{else}}
-        <span class="editor-drop-zone editor-drop-zone-in">{{title}}</span>
+        <span class="editor-drop-zone editor-drop-zone-in" data-class="{{class}}">{{title}}</span>
       {{/if}}
       <div class="editor-drop-zone editor-drop-zone-after"></div>
       {{#if children}}

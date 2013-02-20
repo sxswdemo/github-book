@@ -2,7 +2,7 @@
 # This module contains backbone models used throughout the application
 #
 # It also has some hardcoded URLs for syncing with the server (GET/POST/PUT URLs)
-define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) ->
+define ['exports', 'jquery', 'backbone', 'i18n!app/nls/strings'], (exports, jQuery, Backbone, __) ->
 
   # Contains a mapping from mime-type to a `Backbone.Model` constructor
   # Different plugins (Markdown, ASCIIDoc, cnxml) can add themselves to this
@@ -99,14 +99,13 @@ define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) 
     parseNavTree: (li) ->
       $li = jQuery(li)
 
-      $a = $li.children 'a, *[data-id]'
-      $span = $li.children 'span'
+      $a = $li.children 'a, span'
       $ol = $li.children 'ol'
 
-      if $a[0]
-        obj = {href: $a.attr('href') or $a.data('id'), title: $a.text()}
-      else
-        obj = {title: $span.text()}
+      obj = {href: $a.attr('href') or $a.data('id'), title: $a.text()}
+
+      # The custom class is either set on the $span (if parsing from the editor) or on the $a (if parsing from an EPUB)
+      obj.class = $a.data('class') or $a.not('span').attr('class')
 
       obj.children = (@parseNavTree(li) for li in $ol.children()) if $ol[0]
       return obj
@@ -132,7 +131,7 @@ define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) 
         recAdd = (nodes) =>
           for node in nodes
             if node.href
-              ALL_CONTENT.add {id: node.href, mediaType: 'text/x-module'}
+              ALL_CONTENT.add {id: node.href, title: node.title, mediaType: 'text/x-module'}
               contentModel = ALL_CONTENT.get node.href
               @manifest.add contentModel
             recAdd node.children if node.children

@@ -471,7 +471,7 @@ define [
 
             $drag = ui.draggable
             $drop = jQuery(evt.target)
-            $root = $drop.parents('nav')
+            $root = $drop.parents('nav[data-type="toc"]')
             $li = $drop.parent()
 
             # Perform all of these DOM cleanup events once jQueryUI is finished with its events

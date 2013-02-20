@@ -2,11 +2,11 @@
   <button class="btn edit"><i class="icon-edit"></i> Edit</button>
   <h3>Table of Contents</h3>
 </div>
-<nav>
+<nav data-type="toc">
 {{#with navTree}}
   <ol>
   {{#recursive .}}
-    <li>
+    <li class="{{class}}">
     {{#if href}}
       <a href="{{href}}" data-id="{{href}}">{{title}}</a>
     {{else}}

@@ -494,7 +494,7 @@
               };
               $drag = ui.draggable;
               $drop = jQuery(evt.target);
-              $root = $drop.parents('nav');
+              $root = $drop.parents('nav[data-type="toc"]');
               $li = $drop.parent();
               delay = function() {
                 var $ol;
