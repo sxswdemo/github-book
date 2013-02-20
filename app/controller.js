@@ -67,11 +67,17 @@
         var view, workspace;
         mainToolbar.close();
         workspace = new Models.SearchResults();
+        workspace = new Models.FilteredCollection(null, {
+          collection: workspace
+        });
+        view = new Views.SearchBoxView({
+          model: workspace
+        });
+        mainToolbar.show(view);
         view = new Views.SearchResultsView({
           collection: workspace
         });
         mainArea.show(view);
-        mainSidebar.close();
         Backbone.history.navigate('workspace');
         return workspace.on('change', function() {
           return view.render();
@@ -109,6 +115,7 @@
             return alert('Problem connecting to server');
           }
           mainToolbar.close();
+          mainArea.close();
           view = new Views.BookView({
             model: model
           });

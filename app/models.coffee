@@ -61,6 +61,41 @@ define ['exports', 'jquery', 'backbone', 'i18n!app/nls/strings'], (exports, jQue
     deferred: () -> deferred.apply(@, arguments)
 
 
+  exports.FilteredCollection = Backbone.Collection.extend
+    defaults:
+      collection: null
+    setFilter: (str) ->
+      return if @filterStr == str
+      @filterStr = str
+
+      # Remove anything that no longer matches
+      models = (@collection.filter (model) => @isMatch(model))
+      @reset models
+
+    isMatch: (model) ->
+      return true if not @filterStr
+      model.get('title').toLowerCase().search(@filterStr.toLowerCase()) >= 0
+
+    initialize: (models, options) ->
+      @filterStr = options.filterStr or ''
+      @collection = options.collection
+      throw 'BUG: Cannot filter on a non-existent collection' if not @collection
+
+      @add (@collection.filter (model) => @isMatch(model))
+
+      @collection.on 'add', (model) =>
+        @add model if @isMatch(model)
+
+      @collection.on 'remove', (model) => @remove model
+
+      @collection.on 'change', (model) =>
+        if @isMatch(model)
+          @add model
+        else
+          @remove model
+
+
+
   # The `Content` model contains the following members:
   #
   # * `title` - an HTML title of the content

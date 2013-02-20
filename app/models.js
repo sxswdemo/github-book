@@ -65,6 +65,55 @@
         return deferred.apply(this, arguments);
       }
     });
+    exports.FilteredCollection = Backbone.Collection.extend({
+      defaults: {
+        collection: null
+      },
+      setFilter: function(str) {
+        var models,
+          _this = this;
+        if (this.filterStr === str) {
+          return;
+        }
+        this.filterStr = str;
+        models = this.collection.filter(function(model) {
+          return _this.isMatch(model);
+        });
+        return this.reset(models);
+      },
+      isMatch: function(model) {
+        if (!this.filterStr) {
+          return true;
+        }
+        return model.get('title').toLowerCase().search(this.filterStr.toLowerCase()) >= 0;
+      },
+      initialize: function(models, options) {
+        var _this = this;
+        this.filterStr = options.filterStr || '';
+        this.collection = options.collection;
+        if (!this.collection) {
+          throw 'BUG: Cannot filter on a non-existent collection';
+        }
+        this.add(this.collection.filter(function(model) {
+          return _this.isMatch(model);
+        }));
+        this.collection.on('add', function(model) {
+          if (_this.isMatch(model)) {
+            return _this.add(model);
+          }
+        });
+        this.collection.on('remove', function(model) {
+          return _this.remove(model);
+        });
+        return this.collection.on('change', function(model) {
+          if (_this.isMatch(model)) {
+            return _this.add(model);
+          } else {
+            return _this.remove(model);
+          }
+        });
+      }
+    });
     Content = Deferrable.extend({
       defaults: {
         title: __('Untitled'),
