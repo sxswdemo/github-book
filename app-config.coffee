@@ -34,7 +34,7 @@ require.config
     # A Handlebars helper for making recursive templates (rendering trees)
     'template/helpers/recursive': 'helpers/hbs-helper-recursive'
 
-    'font-awesome': 'lib/font-awesome/css/font-awesome'
+    'font-awesome': 'lib/font-awesome/css/Font-Awesome'
 
   # # Shims
   # To support libraries that were not written for AMD
