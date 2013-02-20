@@ -20,7 +20,7 @@
       i18nprecompile: 'lib/require-handlebars-plugin/hbs/i18nprecompile',
       json2: 'lib/require-handlebars-plugin/hbs/json2',
       'template/helpers/recursive': 'helpers/hbs-helper-recursive',
-      'font-awesome': 'lib/font-awesome/css/font-awesome'
+      'font-awesome': 'lib/Font-Awesome/css/font-awesome'
     },
     shim: {
       jquery: {
