@@ -1,16 +1,16 @@
 <div>
-  <button class="btn edit">Edit</button>
+  <button class="btn edit"><i class="icon-edit"></i> Edit</button>
   <h3>Table of Contents</h3>
 </div>
 <nav>
 {{#with navTree}}
   <ol>
   {{#recursive .}}
-    <li class="editor-node">
+    <li>
     {{#if href}}
-      <a class="editor-drop-zone editor-drop-zone-in" href="{{href}}" data-id="{{href}}">{{title}}</a>
+      <a href="{{href}}" data-id="{{href}}">{{title}}</a>
     {{else}}
-      <span class="editor-drop-zone editor-drop-zone-in">{{title}}</span>
+      <span>{{title}}</span>
     {{/if}}
     {{#if children}}
       <ol>

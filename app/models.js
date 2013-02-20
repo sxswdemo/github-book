@@ -149,7 +149,7 @@
                 return node;
               }
               if (node.children) {
-                return recFind(children);
+                return recFind(node.children);
               }
             }
           };
@@ -163,7 +163,7 @@
         this.manifest.on('add', function(model) {
           return ALL_CONTENT.add(model);
         });
-        this.on('change:navTree', function(navTree) {
+        this.on('change:navTree', function(model, navTree) {
           var recAdd;
           recAdd = function(nodes) {
             var contentModel, node, _i, _len, _results;
@@ -179,7 +179,7 @@
                 _this.manifest.add(contentModel);
               }
               if (node.children) {
-                _results.push(recAdd(children));
+                _results.push(recAdd(node.children));
               } else {
                 _results.push(void 0);
               }
@@ -190,7 +190,7 @@
             return recAdd(navTree);
           }
         });
-        return this.trigger('change:navTree', this.getNavTree());
+        return this.trigger('change:navTree', this, this.getNavTree());
       },
       prependNewContent: function(config) {
         var b, navTree, newContent, uuid;

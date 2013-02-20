@@ -40,6 +40,16 @@
 }
 
 
+#layout-main-sidebar .edit { float: right; }
+
+
+.addable { margin-left: 1em; }
+/* Style TOC sections different from content */
+.editor-drop-zone-in:not([data-id]) { font-weight: bold; }
+
+
+
+
 /* Mustache does not allow logic in their templates so
  * we set the correct character based on the 'type' of content.
  *

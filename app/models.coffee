@@ -120,14 +120,14 @@ define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) 
         recFind = (nodes) ->
           for node in nodes
             return node if model.id == node.href
-            return recFind children if node.children
+            return recFind node.children if node.children
         node = recFind(navTree)
         throw 'BUG: There is an entry in the tree but no corresponding model in the manifest' if not node
         node.title = newValue
         @set 'navTree', navTree
 
       @manifest.on 'add', (model) -> ALL_CONTENT.add model
-      @on 'change:navTree', (navTree) =>
+      @on 'change:navTree', (model, navTree) =>
         # **TODO:** Remove manifest entries if they are not referred to by the navTree or any modules in the book.
         recAdd = (nodes) =>
           for node in nodes
@@ -135,10 +135,10 @@ define ['backbone', 'exports', 'i18n!app/nls/strings'], (Backbone, exports, __) 
               ALL_CONTENT.add {id: node.href, mediaType: 'text/x-module'}
               contentModel = ALL_CONTENT.get node.href
               @manifest.add contentModel
-            recAdd children if node.children
+            recAdd node.children if node.children
         recAdd(navTree) if navTree
 
-      @trigger 'change:navTree', @getNavTree()
+      @trigger 'change:navTree', @, @getNavTree()
 
     prependNewContent: (config) ->
       uuid = b = (a) ->
