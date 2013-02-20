@@ -1,11 +1,13 @@
 require.onError = (err) -> console.error err
 
+ALOHA_PATH = 'http://wysiwhat.github.com/Aloha-Editor' # '../Aloha-Editor'
+
 # Configure paths to all the JS libs
 require.config
 
   # # Configure Library Locations
   paths:
-    aloha: '../Aloha-Editor/src/lib/aloha'
+    aloha: ALOHA_PATH + '/src/lib/aloha'
 
 
 

@@ -97,9 +97,10 @@ define [
     # ### Show Workspace
     # Shows the workspace listing and updates the URL
     workspace: ->
+      mainToolbar.close()
       # List the workspace
       workspace = new Models.SearchResults()
-      view = new Views.WorkspaceView {collection: workspace}
+      view = new Views.SearchResultsView {collection: workspace}
       mainArea.show view
 
       mainSidebar.close()
@@ -136,6 +137,7 @@ define [
     showBook: (model) ->
       model.deferred (err) =>
         return alert 'Problem connecting to server' if err
+        mainToolbar.close()
 
         view = new Views.BookView {model: model}
         mainSidebar.show view
@@ -143,6 +145,7 @@ define [
     editBook: (model) ->
       model.deferred (err) =>
         return alert 'Problem connecting to server' if err
+        mainToolbar.close()
 
         view = new Views.BookAddContentView {model: model}
         mainSidebar.show view
@@ -178,7 +181,7 @@ define [
       configAccordionDialog contentLayout.roles,    new Views.RolesEditView {model: content}
 
       view = new Views.ContentToolbarView(model: content)
-      contentLayout.toolbar.show view
+      mainToolbar.show view
 
       view = new Views.TitleEditView(model: content)
       contentLayout.title.show view
