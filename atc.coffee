@@ -52,31 +52,6 @@ define [
   jQuery.curCSS = jQuery.css
 
 
-  # ## Custom POST/PUT syntax
-  # **FIXME:** By default Backbone sends the JSON object as the body when a PUT is called.
-  # Instead, send each key/value as a PUT parameter
-  Backbone_sync_orig = Backbone.sync
-  Backbone.sync = (method, model, options) =>
-    if 'update' == method
-      data = _.extend {}, model.toJSON()
-      # **FIXME:** This URL (and the funky data.json param) is a HACK and should be fixed
-      data.json = JSON.stringify(model)
-      href = options['url'] or model.url() or throw 'URL to sync to not defined'
-      href = "#{href}?#{jQuery.param(model.toJSON())}"
-
-      params =
-        type: 'PUT'
-        url: href
-        data: JSON.stringify(model)
-        processData: false
-        dataType: 'json'
-        contentType: 'application/json'
-
-      jQuery.ajax(_.extend(params, options))
-    else
-      Backbone_sync_orig method, model, options
-
-
   # # Hash tags in links
   # Code should use the `Controller` module to change the page
   # instead of relying on the URL

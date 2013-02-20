@@ -2,8 +2,6 @@
 (function() {
 
   define(['jquery', 'underscore', 'backbone', 'marionette', 'aloha', 'atc/auth', 'atc/controller', 'css!atc'], function(jQuery, _, Backbone, Marionette, Aloha, Auth, Controller) {
-    var Backbone_sync_orig,
-      _this = this;
     Auth.fetch();
     Controller.start();
     this.jQuery = this.$ = function() {
@@ -12,29 +10,6 @@
     };
     jQuery.extend(this.jQuery, jQuery);
     jQuery.curCSS = jQuery.css;
-    Backbone_sync_orig = Backbone.sync;
-    Backbone.sync = function(method, model, options) {
-      var data, href, params;
-      if ('update' === method) {
-        data = _.extend({}, model.toJSON());
-        data.json = JSON.stringify(model);
-        href = options['url'] || model.url() || (function() {
-          throw 'URL to sync to not defined';
-        })();
-        href = "" + href + "?" + (jQuery.param(model.toJSON()));
-        params = {
-          type: 'PUT',
-          url: href,
-          data: JSON.stringify(model),
-          processData: false,
-          dataType: 'json',
-          contentType: 'application/json'
-        };
-        return jQuery.ajax(_.extend(params, options));
-      } else {
-        return Backbone_sync_orig(method, model, options);
-      }
-    };
     return jQuery(document).on('click', 'a:not([data-bypass])', function(evt) {
       var href;
       evt.preventDefault();
