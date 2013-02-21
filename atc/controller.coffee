@@ -9,6 +9,7 @@ define [
   'jquery'
   'backbone'
   'marionette'
+  'atc/media-types'
   'atc/auth'
   'atc/models'
   # There is a cyclic dependency between views and controllers
@@ -20,7 +21,7 @@ define [
   'hbs!atc/layouts/workspace'
   'exports'
   'i18n!atc/nls/strings'
-], (jQuery, Backbone, Marionette, Auth, Models, Views, LAYOUT_MAIN, LAYOUT_BOOK_VIEW, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) ->
+], (jQuery, Backbone, Marionette, MEDIA_TYPES, Auth, Models, Views, LAYOUT_MAIN, LAYOUT_BOOK_VIEW, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) ->
 
   mainRegion = new Marionette.Region
     el: '#main'
@@ -133,10 +134,10 @@ define [
     #
     # Dispatches based on the contents' `mediaType`
     editModel: (model) ->
-      switch model.get 'mediaType'
-        when 'text/x-module' then @editContent model
-        when 'text/x-collection' then @showBook model
-        else console.warn('BUG: Invalid mediaType. Assuming it is text/x-module'); @editContent model
+      throw 'BUG: model.mediaType does not exist' if not model.mediaType
+      editAction = MEDIA_TYPES.get(model.mediaType).editAction
+      throw 'BUG: no way to edit this model' if not editAction
+      editAction(model)
 
     # Show a book TOC in the left sidebar
     showBook: (model) ->
@@ -210,6 +211,11 @@ define [
       'workspace':    'workspace'
       'content':      'createContent' # Create a new piece of content
       'content/:id':  'editModelId' # Edit an existing piece of content
+
+  # ## Attach mediaType edit views
+  MEDIA_TYPES.add 'text/x-module',     {editAction: (model) -> mainController.editContent model}
+  MEDIA_TYPES.add 'text/x-collection', {editAction: (model) -> mainController.showBook model}
+
 
   # Start listening to URL changes
   new ContentRouter()

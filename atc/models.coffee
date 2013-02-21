@@ -1,45 +1,13 @@
 # # Backbone Models
 # This module contains backbone models used throughout the application
-define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQuery, Backbone, __) ->
-
-  # ## Custom Media Types Plugin
-  #
-  # Several languages translate to HTML (Markdown, ASCIIDoc, cnxml).
-  #
-  # Developers can extend the types used by registering to handle different mime-types.
-  # Making an extension requires the following:
-  #
-  # - `parse()` and `serialize()` functions for
-  #     reading in the file and writing it to HTML
-  # - An Edit View for editing the content
-  #
-  # Entries in here contain a mapping from mime-type to a `Backbone.Model` constructor
-  # Different plugins (Markdown, ASCIIDoc, cnxml) can add themselves to this
-  MediaTypes = Backbone.Collection.extend
-    # Just a glorified JSON holder
-    model: Backbone.Model.extend
-      sync: -> throw 'This model cannot be syncd'
-    sync: -> throw 'This model cannot be syncd'
-
-  # This is exported at the end of the module
-  MEDIA_TYPES = new MediaTypes()
+define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/strings'], (exports, jQuery, Backbone, MEDIA_TYPES, __) ->
 
 
   # Custom Models defined above are mixed in using `BaseContent.initialize`
   BaseContent = Backbone.Model.extend
     initialize: ->
-      mediaType = @get 'mediaType'
-      throw 'BUG: No mediaType set' if not mediaType
-      throw 'BUG: No mediaType not registered' if not MEDIA_TYPES.get mediaType
-
-      # Mixin the subclasses fields
-      mediaTypeConfig = MEDIA_TYPES.get mediaType
-      proto = mediaTypeConfig.get('constructor').prototype
-      for key, value of proto
-        @[key] = value
-
-      # Call the mixed-in constructor
-      proto.initialize.apply(this, arguments)
+      throw 'BUG: No mediaType set' if not @mediaType
+      throw 'BUG: No mediaType not registered' if not MEDIA_TYPES.get @mediaType
 
   # ## All Content
   #
@@ -74,30 +42,17 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
 
   Deferrable = Backbone.Model.extend
     loaded: () -> loaded.apply(@, arguments)
+    toJSON: ->
+      json = Backbone.Model.prototype.toJSON.apply(@, arguments)
+      json.mediaType = @mediaType
+      return json
 
   DeferrableCollection = Backbone.Collection.extend
     loaded: () -> loaded.apply(@, arguments)
-
-    # From `Backbone.Collection._prepareModel` version 0.9.10
-    #
-    # Prepare a model or hash of attributes to be added to this collection.
-    _prepareModel: (attrs, options) ->
-      if attrs instanceof Backbone.Model
-        # Get back the model in ALL_CONTENT
-        ALL_CONTENT.add attrs
-        attrs = ALL_CONTENT.get attrs
-
-        attrs.collection = this if not attrs.collection
-        return attrs
-
-      options || (options = {})
-      options.collection = @
-
-      # Here is where we differ. Create the model using `MEDIA_TYPES`
-      # and ensure it is added to `ALL_CONTENT`
-      ALL_CONTENT.add attrs
-      model = ALL_CONTENT.get attrs
-      return model
+    toJSON: -> (model.toJSON() for model in @models)
+    initialize: ->
+      @on 'add',   (model) -> ALL_CONTENT.add model
+      @on 'reset', (collection, options) -> ALL_CONTENT.add collection.toArray()
 
 
 
@@ -148,7 +103,8 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
   # * `subjects` - an array of strings (eg `['Mathematics', 'Business']`)
   # * `keywords` - an array of keywords (eg `['constant', 'boltzmann constant']`)
   # * `authors` - an `Collection` of `User`s that are attributed as authors
-  Content = Deferrable.extend
+  BaseContent = Deferrable.extend
+    mediaType: 'text/x-module'
     defaults:
       title: __('Untitled')
       subjects: []
@@ -167,13 +123,21 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
 
 
   # Represents a "collection" in [Connexions](http://cnx.org) terminology and an `.opf` file in an EPUB
-  Book = Deferrable.extend
+  BaseBook = Deferrable.extend
+    mediaType: 'text/x-collection'
     defaults:
       manifest: null
-      navTree: null
+      # `navTreeStr` is stored as a JSON string so events are fired when changes are made
+      navTreeStr: '[]'
+
     # Subclasses can provide a better Collection for storing Content items in a book
     # so the book can listen to changes.
     manifestType: Backbone.Collection
+
+    toJSON: ->
+      json = Deferrable.prototype.toJSON.apply(@, arguments)
+      json.navTree = JSON.parse @get 'navTreeStr'
+      return json
 
     # Takes an element representing a `<nav epub:type="toc"/>` element
     # and returns a JSON tree with the following structure:
@@ -223,77 +187,79 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
     #
     # Similarly, an update to the navigation tree will create new models.
     initialize: ->
+      ALL_CONTENT.add @
+
       @manifest = new @manifestType()
+      @manifest.on 'add',   (model, collection) -> ALL_CONTENT.add model
+      @manifest.on 'reset', (model, collection) -> ALL_CONTENT.add model
+
       @manifest.on 'change:title', (model, newValue, oldValue) =>
-        navTree = @getNavTree()
+        navTree = JSON.parse @get('navTreeStr')
         # Find the node that has an `id` to this model
         recFind = (nodes) ->
           for node in nodes
             return node if model.id == node.id
-            return recFind node.children if node.children
+            if node.children
+              found = recFind node.children
+              return found if found
         node = recFind(navTree)
         throw 'BUG: There is an entry in the tree but no corresponding model in the manifest' if not node
         node.title = newValue
-        @set 'navTree', navTree
+        @set 'navTreeStr', JSON.stringify navTree
 
-      @on 'change:navTree', (model, navTree) =>
+      @on 'change:navTreeStr', (model, navTreeStr, options) =>
         # **TODO:** Remove manifest entries if they are not referred to by the navTree or any modules in the book.
         recAdd = (nodes) =>
           for node in nodes
             if node.id
-              contentModel = @_addToManifest {id: node.id, title: node.title, mediaType: 'text/x-module'}
+              contentModel = @manifest.add {id: node.id, title: node.title, mediaType: 'text/x-module'}
             recAdd node.children if node.children
-        recAdd(navTree) if navTree
-
-      @trigger 'change:navTree', @, @getNavTree()
-
-    _addToManifest: (config) ->
-      ALL_CONTENT.add config
-      model = ALL_CONTENT.get config.id
-      @manifest.add model
-      return model
+        recAdd(JSON.parse navTreeStr)
 
 
     # **FIXME:** Somewhat hacky way of creating a new piece of content
-    prependNewContent: (config) ->
-      uuid = b = (a) ->
-        (if a then (a ^ Math.random() * 16 >> a / 4).toString(16) else ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b))
-      config.id = uuid() if not config.id
+    prependNewContent: (model, mediaType) ->
+      if model instanceof Backbone.Model
+        @manifest.add model
 
-      # Create the model from a config and add it to the manifest
-      newContent = @_addToManifest config
-      # HACK: Since it is new content there is nothing to load but we already set an `id`
-      console.warn 'FIXME: Hack for new content'
-      newContent.loaded(true)
+      else if mediaType
+        config = model
+        throw 'BUG: Media type not registered' if not MEDIA_TYPES.get mediaType
+        uuid = b = (a) ->
+          (if a then (a ^ Math.random() * 16 >> a / 4).toString(16) else ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b))
+        config.id = uuid() if not config.id
 
-      navTree = @getNavTree()
-      navTree.unshift {id: config.id, title: config.title}
-      @set 'navTree', navTree
+        # Create the model from a config and add it to the manifest
+        ContentType = MEDIA_TYPES.get(mediaType).constructor
+        model = new ContentType config
+        @manifest.add model
+        # HACK: Since it is new content there is nothing to load but we already set an `id`
+        console.warn 'FIXME: Hack for new content'
+        model.loaded(true)
 
+      else
+        # Otherwise, just add a container
+        model = new Backbone.Model model
 
-    # Since the nav tree is just a plain JSON object and changes to it will not trigger model changes
-    # return a deep clone of the tree before making a change to it.
-    #
-    # **FIXME:** This should be implemented using a Tree-Like Collection that has a `.toJSON()` and methods like `.insertBefore()`
-    getNavTree: (tree) ->
-      navTree = @get('navTree') or []
-      return JSON.parse JSON.stringify(navTree)
+      # Prepend to the navTree
+      navTree = JSON.parse @get('navTreeStr')
+      navTree.unshift {id: model.get('id'), title: model.get('title')}
+      @set 'navTreeStr', JSON.stringify navTree
 
   SearchResults = DeferrableCollection.extend
     defaults:
       parameters: []
 
   # Add the 2 basic Media Types already defined above
-  MEDIA_TYPES.add
-    id: 'text/x-module'
-    constructor: Content
+  MEDIA_TYPES.add 'text/x-module',
+    constructor: BaseContent
 
-  MEDIA_TYPES.add
-    id: 'text/x-collection'
-    constructor: Book
+  MEDIA_TYPES.add 'text/x-collection',
+    constructor: BaseBook
 
   # Finally, export only the pieces needed
-  exports.Book = Book
+  exports.BaseContent = BaseContent
+  exports.BaseBook = BaseBook
   exports.Deferrable = Deferrable
   exports.DeferrableCollection = DeferrableCollection
   exports.ALL_CONTENT = ALL_CONTENT

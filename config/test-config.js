@@ -14,24 +14,12 @@
     }
   });
 
-  require(['atc/models'], function(Models) {
-    Models.ALL_CONTENT.add({
-      id: 'test1',
-      mediaType: 'text/x-module',
-      title: 'Test Module',
-      body: '<h1>Hello</h1>'
-    });
-    Models.ALL_CONTENT.add({
-      id: 'test2',
-      mediaType: 'text/x-module',
-      title: 'Another Test Module',
-      body: '<h1>Hello2</h1>'
-    });
-    Models.ALL_CONTENT.add({
+  require(['underscore', 'atc/models'], function(_, Models) {
+    var book, recAdd, workspace;
+    book = new Models.BaseBook({
       id: 'col1',
-      mediaType: 'text/x-collection',
-      title: 'Test Collection',
-      navTree: [
+      title: 'Physics: Volume 1',
+      navTreeStr: JSON.stringify([
         {
           "class": 'preface',
           id: "m42955",
@@ -1087,28 +1075,28 @@
           id: "m42709",
           title: "Glossary of Key Symbols and Notation"
         }
-      ]
+      ])
     });
-    Models.SearchResults = Models.SearchResults.extend({
-      initialize: function() {
-        var model, _i, _len, _ref, _results;
-        _ref = Models.ALL_CONTENT.models;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          model = _ref[_i];
-          if (model.get('mediaType') !== 'text/x-module') {
-            _results.push(this.add(model, {
-              at: 0
-            }));
-          } else {
-            _results.push(this.add(model));
-          }
+    workspace = [];
+    recAdd = function(nodes) {
+      return _.each(nodes, function(node) {
+        if (node.id) {
+          workspace.push(new Models.BaseContent(_.omit(node, 'children')));
         }
-        return _results;
-      }
-    });
-    return Models.ALL_CONTENT.each(function(model) {
+        return recAdd(node.children);
+      });
+    };
+    recAdd(JSON.parse(book.get('navTreeStr')));
+    book.manifest.add(workspace);
+    workspace.unshift(book);
+    Models.ALL_CONTENT.add(workspace);
+    Models.ALL_CONTENT.each(function(model) {
       return model.loaded(true);
+    });
+    return Models.SearchResults = Models.SearchResults.extend({
+      initialize: function() {
+        return this.add(workspace);
+      }
     });
   });
 

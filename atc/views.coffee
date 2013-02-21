@@ -422,14 +422,9 @@ define [
     events:
       'click .add-section': 'prependSection'
       'click .add-content': 'prependContent'
-    _prepend: (cfg) ->
-      navTree = @model.getNavTree()
-      navTree.unshift cfg
-      @model.set 'navTree', navTree
 
-    prependSection: -> @_prepend {title: 'Untitled Section'}
-    prependContent: ->
-      @model.prependNewContent {title: 'Untitled Content', mediaType: 'text/x-module'}
+    prependSection: -> @model.prependNewContent {title: 'Untitled Section'}
+    prependContent: -> @model.prependNewContent {title: 'Untitled Content'}, 'text/x-module'
 
 
   # When viewing a `Book` in the sidebar render it as a tree and provide an "Edit" button.
@@ -443,7 +438,8 @@ define [
       evt.preventDefault()
       evt.stopPropagation()
       id = jQuery(evt.target).attr 'data-id'
-      Controller.editModelId id
+      model = @model.manifest.get id
+      Controller.editModel model
     initialize: ->
       @listenTo @model, 'all', => @render()
 
@@ -505,7 +501,7 @@ define [
               # Remove the drag node (a clone of the element that's being dragged)
               $root.find('.ui-draggable-dragging').remove()
 
-              @model.set 'navTree', @model.parseNavTree($root).children
+              @model.set 'navTreeStr', JSON.stringify @model.parseNavTree($root).children
 
             setTimeout delay, 10
 

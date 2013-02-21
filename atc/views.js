@@ -428,22 +428,15 @@
         'click .add-section': 'prependSection',
         'click .add-content': 'prependContent'
       },
-      _prepend: function(cfg) {
-        var navTree;
-        navTree = this.model.getNavTree();
-        navTree.unshift(cfg);
-        return this.model.set('navTree', navTree);
-      },
       prependSection: function() {
-        return this._prepend({
+        return this.model.prependNewContent({
           title: 'Untitled Section'
         });
       },
       prependContent: function() {
         return this.model.prependNewContent({
-          title: 'Untitled Content',
-          mediaType: 'text/x-module'
-        });
+          title: 'Untitled Content'
+        }, 'text/x-module');
       }
     });
     exports.BookView = Marionette.ItemView.extend({
@@ -456,11 +449,12 @@
         return Controller.editBook(this.model);
       },
       editModel: function(evt) {
-        var id;
+        var id, model;
         evt.preventDefault();
         evt.stopPropagation();
         id = jQuery(evt.target).attr('data-id');
-        return Controller.editModelId(id);
+        model = this.model.manifest.get(id);
+        return Controller.editModel(model);
       },
       initialize: function() {
         var _this = this;
@@ -521,7 +515,7 @@
                   $ol.append($drag);
                 }
                 $root.find('.ui-draggable-dragging').remove();
-                return _this.model.set('navTree', _this.model.parseNavTree($root).children);
+                return _this.model.set('navTreeStr', JSON.stringify(_this.model.parseNavTree($root).children));
               };
               return setTimeout(delay, 10);
             }

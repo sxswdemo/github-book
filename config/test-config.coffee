@@ -12,24 +12,12 @@ require.config
 
 
 
-require ['atc/models'], (Models) ->
-  Models.ALL_CONTENT.add
-    id: 'test1'
-    mediaType: 'text/x-module'
-    title: 'Test Module'
-    body: '<h1>Hello</h1>'
+require ['underscore', 'atc/models'], (_, Models) ->
 
-  Models.ALL_CONTENT.add
-    id: 'test2'
-    mediaType: 'text/x-module'
-    title: 'Another Test Module'
-    body: '<h1>Hello2</h1>'
-
-  Models.ALL_CONTENT.add
+  book = new Models.BaseBook
     id: 'col1'
-    mediaType: 'text/x-collection'
-    title: 'Test Collection'
-    navTree: [{class:'preface', id:"m42955", title:"Preface"
+    title: 'Physics: Volume 1'
+    navTreeStr: JSON.stringify [{class:'preface', id:"m42955", title:"Preface"
      },{class:'chapter', title:"Introduction: The Nature of Science and Physics","children":[
       {id:"m42119", title:"Introduction to Science and the Realm of Physics, Physical Quantities, and Units"},
       {id:"m42092", title:"Physics: An Introduction"},
@@ -347,13 +335,19 @@ require ['atc/models'], (Models) ->
       {id:"m42709", title:"Glossary of Key Symbols and Notation"}]
 
 
-  Models.SearchResults = Models.SearchResults.extend
-    initialize: ->
-      for model in Models.ALL_CONTENT.models
-        if model.get('mediaType') != 'text/x-module'
-          @add model, {at: 0}
-        else
-          @add model
+  workspace = []
+  recAdd = (nodes) ->
+    _.each nodes, (node) ->
+      workspace.push new Models.BaseContent _.omit(node, 'children') if node.id
+      recAdd(node.children)
+  recAdd JSON.parse book.get 'navTreeStr'
+  book.manifest.add workspace
+  workspace.unshift book
 
-  # SEt the loaded flag so we don't try and populate them from the server
+  Models.ALL_CONTENT.add workspace
+
+  # Mark all the content as loaded so we do not try to fetch
   Models.ALL_CONTENT.each (model) -> model.loaded(true)
+
+  Models.SearchResults = Models.SearchResults.extend
+    initialize: -> @add workspace
