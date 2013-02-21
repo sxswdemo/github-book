@@ -2,14 +2,9 @@
 # Most views have the following properties:
 #
 # 1. Load a Handlebar template using the `hbs` plugin (see `define` below)
-# 2. Attach listeners to the corresponding model (see `initialize` methods)
+# 2. Attach listeners to the corresponding model (see `initialize` method and `events:`)
 # 3. Attach jQuery listeners to the rendered template (see `onRender` methods)
 # 4. Navigate to a different "page" (see `Controller.*` in the `jQuery.on` handlers)
-#
-# Description of method naming:
-#
-# 1. `_change*` Modifies the model based on a change in the view
-# 2. `_update*` Modifies the view based on changes to the model
 #
 
 #
@@ -92,7 +87,7 @@ define [
     LANGUAGES.push(value)
 
 
-  # ## "Generic" Views
+  # ## Search Result Views (workspace)
   #
   # A list of search results (stubs of models only containing an icon, url, title)
   # need a generic view for an item.
@@ -114,12 +109,15 @@ define [
     initialize: ->
       @listenTo @collection, 'all',   => @render()
 
-  # This can also be thought of as the Workspace view
+  # The search box. Changing the text will cause the underlying collection to filter
+  # and fire off `add/remove` events.
   exports.SearchBoxView = Marionette.ItemView.extend
     template: SEARCH_BOX
     events:
       'keyup #search': 'setFilter'
       'change #search': 'setFilter'
+    initialize: ->
+      throw 'BUG: You must wrap the collection in a FilterableCollection' if not @model.setFilter
     setFilter: (evt) ->
       $searchBox = jQuery(@$el).find '#search'
       filterStr = $searchBox.val()
@@ -127,6 +125,7 @@ define [
       @model.setFilter filterStr
 
 
+  # A generic way of editing a HTML key in a model using the Aloha Editor
   exports.AlohaEditView = Marionette.ItemView.extend
     # **NOTE:** This template is not wrapped in an element
     template: () -> throw 'You need to specify a template, modelKey, and optionally alohaOptions'
@@ -184,6 +183,7 @@ define [
     template: (serialized_model) -> "#{serialized_model.body or 'This module is empty. Please change it'}"
     modelKey: 'body'
 
+  # Edit the title field of a piece of Content
   exports.TitleEditView = exports.AlohaEditView.extend
     # **NOTE:** This template is not wrapped in an element
     template: (serialized_model) -> "#{serialized_model.title or 'Untitled'}"
@@ -191,6 +191,7 @@ define [
     tagName: 'span' # override the default tagName of `div` so titles can be edited inline.
 
 
+  # Parse in (from handlebars) the Aloha Toolbar and buttons
   exports.ContentToolbarView = Marionette.ItemView.extend
     template: ALOHA_TOOLBAR
 
@@ -200,6 +201,7 @@ define [
       Aloha.ready =>
         @$el.removeClass('disabled')
 
+  # ### Content Metadata
 
   exports.MetadataEditView = Marionette.ItemView.extend
     template: EDIT_METADATA
@@ -412,10 +414,9 @@ define [
     # Before it does, update the model
     signOut: -> @model.signOut()
 
+  # ## Book Editing
 
-  # **FIXME:** Don't generate uuid's inside a view; that's just dumb.
-  # Generate UUIDv4 id's (from http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript)
-
+  # When editing a `Book` this provides buttons to add new content into the tree
   exports.BookAddContentView = Marionette.ItemView.extend
     template: BOOK_ADD_CONTENT
     events:
@@ -431,7 +432,7 @@ define [
       @model.prependNewContent {title: 'Untitled Content', mediaType: 'text/x-module'}
 
 
-  # Use this to generate HTML with extra divs for Drag/Drop
+  # When viewing a `Book` in the sidebar render it as a tree and provide an "Edit" button.
   exports.BookView = Marionette.ItemView.extend
     template: BOOK_VIEW
     events:
@@ -446,7 +447,12 @@ define [
     initialize: ->
       @listenTo @model, 'all', => @render()
 
-  # Use this to generate HTML with extra divs for Drag/Drop
+  # Use this to generate HTML with extra divs for Drag-and-Drop zones.
+  #
+  # To update the Book model when a `drop` occurs we convert the new DOM into
+  # a JSON tree and set it on the model.
+  #
+  # **FIXME:** Instead of a JSON tree this Model should be implemented using a Tree-Like Collection that has a `.toJSON()` and methods like `.insertBefore()`
   exports.BookEditView = exports.BookView.extend
     template: BOOK_EDIT
     events:

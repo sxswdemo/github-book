@@ -21,7 +21,6 @@ define [
 ], (jQuery, _, Backbone, Marionette, Aloha, Auth, Controller) ->
 
   # # Application Code
-  # The Single Page Application starts here
 
   # ## Authenticated User
   # Find out whether the user is authenticated
@@ -37,7 +36,7 @@ define [
   # These cross over many modules and do not have a better home than here.
 
   # ## Global Variables like jQuery
-  # **HACK:** to discourage people from using the global jQuery
+  # **HACK:** discourage people from using the global jQuery
   # and instead use the `requirejs` version.
   # This helps ensure plugins that extend jQuery (like bootstrap)
   # are properly listed as dependencies in requirejs' `define`
@@ -46,7 +45,7 @@ define [
     jQuery.apply @, arguments
   jQuery.extend(@jQuery, jQuery)
 
-  # jQueryUI in aloha relies on a very old function.
+  # jQueryUI in Aloha relies on a very old function.
   # Used for re-ordering Authors and copyright holders
   # in the Select2 widget
   jQuery.curCSS = jQuery.css

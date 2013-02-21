@@ -175,9 +175,6 @@
         }
         return obj;
       },
-      deferred: function() {
-        return deferred.apply(this, arguments);
-      },
       initialize: function() {
         var _this = this;
         this.manifest = new Backbone.Collection();

@@ -91,6 +91,11 @@
         'keyup #search': 'setFilter',
         'change #search': 'setFilter'
       },
+      initialize: function() {
+        if (!this.model.setFilter) {
+          throw 'BUG: You must wrap the collection in a FilterableCollection';
+        }
+      },
       setFilter: function(evt) {
         var $searchBox, filterStr;
         $searchBox = jQuery(this.$el).find('#search');

@@ -14,7 +14,7 @@ of how the code is organized.
 
 Documentation is built using `docco`.
 
-    find . -name "*.coffee" | grep -v './lib/' | xargs ./node_modules/docco/bin/docco
+    find . -name "*.coffee" | grep -v './lib/' | grep -v './node_modules' | xargs ./node_modules/docco/bin/docco
 
 Check the `./docs` directory to read through the different modules.
 

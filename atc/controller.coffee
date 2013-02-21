@@ -12,7 +12,7 @@ define [
   'atc/auth'
   'atc/models'
   # There is a cyclic dependency between views and controllers
-  # So we use the `exports` module to get around that problem.
+  # so we use the `exports` module to get around that problem.
   'atc/views'
   'hbs!atc/layouts/main'
   'hbs!atc/layouts/book-view'
@@ -25,13 +25,14 @@ define [
   mainRegion = new Marionette.Region
     el: '#main'
 
-  # ## Layouts
-  # There are 2 major page layouts; the workspace and content editing.
 
+  # Use a custom region manager so CSS3 transitions can be triggered
   HidingRegion = Marionette.Region.extend
     onShow: ->  @$el.removeClass 'hidden'
-    onClose: -> @ensureEl(); @$el.addClass    'hidden'
+    onClose: -> @ensureEl(); @$el.addClass 'hidden'
 
+  # ## Layouts
+  # The `MainLayout` contains all areas of the page that do not change
   MainLayout = Marionette.Layout.extend
     template: LAYOUT_MAIN
     regionType: HidingRegion
@@ -42,10 +43,13 @@ define [
       sidebar:      '#layout-main-sidebar'
       area:         '#layout-main-area'
   mainLayout = new MainLayout()
+  # Keep the regions so views can just update the regions they need
   mainToolbar = mainLayout.toolbar
   mainSidebar = mainLayout.sidebar
   mainArea = mainLayout.area
 
+  # Used when editing a single piece of content.
+  # Contains additional areas for editing metadata using separate views
   ContentLayout = Marionette.Layout.extend
     template: LAYOUT_CONTENT
     regions:
@@ -80,6 +84,7 @@ define [
       # Hide the regions if they are not being used
       mainSidebar.onClose()
       mainArea.onClose()
+      # Start URL Routing
       Backbone.history.start()
 
     # Provide the main region that this controller uses.
@@ -123,12 +128,17 @@ define [
       return console.warn 'Could not find content with that id' if not model
       @editModel model
 
+    # Edit a piece of content.
+    # Called when a link is clicked in the workspace list or in a search result window
+    #
+    # Dispatches based on the contents' `mediaType`
     editModel: (model) ->
       switch model.get 'mediaType'
         when 'text/x-module' then @editContent model
         when 'text/x-collection' then @showBook model
         else throw 'BUG: Invalid mediaType'
 
+    # Show a book TOC in the left sidebar
     showBook: (model) ->
       model.deferred (err) =>
         return alert 'Problem connecting to server' if err
@@ -139,6 +149,7 @@ define [
         view = new Views.BookView {model: model}
         mainSidebar.show view
 
+    # Edit a book in the main area
     editBook: (model) ->
       model.deferred (err) =>
         return alert 'Problem connecting to server' if err
@@ -150,8 +161,7 @@ define [
         view = new Views.BookEditView {model: model}
         mainArea.show view
 
-    # Internal method that updates the metadata/roles links so they
-    # refer to the correct Content Model
+    # Edit a piece of HTML content
     editContent: (content) ->
       # ## Bind Metadata Dialogs
       mainArea.show contentLayout
@@ -159,9 +169,7 @@ define [
       # Load the various views:
       #
       # - The Aloha toolbar
-      # - The editable title on top of the page
-      # - The logoff button on the top-right
-      # - The 2nd editable title at the top of the document under the toolbar
+      # - The editable title at the top of the document under the toolbar
       # - The metadata/roles accordion
       # - The main editable content area
 

@@ -26,7 +26,7 @@ console?.error 'MathJax did not load for some reason.' if not @MathJax?.Hub
 
   # Apparently we cannot change the escape sequence for ASCIIMath (MathJax does not find it)
   #
-  #    asciimath2jax: { inlineMath: [['[ASCIIMATH_START]', '[ASCIIMATH_END]']], },
+  #     asciimath2jax: { inlineMath: [['[ASCIIMATH_START]', '[ASCIIMATH_END]']], },
 
   TeX:
     extensions: [

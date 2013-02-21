@@ -64,7 +64,8 @@ require.config
       #
       # We can also delete `_` at this point and can delete `Backbone.Marionette`
       # so we never always include `marionette` and never assume Marionette is already loaded as a dependency.
-      #    init: -> ret = @Backbone.Marionette; delete @Backbone.Marionette; delete @Backbone; delete @_; ret
+      #
+      #      init: -> ret = @Backbone.Marionette; delete @Backbone.Marionette; delete @Backbone; delete @_; ret
       init: -> ret = @Backbone.Marionette; delete @Backbone.Marionette; delete @Backbone; ret
 
     # ## UI Libraries
