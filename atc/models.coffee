@@ -248,7 +248,8 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
     #
     # **FIXME:** This should be implemented using a Tree-Like Collection that has a `.toJSON()` and methods like `.insertBefore()`
     getNavTree: (tree) ->
-      return JSON.parse JSON.stringify(@get 'navTree')
+      navTree = @get('navTree') or []
+      return JSON.parse JSON.stringify(navTree)
 
   SearchResults = DeferrableCollection.extend
     defaults:

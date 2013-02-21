@@ -255,7 +255,9 @@
         return this.set('navTree', navTree);
       },
       getNavTree: function(tree) {
-        return JSON.parse(JSON.stringify(this.get('navTree')));
+        var navTree;
+        navTree = this.get('navTree') || [];
+        return JSON.parse(JSON.stringify(navTree));
       }
     });
     SearchResults = DeferrableCollection.extend({
