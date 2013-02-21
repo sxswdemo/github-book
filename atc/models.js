@@ -138,13 +138,6 @@
         copyrightHolders: [],
         language: ((typeof navigator !== "undefined" && navigator !== null ? navigator.userLanguage : void 0) || (typeof navigator !== "undefined" && navigator !== null ? navigator.language : void 0) || 'en').toLowerCase()
       },
-      url: function() {
-        if (this.get('id')) {
-          return "" + URLS.CONTENT_PREFIX + (this.get('id'));
-        } else {
-          return URLS.CONTENT_PREFIX;
-        }
-      },
       validate: function(attrs) {
         var isEmpty;
         isEmpty = function(str) {
@@ -166,6 +159,7 @@
         manifest: null,
         navTree: null
       },
+      manifestType: Backbone.Collection,
       parseNavTree: function(li) {
         var $a, $li, $ol, obj;
         $li = jQuery(li);
@@ -192,7 +186,7 @@
       },
       initialize: function() {
         var _this = this;
-        this.manifest = new Backbone.Collection();
+        this.manifest = new this.manifestType();
         this.manifest.on('change:title', function(model, newValue, oldValue) {
           var navTree, node, recFind;
           navTree = _this.getNavTree();
@@ -215,9 +209,6 @@
           node.title = newValue;
           return _this.set('navTree', navTree);
         });
-        this.manifest.on('add', function(model) {
-          return ALL_CONTENT.add(model);
-        });
         this.on('change:navTree', function(model, navTree) {
           var recAdd;
           recAdd = function(nodes) {
@@ -226,13 +217,11 @@
             for (_i = 0, _len = nodes.length; _i < _len; _i++) {
               node = nodes[_i];
               if (node.id) {
-                ALL_CONTENT.add({
+                contentModel = _this._addToManifest({
                   id: node.id,
                   title: node.title,
                   mediaType: 'text/x-module'
                 });
-                contentModel = ALL_CONTENT.get(node.id);
-                _this.manifest.add(contentModel);
               }
               if (node.children) {
                 _results.push(recAdd(node.children));
@@ -248,6 +237,13 @@
         });
         return this.trigger('change:navTree', this, this.getNavTree());
       },
+      _addToManifest: function(config) {
+        var model;
+        ALL_CONTENT.add(config);
+        model = ALL_CONTENT.get(config.id);
+        this.manifest.add(model);
+        return model;
+      },
       prependNewContent: function(config) {
         var b, navTree, newContent, uuid;
         uuid = b = function(a) {
@@ -260,8 +256,9 @@
         if (!config.id) {
           config.id = uuid();
         }
-        ALL_CONTENT.add(config);
-        newContent = ALL_CONTENT.get(config.id);
+        newContent = this._addToManifest(config);
+        console.warn('FIXME: Hack for new content');
+        newContent.loaded(true);
         navTree = this.getNavTree();
         navTree.unshift({
           id: config.id,

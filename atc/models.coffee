@@ -158,9 +158,6 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
       # Default language for new content is the browser's language
       language: (navigator?.userLanguage or navigator?.language or 'en').toLowerCase()
 
-    # Set a URL to POST/PUT to when sync'ing the model with the server
-    url: -> if @get 'id' then "#{URLS.CONTENT_PREFIX}#{@get 'id'}" else URLS.CONTENT_PREFIX
-
     # Perform some validation before saving
     validate: (attrs) ->
       isEmpty = (str) -> str and not str.trim().length
@@ -174,6 +171,9 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
     defaults:
       manifest: null
       navTree: null
+    # Subclasses can provide a better Collection for storing Content items in a book
+    # so the book can listen to changes.
+    manifestType: Backbone.Collection
 
     # Takes an element representing a `<nav epub:type="toc"/>` element
     # and returns a JSON tree with the following structure:
@@ -223,7 +223,7 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
     #
     # Similarly, an update to the navigation tree will create new models.
     initialize: ->
-      @manifest = new Backbone.Collection()
+      @manifest = new @manifestType()
       @manifest.on 'change:title', (model, newValue, oldValue) =>
         navTree = @getNavTree()
         # Find the node that has an `id` to this model
@@ -236,27 +236,36 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
         node.title = newValue
         @set 'navTree', navTree
 
-      @manifest.on 'add', (model) -> ALL_CONTENT.add model
       @on 'change:navTree', (model, navTree) =>
         # **TODO:** Remove manifest entries if they are not referred to by the navTree or any modules in the book.
         recAdd = (nodes) =>
           for node in nodes
             if node.id
-              ALL_CONTENT.add {id: node.id, title: node.title, mediaType: 'text/x-module'}
-              contentModel = ALL_CONTENT.get node.id
-              @manifest.add contentModel
+              contentModel = @_addToManifest {id: node.id, title: node.title, mediaType: 'text/x-module'}
             recAdd node.children if node.children
         recAdd(navTree) if navTree
 
       @trigger 'change:navTree', @, @getNavTree()
+
+    _addToManifest: (config) ->
+      ALL_CONTENT.add config
+      model = ALL_CONTENT.get config.id
+      @manifest.add model
+      return model
+
 
     # **FIXME:** Somewhat hacky way of creating a new piece of content
     prependNewContent: (config) ->
       uuid = b = (a) ->
         (if a then (a ^ Math.random() * 16 >> a / 4).toString(16) else ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, b))
       config.id = uuid() if not config.id
-      ALL_CONTENT.add config
-      newContent = ALL_CONTENT.get config.id
+
+      # Create the model from a config and add it to the manifest
+      newContent = @_addToManifest config
+      # HACK: Since it is new content there is nothing to load but we already set an `id`
+      console.warn 'FIXME: Hack for new content'
+      newContent.loaded(true)
+
       navTree = @getNavTree()
       navTree.unshift {id: config.id, title: config.title}
       @set 'navTree', navTree
