@@ -1108,7 +1108,7 @@
       }
     });
     return Models.ALL_CONTENT.each(function(model) {
-      return model.loaded = true;
+      return model.loaded(true);
     });
   });
 

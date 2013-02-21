@@ -136,12 +136,11 @@ define [
       switch model.get 'mediaType'
         when 'text/x-module' then @editContent model
         when 'text/x-collection' then @showBook model
-        else throw 'BUG: Invalid mediaType'
+        else console.warn('BUG: Invalid mediaType. Assuming it is text/x-module'); @editContent model
 
     # Show a book TOC in the left sidebar
     showBook: (model) ->
-      model.deferred (err) =>
-        return alert 'Problem connecting to server' if err
+      model.loaded().then =>
         mainToolbar.close()
         mainArea.close()
 
@@ -151,8 +150,7 @@ define [
 
     # Edit a book in the main area
     editBook: (model) ->
-      model.deferred (err) =>
-        return alert 'Problem connecting to server' if err
+      model.loaded().then =>
         mainToolbar.close()
 
         view = new Views.BookAddContentView {model: model}
@@ -166,42 +164,43 @@ define [
       # ## Bind Metadata Dialogs
       mainArea.show contentLayout
 
-      # Load the various views:
-      #
-      # - The Aloha toolbar
-      # - The editable title at the top of the document under the toolbar
-      # - The metadata/roles accordion
-      # - The main editable content area
+      content.loaded().then =>
+        # Load the various views:
+        #
+        # - The Aloha toolbar
+        # - The editable title at the top of the document under the toolbar
+        # - The metadata/roles accordion
+        # - The main editable content area
 
-      # Wrap each 'tab' in the accordion with a Save/Cancel dialog
-      configAccordionDialog = (region, view) ->
-        dialog = new Views.DialogWrapper {view: view}
-        region.show dialog
-        # When save/cancel are clicked collapse the accordion
-        dialog.on 'saved',     => region.$el.parent().collapse 'hide'
-        dialog.on 'cancelled', => region.$el.parent().collapse 'hide'
+        # Wrap each 'tab' in the accordion with a Save/Cancel dialog
+        configAccordionDialog = (region, view) ->
+          dialog = new Views.DialogWrapper {view: view}
+          region.show dialog
+          # When save/cancel are clicked collapse the accordion
+          dialog.on 'saved',     => region.$el.parent().collapse 'hide'
+          dialog.on 'cancelled', => region.$el.parent().collapse 'hide'
 
-      # Set up the metadata dialog
-      configAccordionDialog contentLayout.metadata, new Views.MetadataEditView {model: content}
-      configAccordionDialog contentLayout.roles,    new Views.RolesEditView {model: content}
+        # Set up the metadata dialog
+        configAccordionDialog contentLayout.metadata, new Views.MetadataEditView {model: content}
+        configAccordionDialog contentLayout.roles,    new Views.RolesEditView {model: content}
 
-      view = new Views.ContentToolbarView(model: content)
-      mainToolbar.show view
+        view = new Views.ContentToolbarView(model: content)
+        mainToolbar.show view
 
-      view = new Views.TitleEditView(model: content)
-      contentLayout.title.show view
+        view = new Views.TitleEditView(model: content)
+        contentLayout.title.show view
 
-      # Enable the tooltip letting the user know to edit
-      contentLayout.title.$el.popover
-        trigger: 'hover'
-        placement: 'right'
-        content: __('Click to change title')
+        # Enable the tooltip letting the user know to edit
+        contentLayout.title.$el.popover
+          trigger: 'hover'
+          placement: 'right'
+          content: __('Click to change title')
 
-      view = new Views.ContentEditView(model: content)
-      contentLayout.body.show view
+        view = new Views.ContentEditView(model: content)
+        contentLayout.body.show view
 
-      # Update the URL
-      Backbone.history.navigate "content/#{content.get 'id'}"
+        # Update the URL
+        Backbone.history.navigate "content/#{content.get 'id'}"
 
   # ## Bind Routes
   ContentRouter = Marionette.AppRouter.extend

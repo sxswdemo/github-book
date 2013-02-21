@@ -98,16 +98,14 @@
           case 'text/x-collection':
             return this.showBook(model);
           default:
-            throw 'BUG: Invalid mediaType';
+            console.warn('BUG: Invalid mediaType. Assuming it is text/x-module');
+            return this.editContent(model);
         }
       },
       showBook: function(model) {
         var _this = this;
-        return model.deferred(function(err) {
+        return model.loaded().then(function() {
           var view;
-          if (err) {
-            return alert('Problem connecting to server');
-          }
           mainToolbar.close();
           mainArea.close();
           view = new Views.BookView({
@@ -118,11 +116,8 @@
       },
       editBook: function(model) {
         var _this = this;
-        return model.deferred(function(err) {
+        return model.loaded().then(function() {
           var view;
-          if (err) {
-            return alert('Problem connecting to server');
-          }
           mainToolbar.close();
           view = new Views.BookAddContentView({
             model: model
@@ -135,46 +130,49 @@
         });
       },
       editContent: function(content) {
-        var configAccordionDialog, view;
+        var _this = this;
         mainArea.show(contentLayout);
-        configAccordionDialog = function(region, view) {
-          var dialog,
-            _this = this;
-          dialog = new Views.DialogWrapper({
-            view: view
+        return content.loaded().then(function() {
+          var configAccordionDialog, view;
+          configAccordionDialog = function(region, view) {
+            var dialog,
+              _this = this;
+            dialog = new Views.DialogWrapper({
+              view: view
+            });
+            region.show(dialog);
+            dialog.on('saved', function() {
+              return region.$el.parent().collapse('hide');
+            });
+            return dialog.on('cancelled', function() {
+              return region.$el.parent().collapse('hide');
+            });
+          };
+          configAccordionDialog(contentLayout.metadata, new Views.MetadataEditView({
+            model: content
+          }));
+          configAccordionDialog(contentLayout.roles, new Views.RolesEditView({
+            model: content
+          }));
+          view = new Views.ContentToolbarView({
+            model: content
           });
-          region.show(dialog);
-          dialog.on('saved', function() {
-            return region.$el.parent().collapse('hide');
+          mainToolbar.show(view);
+          view = new Views.TitleEditView({
+            model: content
           });
-          return dialog.on('cancelled', function() {
-            return region.$el.parent().collapse('hide');
+          contentLayout.title.show(view);
+          contentLayout.title.$el.popover({
+            trigger: 'hover',
+            placement: 'right',
+            content: __('Click to change title')
           });
-        };
-        configAccordionDialog(contentLayout.metadata, new Views.MetadataEditView({
-          model: content
-        }));
-        configAccordionDialog(contentLayout.roles, new Views.RolesEditView({
-          model: content
-        }));
-        view = new Views.ContentToolbarView({
-          model: content
+          view = new Views.ContentEditView({
+            model: content
+          });
+          contentLayout.body.show(view);
+          return Backbone.history.navigate("content/" + (content.get('id')));
         });
-        mainToolbar.show(view);
-        view = new Views.TitleEditView({
-          model: content
-        });
-        contentLayout.title.show(view);
-        contentLayout.title.$el.popover({
-          trigger: 'hover',
-          placement: 'right',
-          content: __('Click to change title')
-        });
-        view = new Views.ContentEditView({
-          model: content
-        });
-        contentLayout.body.show(view);
-        return Backbone.history.navigate("content/" + (content.get('id')));
       }
     };
     ContentRouter = Marionette.AppRouter.extend({

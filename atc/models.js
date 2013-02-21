@@ -2,7 +2,7 @@
 (function() {
 
   define(['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], function(exports, jQuery, Backbone, __) {
-    var ALL_CONTENT, AllContent, BaseContent, Book, Content, Deferrable, DeferrableCollection, MEDIA_TYPES, MediaTypes, SearchResults, deferred;
+    var ALL_CONTENT, AllContent, BaseContent, Book, Content, Deferrable, DeferrableCollection, MEDIA_TYPES, MediaTypes, SearchResults, loaded;
     MediaTypes = Backbone.Collection.extend({
       model: Backbone.Model.extend({
         sync: function() {
@@ -37,32 +37,45 @@
       model: BaseContent
     });
     ALL_CONTENT = new AllContent();
-    deferred = function(cb) {
-      var _this = this;
-      if (this.loaded) {
-        return cb(null, this);
+    loaded = function(flag) {
+      var deferred;
+      if (flag == null) {
+        flag = false;
       }
-      if (!this._defer) {
-        this._defer = this.fetch();
+      if (flag) {
+        deferred = jQuery.Deferred();
+        deferred.resolve(this);
+        this._promise = deferred.promise();
       }
-      return this._defer.done(function(value) {
-        _this.loaded = true;
-        _this._defer = null;
-        return cb(null, _this);
-      }).fail(function(err) {
-        _this.loaded = false;
-        _this._defer = null;
-        return cb(err, _this);
-      });
+      if (!this._promise || 'rejected' === this._promise.state()) {
+        this._promise = this.fetch();
+      }
+      return this._promise;
     };
     Deferrable = Backbone.Model.extend({
-      deferred: function() {
-        return deferred.apply(this, arguments);
+      loaded: function() {
+        return loaded.apply(this, arguments);
       }
     });
     DeferrableCollection = Backbone.Collection.extend({
-      deferred: function() {
-        return deferred.apply(this, arguments);
+      loaded: function() {
+        return loaded.apply(this, arguments);
+      },
+      _prepareModel: function(attrs, options) {
+        var model;
+        if (attrs instanceof Backbone.Model) {
+          ALL_CONTENT.add(attrs);
+          attrs = ALL_CONTENT.get(attrs);
+          if (!attrs.collection) {
+            attrs.collection = this;
+          }
+          return attrs;
+        }
+        options || (options = {});
+        options.collection = this;
+        ALL_CONTENT.add(attrs);
+        model = ALL_CONTENT.get(attrs);
+        return model;
       }
     });
     exports.FilteredCollection = Backbone.Collection.extend({
@@ -82,10 +95,12 @@
         return this.reset(models);
       },
       isMatch: function(model) {
+        var title;
         if (!this.filterStr) {
           return true;
         }
-        return model.get('title').toLowerCase().search(this.filterStr.toLowerCase()) >= 0;
+        title = model.get('title') || '';
+        return title.toLowerCase().search(this.filterStr.toLowerCase()) >= 0;
       },
       initialize: function(models, options) {
         var _this = this;
@@ -273,6 +288,8 @@
       id: 'text/x-collection',
       constructor: Book
     });
+    exports.Deferrable = Deferrable;
+    exports.DeferrableCollection = DeferrableCollection;
     exports.ALL_CONTENT = ALL_CONTENT;
     exports.MEDIA_TYPES = MEDIA_TYPES;
     exports.SearchResults = SearchResults;

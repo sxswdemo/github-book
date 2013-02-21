@@ -356,4 +356,4 @@ require ['atc/models'], (Models) ->
           @add model
 
   # SEt the loaded flag so we don't try and populate them from the server
-  Models.ALL_CONTENT.each (model) -> model.loaded = true
+  Models.ALL_CONTENT.each (model) -> model.loaded(true)

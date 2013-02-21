@@ -59,28 +59,46 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
   # (ie an entry as a result of a search) but not fetched yet.
   #
   # When dealing with a model (except for `id`, `title`, or `mediaType`)
-  # be sure to call `deferred(cb)` first.
+  # be sure to call `.loaded().then(cb)` first.
   #
   # Once the model is loaded (fetched) call the callbacks.
 
-  deferred= (cb) ->
-    return cb(null, @) if @loaded
-    @_defer = @fetch() if not @_defer
-    @_defer
-    .done (value) =>
-      @loaded = true
-      @_defer = null
-      cb(null, @)
-    .fail (err) =>
-      @loaded = false
-      @_defer = null
-      cb(err, @)
+  loaded = (flag=false) ->
+    if flag
+      deferred = jQuery.Deferred()
+      deferred.resolve @
+      @_promise = deferred.promise()
+
+    @_promise = @fetch() if not @_promise or 'rejected' == @_promise.state()
+    return @_promise
 
   Deferrable = Backbone.Model.extend
-    deferred: () -> deferred.apply(@, arguments)
+    loaded: () -> loaded.apply(@, arguments)
 
   DeferrableCollection = Backbone.Collection.extend
-    deferred: () -> deferred.apply(@, arguments)
+    loaded: () -> loaded.apply(@, arguments)
+
+    # From `Backbone.Collection._prepareModel` version 0.9.10
+    #
+    # Prepare a model or hash of attributes to be added to this collection.
+    _prepareModel: (attrs, options) ->
+      if attrs instanceof Backbone.Model
+        # Get back the model in ALL_CONTENT
+        ALL_CONTENT.add attrs
+        attrs = ALL_CONTENT.get attrs
+
+        attrs.collection = this if not attrs.collection
+        return attrs
+
+      options || (options = {})
+      options.collection = @
+
+      # Here is where we differ. Create the model using `MEDIA_TYPES`
+      # and ensure it is added to `ALL_CONTENT`
+      ALL_CONTENT.add attrs
+      model = ALL_CONTENT.get attrs
+      return model
+
 
 
   # When searching for text, perform a local filter on content while we wait
@@ -100,7 +118,8 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
 
     isMatch: (model) ->
       return true if not @filterStr
-      model.get('title').toLowerCase().search(@filterStr.toLowerCase()) >= 0
+      title = model.get('title') or ''
+      title.toLowerCase().search(@filterStr.toLowerCase()) >= 0
 
     initialize: (models, options) ->
       @filterStr = options.filterStr or ''
@@ -265,6 +284,8 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
     constructor: Book
 
   # Finally, export only the pieces needed (so as not to accidentally create 2 copies of a `Book`)
+  exports.Deferrable = Deferrable
+  exports.DeferrableCollection = DeferrableCollection
   exports.ALL_CONTENT = ALL_CONTENT
   exports.MEDIA_TYPES = MEDIA_TYPES
   exports.SearchResults = SearchResults
