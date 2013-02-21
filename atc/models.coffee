@@ -283,7 +283,8 @@ define ['exports', 'jquery', 'backbone', 'i18n!atc/nls/strings'], (exports, jQue
     id: 'text/x-collection'
     constructor: Book
 
-  # Finally, export only the pieces needed (so as not to accidentally create 2 copies of a `Book`)
+  # Finally, export only the pieces needed
+  exports.Book = Book
   exports.Deferrable = Deferrable
   exports.DeferrableCollection = DeferrableCollection
   exports.ALL_CONTENT = ALL_CONTENT

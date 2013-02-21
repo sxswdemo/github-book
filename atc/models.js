@@ -288,6 +288,7 @@
       id: 'text/x-collection',
       constructor: Book
     });
+    exports.Book = Book;
     exports.Deferrable = Deferrable;
     exports.DeferrableCollection = DeferrableCollection;
     exports.ALL_CONTENT = ALL_CONTENT;
