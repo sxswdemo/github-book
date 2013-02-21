@@ -10,6 +10,14 @@ of how the code is organized.
 3. Build a minified Javascript file by running `r.js` (see https://github.com/jrburke/r.js)
 4. Add the minified Javscript file, commit, and push the changes back to github
 
+## Building Documentation
+
+Documentation is built using `docco`.
+
+    find . -name "*.coffee" | grep -v './lib/' | xargs ./node_modules/docco/bin/docco
+
+Check the `./docs` directory to read through the different modules.
+
 ## Directory Layout
 
 * `atc/models.coffee`    Backbone Models
