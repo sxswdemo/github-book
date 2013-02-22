@@ -28,7 +28,9 @@
         this._promise = deferred.promise();
       }
       if (!this._promise || 'rejected' === this._promise.state()) {
-        this._promise = this.fetch();
+        this._promise = this.fetch({
+          silent: true
+        });
       }
       return this._promise;
     };
@@ -126,21 +128,6 @@
         authors: [],
         copyrightHolders: [],
         language: ((typeof navigator !== "undefined" && navigator !== null ? navigator.userLanguage : void 0) || (typeof navigator !== "undefined" && navigator !== null ? navigator.language : void 0) || 'en').toLowerCase()
-      },
-      validate: function(attrs) {
-        var isEmpty;
-        isEmpty = function(str) {
-          return str && !str.trim().length;
-        };
-        if (isEmpty(attrs.body)) {
-          return 'ERROR_EMPTY_BODY';
-        }
-        if (isEmpty(attrs.title)) {
-          return 'ERROR_EMPTY_TITLE';
-        }
-        if (attrs.title === __('Untitled')) {
-          return 'ERROR_UNTITLED_TITLE';
-        }
       }
     });
     BaseBook = Deferrable.extend({
