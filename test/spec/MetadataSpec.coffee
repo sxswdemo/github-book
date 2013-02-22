@@ -1,6 +1,6 @@
 # Checks editing the Metadata and Roles popups.
 # Uses global jasmine functions like `describe`, `beforeEach`, `it`, and `expect`.
-define ['app/models', 'app/views', 'test/routes'], (Models, Views, MOCK_CONTENT) ->
+define ['atc/models', 'atc/views', 'test/routes'], (Models, Views, MOCK_CONTENT) ->
 
   describe 'Edit Metadata/Roles', ->
     beforeEach ->

@@ -1,5 +1,7 @@
-# A handlebars helper that provides the index `i` and 1-based index `iPlus1`
-# when iterating over an array.
+# A handlebars helper that provides a way to
+# recursively apply a template.
+#
+# Used for generating nested HTML lists.
 define 'template/helpers/recursive', ['underscore', 'handlebars'], (_, Handlebars) ->
   fn = null
   recursive = (children, options) ->

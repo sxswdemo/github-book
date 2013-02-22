@@ -27,4 +27,7 @@ git clone https://github.com/appendto/jquery-mockjax.git
 
 git clone https://github.com/wysiwhat/Aloha-Editor.git
 
+# For github-hosted ebooks
+git clone https://github.com/michael/github.git
+
 rm ${TEMP}

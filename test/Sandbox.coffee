@@ -4,8 +4,8 @@
 # (which matches the requirejs data-main attribute)
 define 'Sandbox', [
   'jquery'
-  'app/models'
-  'app/views'
+  'atc/models'
+  'atc/views'
   'test/routes'
   'css!app'
 ], ($, Models, Views, MOCK_CONTENT) =>
