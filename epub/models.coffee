@@ -34,7 +34,7 @@ define [
         return xmlStr
     serialize: -> @template @toJSON()
 
-  HTMLFile = BaseContent.extend _.extend TemplatedFileMixin, {
+  HTMLFile = BaseContent.extend _.extend {}, TemplatedFileMixin, {
     mediaType: 'application/xhtml+xml'
     getterField: 'body'
     serialize: -> @get @getterField
@@ -91,7 +91,7 @@ define [
             $body = $wrap
           # TODO: Add `<html><head>...</head>` tags around the `$body`
           bodyStr = $body[0].innerHTML
-        @navModel.set 'body', bodyStr
+        @navModel.set 'body', bodyStr, {silent:true}
 
 
 
@@ -113,12 +113,12 @@ define [
             @_updateNavTreeFromXML xmlStr
 
           # Give the HTML files in the manifest some titles from navigation.html
-          navTree = @_updateNavTreeFromXML(@navModel.get 'body')
+          navTree = @_updateNavTreeFromXML(@navModel.get('body'), {silent:true})
           recSetTitles = (nodes=[]) ->
             for node in nodes
               if node.id
                 model = AtcModels.ALL_CONTENT.get node.id
-                model.set {title: node.title}
+                model.set {title: node.title}, {silent:true}
               recSetTitles(node.children)
           recSetTitles navTree
 
@@ -127,7 +127,7 @@ define [
           promise.resolve(@)
       @_promise = promise
 
-    _updateNavTreeFromXML: (xmlStr) ->
+    _updateNavTreeFromXML: (xmlStr, options) ->
       # Re-parse the tree and set it as the navTree
       # `parseNavTree` is defined in `AppModels.Book`
 
@@ -142,7 +142,7 @@ define [
       $nav = $body.find 'nav'
       throw 'ERROR: Currently only 1 nav element in the navigation document is supported' if $nav.length != 1
       navTree = @parseNavTree($nav).children
-      @set 'navTreeStr', JSON.stringify navTree
+      @set 'navTreeStr', JSON.stringify(navTree), options
       return navTree
 
     parse: (xmlStr) ->

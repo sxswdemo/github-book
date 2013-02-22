@@ -30,7 +30,7 @@
         return this.template(this.toJSON());
       }
     };
-    HTMLFile = BaseContent.extend(_.extend(TemplatedFileMixin, {
+    HTMLFile = BaseContent.extend(_.extend({}, TemplatedFileMixin, {
       mediaType: 'application/xhtml+xml',
       getterField: 'body',
       serialize: function() {
@@ -89,7 +89,9 @@
             }
             bodyStr = $body[0].innerHTML;
           }
-          return _this.navModel.set('body', bodyStr);
+          return _this.navModel.set('body', bodyStr, {
+            silent: true
+          });
         });
         promise = jQuery.Deferred();
         this.loaded().then(function() {
@@ -98,7 +100,9 @@
             _this.navModel.on('change:body', function(model, xmlStr) {
               return _this._updateNavTreeFromXML(xmlStr);
             });
-            navTree = _this._updateNavTreeFromXML(_this.navModel.get('body'));
+            navTree = _this._updateNavTreeFromXML(_this.navModel.get('body'), {
+              silent: true
+            });
             recSetTitles = function(nodes) {
               var model, node, _i, _len, _results;
               if (nodes == null) {
@@ -111,6 +115,8 @@
                   model = AtcModels.ALL_CONTENT.get(node.id);
                   model.set({
                     title: node.title
+                  }, {
+                    silent: true
                   });
                 }
                 _results.push(recSetTitles(node.children));
@@ -123,7 +129,7 @@
         });
         return this._promise = promise;
       },
-      _updateNavTreeFromXML: function(xmlStr) {
+      _updateNavTreeFromXML: function(xmlStr, options) {
         var $body, $nav, $xml, navTree;
         $xml = jQuery(xmlStr);
         if (!$xml[0]) {
@@ -135,7 +141,7 @@
           throw 'ERROR: Currently only 1 nav element in the navigation document is supported';
         }
         navTree = this.parseNavTree($nav).children;
-        this.set('navTreeStr', JSON.stringify(navTree));
+        this.set('navTreeStr', JSON.stringify(navTree), options);
         return navTree;
       },
       parse: function(xmlStr) {
