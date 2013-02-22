@@ -3,11 +3,12 @@ define [
   'underscore'
   'backbone'
   'atc/media-types'
+  'atc/controller'
   'atc/models'
   'hbs!./opf-file'
   'hbs!./container-file'
   'hbs!./nav-serialize'
-], (exports, _, Backbone, MEDIA_TYPES, AtcModels, OPF_TEMPLATE, CONTAINER_TEMPLATE, NAV_SERIALIZE) ->
+], (exports, _, Backbone, MEDIA_TYPES, Controller, AtcModels, OPF_TEMPLATE, CONTAINER_TEMPLATE, NAV_SERIALIZE) ->
 
   BaseCollection = AtcModels.DeferrableCollection
   BaseContent = AtcModels.BaseContent
@@ -210,7 +211,7 @@ define [
       return ret
 
 
-  MEDIA_TYPES.add 'application/xhtml+xml', {constructor: HTMLFile, editAction: MEDIA_TYPES.get('text/x-module').editAction}
+  MEDIA_TYPES.add 'application/xhtml+xml', {constructor: HTMLFile, editAction: Controller.editContent}
 
   exports.EPUB_CONTAINER = new EPUBContainer()
 
