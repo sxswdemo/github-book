@@ -1,0 +1,115 @@
+<div class="btn-group">
+  <button id="save-content" type="button" class="btn disabled" data-placement="bottom" title="Save all changes to github"><i class="icon-save"></i> Save</button>
+  <button type="button" class="btn" data-target="#settings-modal" data-toggle="modal" data-placement="bottom" title="Repository Settings"><i class="icon-cogs"></i></button>
+</div>
+
+<button id="fork-book" class="btn btn-success"><i class="icon-github-alt"></i> Fork this Book!</button>
+
+{{#if password}}
+  <!-- Person IS logged in -->
+  <button type="button" id="sign-out" class="btn btn-link">Sign Out</button>
+
+
+{{else}}
+  <!-- Person is NOT logged in -->
+  <button type="button" class="btn btn-primary" data-target="#sign-in-modal" data-toggle="modal"><i class="icon-signin"></i> Sign In</button>
+
+  <!-- Sign in Modal -->
+  <div id="sign-in-modal" data-backdrop="false" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="sign-in-modal-label" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="sign-in-modal-label">Sign in to Github!</h3>
+    </div>
+    <div class="modal-body">
+      <p>You can view any book without logging in but need a username and password to make changes</p>
+      <p>If you plan on making changes to a book you will need to enter your github credentials</p>
+      <p>If you only plan on viewing you will still need to provide a username (github's API requires it for unauthenticated access)</p>
+
+      <p>This information is not stored anywhere and if you refresh this page you will need to re-enter this information.</p>
+      <div class="form-inline">
+        <input id="github-username" class="input-small" type="text" required="true" placeholder="Username or Email" value="{{username}}"/>
+        <input id="github-password" type="password" required="true" class="input-small" placeholder="Password"/>
+        <button id="sign-in" type="submit" class="btn btn-primary" data-dismiss="modal">Sign In</button>
+      </div>
+      <p><strong>Note:</strong> To save changes on Github you may still need to click <button type="button" class="btn btn-mini" data-target="#settings-modal" data-toggle="modal"><i class="icon-cogs"></i> Settings</button>  and change to a repository you have access to.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+  </div>
+
+{{/if}}
+
+
+
+
+<div id="fork-book-modal" data-backdrop="false" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fork-book-modal-label" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="fork-book-modal-label">Fork this book!</h3>
+  </div>
+  <div class="modal-body">
+
+    [Places to fork to go here]
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+  </div>
+</div>
+
+
+
+<div id="settings-modal" data-backdrop="false" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="settings-modal-label" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="settings-modal-label">Repository Settings</h3>
+  </div>
+  <div class="modal-body">
+
+    <p>Every book is stored in a repository in Github.</p>
+    <p>You can view any book without logging in but you will need to Sign in to save changes.</p>
+    <p>The two fields correspond to the following parts in a github URL:</p>
+
+    <code>https://github.com/<strong>[Repo User]</strong>/<strong>[Repo Name]</strong>.git</code>
+
+
+    <p>
+      <div class="input-prepend">
+        <span class="add-on">Repo User</span>
+        <input id="github-repoUser" class="input-small" required type="text" value="{{repoUser}}" title="The user/org hosting the book" placeholder="Required" data-placement="below"/>
+      </div>
+      <div class="input-prepend">
+        <span class="add-on">Repo Name</span>
+
+        <input id="github-repoName" class="input-small" required type="text" value="{{repoName}}" title="The name of the repo in the users account" placeholder="Required" data-placement="below"/>
+      </div>
+    </p>
+
+    <p>Optionally, you can point to a specific branch (usually <code>master</code>)
+      in the repo and if the book is in a subdirectory,
+      a root directory containing the HTML files.</p>
+
+    <p>
+      <div class="input-prepend">
+        <span class="add-on">Branch</span>
+        <input id="github-branch" class="input-small" type="text" value="{{branch}}" placeholder="Repo branch"/>
+      </div>
+    </p>
+
+    <p>
+      <div class="input-prepend">
+        <span class="add-on">Root Path</span>
+        <input id="github-rootPath" type="text" value="{{rootPath}}" placeholder="path/to/epub/root"/>
+      </div>
+    </p>
+
+
+
+
+  </div>
+  <div class="modal-footer">
+    <button id="save-settings" type="submit" class="btn btn-primary" data-dismiss="modal">Save Settings</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+  </div>
+</div>

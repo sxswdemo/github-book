@@ -1,0 +1,59 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/Cellar/node/0.8.11/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '.' ]
+2 info using npm@1.1.62
+3 info using node@v0.8.11
+4 verbose read json /Users/phil/Sites/atc/package.json
+5 verbose readDependencies using package.json deps
+6 verbose install where, deps [ '/Users/phil/Sites/atc',
+6 verbose install   [ 'underscore', 'backbone', 'docco', 'mockjaxify' ] ]
+7 verbose from cache /Users/phil/Sites/atc/package.json
+8 info preinstall atc@0.0.0
+9 verbose read json /Users/phil/Sites/atc/node_modules/backbone/package.json
+10 verbose read json /Users/phil/Sites/atc/node_modules/docco/package.json
+11 verbose read json /Users/phil/Sites/atc/node_modules/mockjaxify/package.json
+12 verbose read json /Users/phil/Sites/atc/node_modules/underscore/package.json
+13 verbose from cache /Users/phil/Sites/atc/package.json
+14 verbose readDependencies using package.json deps
+15 verbose read json /Users/phil/Sites/atc/node_modules/.bin/package.json
+16 verbose from cache /Users/phil/Sites/atc/node_modules/backbone/package.json
+17 verbose from cache /Users/phil/Sites/atc/node_modules/docco/package.json
+18 verbose from cache /Users/phil/Sites/atc/node_modules/mockjaxify/package.json
+19 verbose from cache /Users/phil/Sites/atc/node_modules/underscore/package.json
+20 verbose already installed skipping mockjaxify@* /Users/phil/Sites/atc
+21 verbose already installed skipping underscore@>=1.4.3 /Users/phil/Sites/atc
+22 verbose already installed skipping backbone@>=0.9.9 /Users/phil/Sites/atc
+23 verbose already installed skipping docco@~0.4.0 /Users/phil/Sites/atc
+24 silly resolved []
+25 info build /Users/phil/Sites/atc
+26 verbose from cache /Users/phil/Sites/atc/package.json
+27 verbose linkStuff [ false, false, false, '/Users/phil/Sites' ]
+28 info linkStuff atc@0.0.0
+29 verbose linkBins atc@0.0.0
+30 verbose linkMans atc@0.0.0
+31 verbose rebuildBundles atc@0.0.0
+32 verbose rebuildBundles [ '.bin', 'backbone', 'docco', 'mockjaxify', 'underscore' ]
+33 info install atc@0.0.0
+34 verbose unsafe-perm in lifecycle true
+35 silly exec sh "-c" "mkdir -p ./lib && cd ./lib && bash ../install-libs.sh && cd ../"
+36 silly sh,-c,mkdir -p ./lib && cd ./lib && bash ../install-libs.sh && cd ../,/Users/phil/Sites/atc spawning
+37 info atc@0.0.0 Failed to exec install script
+38 error atc@0.0.0 install: `mkdir -p ./lib && cd ./lib && bash ../install-libs.sh && cd ../`
+38 error `sh "-c" "mkdir -p ./lib && cd ./lib && bash ../install-libs.sh && cd ../"` failed with 128
+39 error Failed at the atc@0.0.0 install script.
+39 error This is most likely a problem with the atc package,
+39 error not with npm itself.
+39 error Tell the author that this fails on your system:
+39 error     mkdir -p ./lib && cd ./lib && bash ../install-libs.sh && cd ../
+39 error You can get their info via:
+39 error     npm owner ls atc
+39 error There is likely additional logging output above.
+40 error System Darwin 12.2.1
+41 error command "/usr/local/Cellar/node/0.8.11/bin/node" "/usr/local/bin/npm" "install" "."
+42 error cwd /Users/phil/Sites/atc
+43 error node -v v0.8.11
+44 error npm -v 1.1.62
+45 error code ELIFECYCLE
+46 verbose exit [ 1, true ]
