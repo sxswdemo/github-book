@@ -3,6 +3,7 @@
 
   require.config({
     paths: {
+      aloha: 'http://wysiwhat.github.com/Aloha-Editor/src/lib/aloha',
       'atc/auth': 'gh-book/auth',
       base64: 'lib/github/lib/base64',
       github: 'lib/github/github'

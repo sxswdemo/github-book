@@ -204,7 +204,6 @@
         return Controller.start();
       });
     };
-    Auth.set('password', prompt('Enter password'));
     return resetDesktop();
   });
 

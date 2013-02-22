@@ -4,6 +4,9 @@ require.config
   # # Configure Library Locations
   paths:
 
+    # Point to our version of Aloha
+    aloha: 'http://wysiwhat.github.com/Aloha-Editor/src/lib/aloha'
+
     # Change the Stub Auth piece
     'atc/auth': 'gh-book/auth'
 
