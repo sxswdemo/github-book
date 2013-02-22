@@ -37,7 +37,9 @@ define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/string
       deferred.resolve @
       @_promise = deferred.promise()
 
-    @_promise = @fetch() if not @_promise or 'rejected' == @_promise.state()
+    # Silently update the model (the user has not seen the model yet)
+    # so `model.hasChanged()` returns `false` (to know when to enable Saving)
+    @_promise = @fetch {silent:true} if not @_promise or 'rejected' == @_promise.state()
     return @_promise
 
   Deferrable = Backbone.Model.extend
@@ -113,13 +115,6 @@ define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/string
       copyrightHolders: []
       # Default language for new content is the browser's language
       language: (navigator?.userLanguage or navigator?.language or 'en').toLowerCase()
-
-    # Perform some validation before saving
-    validate: (attrs) ->
-      isEmpty = (str) -> str and not str.trim().length
-      return 'ERROR_EMPTY_BODY' if isEmpty(attrs.body)
-      return 'ERROR_EMPTY_TITLE' if isEmpty(attrs.title)
-      return 'ERROR_UNTITLED_TITLE' if attrs.title == __('Untitled')
 
 
   # Represents a "collection" in [Connexions](http://cnx.org) terminology and an `.opf` file in an EPUB
