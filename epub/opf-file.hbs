@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<package version="3.0"
+         xml:lang="en"
+         xmlns="http://www.idpf.org/2007/opf"
+         unique-identifier="pub-id">
+
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <dc:identifier
+              id="pub-id">{{id}}</dc:identifier>
+        <meta refines="#pub-id"
+              property="identifier-type"
+              scheme="xsd:string">uuid</meta>
+
+        <dc:language>{{language}}</dc:language>
+        <dc:title>{{title}}</dc:title>
+
+        <dc:creator id="creator">{{creator}}</dc:creator>
+        <meta refines="#creator"
+              property="role"
+              scheme="marc:relators">aut</meta>
+
+        <meta property="dcterms:modified">{{modified}}</meta>
+
+        <dc:publisher>{{publisher}}</dc:publisher>
+
+        <dc:date>{{created}}</dc:date>
+
+        <meta property="dcterms:dateCopyrighted">{{copyrightDate}}</meta>
+
+    </metadata>
+
+    <manifest>
+    {{#each manifest}}
+        <item id="{{identstring id}}"
+          {{#if properties}}
+              properties="{{properties}}"
+          {{/if}}
+              href="{{id}}"
+              media-type="{{mediaType}}"/>
+    {{/each}}
+    </manifest>
+
+    <spine>
+    {{#with navTree}}
+      {{#recursive .}}
+        {{#if href}}
+          <itemref idref="{{identstring href}}"/>
+        {{/if}}
+        {{#if children}}
+          {{{recursive children}}}
+        {{/if}}
+      {{/recursive}}
+    {{/with}}
+    </spine>
+</package>

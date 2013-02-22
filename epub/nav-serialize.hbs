@@ -1,0 +1,18 @@
+<nav>
+  <ol>
+  {{#recursive .}}
+    <li>
+    {{#if id}}
+      <a href="{{id}}">{{title}}</a>
+    {{else}}
+      <span>{{title}}</span>
+    {{/if}}
+    {{#if children}}
+      <ol>
+        {{{recursive children}}}
+      </ol>
+    {{/if}}
+    </li>
+  {{/recursive}}
+  </ol>
+</nav>
