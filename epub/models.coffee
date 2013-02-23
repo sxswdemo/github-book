@@ -14,6 +14,14 @@ define [
   BaseContent = AtcModels.BaseContent
   BaseBook = AtcModels.BaseBook
 
+
+  # Links in a navigation document are relative to where the nav document resides.
+  # If it does not live in the same directory then they need to be resolved to
+  # an absolute path so content Models can be looked up
+  resolvePath = (context, relPath) ->
+    return relPath if context.search('/') < 0
+    context.replace(/\/[^\/]*$/, '') + '/' + relPath.split('#')[0]
+
   mixin = (src, dest) -> _.defaults dest, src
 
 
@@ -114,11 +122,14 @@ define [
 
           # Give the HTML files in the manifest some titles from navigation.html
           navTree = @_updateNavTreeFromXML(@navModel.get('body'), {silent:true})
-          recSetTitles = (nodes=[]) ->
+          recSetTitles = (nodes=[]) =>
             for node in nodes
-              if node.id
-                model = AtcModels.ALL_CONTENT.get node.id
-                model.set {title: node.title}, {silent:true}
+              if node.id and node.id.search('#') < 0
+                path = resolvePath(@navModel.id, node.id)
+                model = AtcModels.ALL_CONTENT.get path
+                model.set {title: node.title}
+                # Do not mark the object as 'dirty' (for saving)
+                delete model.changed
               recSetTitles(node.children)
           recSetTitles navTree
 
@@ -140,7 +151,9 @@ define [
 
       # Find the tree and parse it into a JSON object
       $nav = $body.find 'nav'
-      throw 'ERROR: Currently only 1 nav element in the navigation document is supported' if $nav.length != 1
+      console.warn 'ERROR: Currently only 1 nav element in the navigation document is supported' if $nav.length != 1
+      $nav = $nav.first()
+
       navTree = @parseNavTree($nav).children
       @set 'navTreeStr', JSON.stringify(navTree), options
       return navTree
@@ -167,9 +180,11 @@ define [
 
         # Add it to the set of all content and construct the correct model based on the mimetype
         mediaType = $item.attr 'media-type'
+        path = $item.attr 'href'
         ContentType = MEDIA_TYPES.get(mediaType).constructor
         model = new ContentType
-          id: $item.attr 'href'
+          # Set the path to the file to be relative to the OPF file
+          id: resolvePath(@id, path)
           properties: $item.attr 'properties'
 
         AtcModels.ALL_CONTENT.add model
@@ -186,7 +201,7 @@ define [
 
     toJSON: ->
       json = BaseBook.prototype.toJSON.apply(@, arguments)
-      json.manifest = @manifest.toJSON()
+      json.manifest = @manifest?.toJSON()
       json
 
   PackageFile = BaseBook.extend PackageFileMixin

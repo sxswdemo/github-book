@@ -1,2 +1,9 @@
 {{! The initial context is an array so the 1st thing we do is loop over each item using '#.' }}
-<td data-media-type="{{mediaType}}"><i class="icon-content"></i><a href="#content/{{id}}">{{{title}}}</a></td><td><!-- modified --></td>
+<td data-media-type="{{mediaType}}"><i class="icon-content"></i><a href="#content/{{id}}">
+  <!-- If the content does not have a title (like an image) or it has not been looked up yet use the path -->
+  {{#if title}}
+    {{{title}}}
+  {{else}}
+    {{id}}
+  {{/if}}
+</a></td><td><!-- modified --></td>

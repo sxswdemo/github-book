@@ -39,7 +39,12 @@ define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/string
 
     # Silently update the model (the user has not seen the model yet)
     # so `model.hasChanged()` returns `false` (to know when to enable Saving)
-    @_promise = @fetch {silent:true} if not @_promise or 'rejected' == @_promise.state()
+    if not @_promise or 'rejected' == @_promise.state()
+      @_promise = @fetch() # {silent:true}
+      # Once we are done fetching and the change events have fired
+      # clear all the `.changed` flag so save does not think it has dirty models
+      @_promise.then => delete @changed
+
     return @_promise
 
   Deferrable = Backbone.Model.extend
@@ -85,10 +90,10 @@ define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/string
 
       @add (@collection.filter (model) => @isMatch(model))
 
-      @collection.on 'add', (model) =>
-        @add model if @isMatch(model)
 
+      @collection.on 'add', (model) => @add model if @isMatch(model)
       @collection.on 'remove', (model) => @remove model
+      @collection.on 'reset', (model) => @reset()
 
       @collection.on 'change', (model) =>
         if @isMatch(model)
@@ -108,7 +113,7 @@ define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/string
   BaseContent = Deferrable.extend
     mediaType: 'text/x-module'
     defaults:
-      title: __('Untitled')
+      title: null
       subjects: []
       keywords: []
       authors: []
@@ -198,7 +203,7 @@ define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/string
               found = recFind node.children
               return found if found
         node = recFind(navTree)
-        throw 'BUG: There is an entry in the tree but no corresponding model in the manifest' if not node
+        return console.error 'BUG: There is an entry in the tree but no corresponding model in the manifest' if not node
         node.title = newValue
         @set 'navTreeStr', JSON.stringify navTree
 

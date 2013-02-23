@@ -18,7 +18,8 @@
     });
     ALL_CONTENT = new AllContent();
     loaded = function(flag) {
-      var deferred;
+      var deferred,
+        _this = this;
       if (flag == null) {
         flag = false;
       }
@@ -28,8 +29,9 @@
         this._promise = deferred.promise();
       }
       if (!this._promise || 'rejected' === this._promise.state()) {
-        this._promise = this.fetch({
-          silent: true
+        this._promise = this.fetch();
+        this._promise.then(function() {
+          return delete _this.changed;
         });
       }
       return this._promise;
@@ -110,6 +112,9 @@
         this.collection.on('remove', function(model) {
           return _this.remove(model);
         });
+        this.collection.on('reset', function(model) {
+          return _this.reset();
+        });
         return this.collection.on('change', function(model) {
           if (_this.isMatch(model)) {
             return _this.add(model);
@@ -122,7 +127,7 @@
     BaseContent = Deferrable.extend({
       mediaType: 'text/x-module',
       defaults: {
-        title: __('Untitled'),
+        title: null,
         subjects: [],
         keywords: [],
         authors: [],
@@ -197,7 +202,7 @@
           };
           node = recFind(navTree);
           if (!node) {
-            throw 'BUG: There is an entry in the tree but no corresponding model in the manifest';
+            return console.error('BUG: There is an entry in the tree but no corresponding model in the manifest');
           }
           node.title = newValue;
           return _this.set('navTreeStr', JSON.stringify(navTree));

@@ -2,10 +2,16 @@
 (function() {
 
   define(['exports', 'underscore', 'backbone', 'atc/media-types', 'atc/controller', 'atc/models', 'hbs!./opf-file', 'hbs!./container-file', 'hbs!./nav-serialize'], function(exports, _, Backbone, MEDIA_TYPES, Controller, AtcModels, OPF_TEMPLATE, CONTAINER_TEMPLATE, NAV_SERIALIZE) {
-    var BaseBook, BaseCollection, BaseContent, EPUBContainer, HTMLFile, PackageFile, PackageFileMixin, TemplatedFileMixin, mixin;
+    var BaseBook, BaseCollection, BaseContent, EPUBContainer, HTMLFile, PackageFile, PackageFileMixin, TemplatedFileMixin, mixin, resolvePath;
     BaseCollection = AtcModels.DeferrableCollection;
     BaseContent = AtcModels.BaseContent;
     BaseBook = AtcModels.BaseBook;
+    resolvePath = function(context, relPath) {
+      if (context.search('/') < 0) {
+        return relPath;
+      }
+      return context.replace(/\/[^\/]*$/, '') + '/' + relPath.split('#')[0];
+    };
     mixin = function(src, dest) {
       return _.defaults(dest, src);
     };
@@ -104,20 +110,20 @@
               silent: true
             });
             recSetTitles = function(nodes) {
-              var model, node, _i, _len, _results;
+              var model, node, path, _i, _len, _results;
               if (nodes == null) {
                 nodes = [];
               }
               _results = [];
               for (_i = 0, _len = nodes.length; _i < _len; _i++) {
                 node = nodes[_i];
-                if (node.id) {
-                  model = AtcModels.ALL_CONTENT.get(node.id);
+                if (node.id && node.id.search('#') < 0) {
+                  path = resolvePath(_this.navModel.id, node.id);
+                  model = AtcModels.ALL_CONTENT.get(path);
                   model.set({
                     title: node.title
-                  }, {
-                    silent: true
                   });
+                  delete model.changed;
                 }
                 _results.push(recSetTitles(node.children));
               }
@@ -138,8 +144,9 @@
         $body = jQuery('<div></div>').append($xml);
         $nav = $body.find('nav');
         if ($nav.length !== 1) {
-          throw 'ERROR: Currently only 1 nav element in the navigation document is supported';
+          console.warn('ERROR: Currently only 1 nav element in the navigation document is supported');
         }
+        $nav = $nav.first();
         navTree = this.parseNavTree($nav).children;
         this.set('navTreeStr', JSON.stringify(navTree), options);
         return navTree;
@@ -160,12 +167,13 @@
         bookId = $xml.find("#" + ($xml.get('unique-identifier'))).text();
         title = $xml.find('title').text();
         $xml.find('package > manifest > item').each(function(i, item) {
-          var $item, ContentType, mediaType, model;
+          var $item, ContentType, mediaType, model, path;
           $item = jQuery(item);
           mediaType = $item.attr('media-type');
+          path = $item.attr('href');
           ContentType = MEDIA_TYPES.get(mediaType).constructor;
           model = new ContentType({
-            id: $item.attr('href'),
+            id: resolvePath(_this.id, path),
             properties: $item.attr('properties')
           });
           AtcModels.ALL_CONTENT.add(model);
@@ -180,9 +188,9 @@
         };
       },
       toJSON: function() {
-        var json;
+        var json, _ref;
         json = BaseBook.prototype.toJSON.apply(this, arguments);
-        json.manifest = this.manifest.toJSON();
+        json.manifest = (_ref = this.manifest) != null ? _ref.toJSON() : void 0;
         return json;
       }
     });

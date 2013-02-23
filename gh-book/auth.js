@@ -32,12 +32,7 @@
       },
       initialize: function() {
         this._update();
-        this.on('change', this._update);
-        this.on('change:username', this._update);
-        this.on('change:password', this._update);
-        this.on('change:token', this._update);
-        this.on('change:repoUser', this._update);
-        return this.on('change:repoName', this._update);
+        return this.on('change', this._update);
       },
       authenticate: function(credentials) {
         return this.set(credentials);

@@ -107,7 +107,7 @@ define [
     itemView: exports.SearchResultsItemView
 
     initialize: ->
-      @listenTo @collection, 'all',   => @render()
+      @listenTo @collection, 'reset',   => @render()
 
   # The search box. Changing the text will cause the underlying collection to filter
   # and fire off `add/remove` events.
@@ -437,9 +437,11 @@ define [
     editModel: (evt) ->
       evt.preventDefault()
       evt.stopPropagation()
-      id = jQuery(evt.target).attr 'data-id'
-      model = @model.manifest.get id
-      Controller.editModel model
+      href = jQuery(evt.target).attr 'data-id'
+      # The id may point to an element inside the HTML document
+      [path, id] = href.split('#')
+      model = @model.manifest.get path
+      Controller.editModel model, id
     initialize: ->
       @listenTo @model, 'all', => @render()
 

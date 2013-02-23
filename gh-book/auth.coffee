@@ -15,6 +15,7 @@ define ['github', 'backbone'], (Github, Backbone) ->
       repoName: 'gh-book'
 
       branch: 'dummy-book'
+      # **Remember:** `rootPath` always needs a trailing slash!
       rootPath: ''
 
     # Updates the singleton variables `github` and `repo`
@@ -34,12 +35,7 @@ define ['github', 'backbone'], (Github, Backbone) ->
     initialize: ->
       @_update()
 
-      @on 'change',           @_update
-      @on 'change:username',  @_update
-      @on 'change:password',  @_update
-      @on 'change:token',     @_update
-      @on 'change:repoUser',  @_update
-      @on 'change:repoName',  @_update
+      @on 'change', @_update
 
     authenticate: (credentials) -> @set credentials
     setRepo: (repoUser, repoName) -> @set
