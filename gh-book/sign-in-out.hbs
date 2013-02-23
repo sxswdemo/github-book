@@ -1,7 +1,35 @@
-<div class="btn-group">
-  <button id="save-content" type="button" class="btn disabled" data-placement="bottom" title="Save all changes to github"><i class="icon-save"></i> Save</button>
-  <button type="button" class="btn" data-target="#settings-modal" data-toggle="modal" data-placement="bottom" title="Repository Settings"><i class="icon-cogs"></i></button>
-</div>
+<small class="disabled" title="See the commits on github!" data-placement="bottom">Editing:
+  <a data-bypass="true" target="_new" href="https://github.com/{{repoUser}}/{{repoName}}/tree/{{branch}}/{{rootPath}}"><code>https://github.com/{{repoUser}}/{{repoName}}#{{rootPath}}</code></a>
+</small>
+
+<button id="save-content" type="button" class="btn disabled" data-placement="bottom" title="Save all changes to github"><i class="icon-save"></i> Save</button>
+
+
+  <div class="btn-group">
+    <button type="button" class="btn" data-target="#settings-modal" data-toggle="modal" data-placement="bottom" title="Repository Settings"><i class="icon-cogs"></i></button>
+    <button class="btn dropdown-toggle" data-toggle="dropdown" title="Choose a different book to edit!" data-placement="bottom">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li class="disabled">Edit a different book:</li>
+      <li class="divider"></li>
+
+      <li><a tabindex="-1" href="#" class="other-books" data-repo-user="philschatz" data-repo-name="github-book-example" data-branch="master" data-root-path="">Initially Loaded Example Book</a></li>
+
+      <li class="divider"></li>
+
+      <li><a tabindex="-1" href="#" class="other-books" data-repo-user="readium" data-repo-name="readium" data-branch="master" data-root-path="epub_content/epub30_spec/">EPUB3 Spec as a book (from Readium)</a></li>
+
+      <li><a tabindex="-1" href="#" class="other-books" data-repo-user="readium" data-repo-name="readium" data-branch="master" data-root-path="epub_content/accessible_epub_3/">Accessible EPUB3 (from Readium)</a></li>
+
+      <li><a tabindex="-1" href="#" class="other-books" data-repo-user="readium" data-repo-name="readium" data-branch="master" data-root-path="epub_content/hefty_water/">Hefty Water (from Readium)</a></li>
+
+      <li><a tabindex="-1" href="#" class="other-books" data-repo-user="readium" data-repo-name="readium" data-branch="master" data-root-path="epub_content/moby_dick/">Moby Dick (very big!) (from Readium)</a></li>
+
+
+    </ul>
+  </div>
+
 
 <button id="fork-book" class="btn btn-success"><i class="icon-github-alt"></i> Fork this Book!</button>
 
@@ -104,12 +132,39 @@
       </div>
     </p>
 
-
+    <h4>Other Books Already in Github</h4>
+    <p>Or, pick one of these EPUB3 books already in Github from the dropdown next to Settings (your mileage may vary)</p>
 
 
   </div>
   <div class="modal-footer">
     <button id="save-settings" type="submit" class="btn btn-primary" data-dismiss="modal">Save Settings</button>
     <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+  </div>
+</div>
+
+
+
+
+<div id="save-progress-modal" data-backdrop="false" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="save-progress-modal-label" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="save-progress-modal-label">Saving...</h3>
+  </div>
+  <div class="modal-body">
+
+    <div class="alert alert-error hide">
+      <strong>Error!</strong> There were problems saving. Are you sure you are signed in to this editor and have permission to commit to
+      <a data-bypass="true" target="_new" href="https://github.com/{{repoUser}}/{{repoName}}/tree/{{branch}}/{{rootPath}}"><code>https://github.com/{{repoUser}}/{{repoName}}</code></a>
+      ?
+    </div>
+
+    <div class="saving">
+      <p>Now saving: <span class="label">[content title]</span></p>
+      <div class="progress progress-striped active">
+        <div class="bar success"></div>
+        <div class="bar error"></div>
+      </div>
+    </div>
   </div>
 </div>

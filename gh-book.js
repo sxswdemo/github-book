@@ -2,8 +2,9 @@
 (function() {
   var __slice = [].slice;
 
-  define(['backbone', 'marionette', 'atc/controller', 'atc/models', 'epub/models', 'atc/auth', 'atc/views', 'hbs!gh-book/sign-in-out', 'hbs!gh-book/fork-book-item', 'css!atc'], function(Backbone, Marionette, Controller, AtcModels, EpubModels, Auth, Views, SIGN_IN_OUT, FORK_BOOK_ITEM) {
-    var b, defer, readDir, readFile, resetDesktop, uuid, writeFile, _saveContent;
+  define(['underscore', 'backbone', 'atc/controller', 'atc/models', 'epub/models', 'atc/auth', 'gh-book/views', 'css!atc'], function(_, Backbone, Controller, AtcModels, EpubModels, Auth, Views) {
+    var DEBUG, b, defer, readDir, readFile, resetDesktop, uuid, writeFile;
+    DEBUG = true;
     uuid = b = function(a) {
       if (a) {
         return (a ^ Math.random() * 16 >> a / 4).toString(16);
@@ -49,6 +50,9 @@
         return typeof success === "function" ? success(model, value, options) : void 0;
       };
       path = model.id || (typeof model.url === "function" ? model.url() : void 0) || model.url;
+      if (DEBUG) {
+        console.log(method, path);
+      }
       switch (method) {
         case 'read':
           return readFile(path, callback);
@@ -62,148 +66,53 @@
           throw "Model sync method not supported: " + method;
       }
     };
-    _saveContent = function() {
-      var allContent, recSave;
-      allContent = AtcModels.ALL_CONTENT.filter(function(model) {
-        return model.hasChanged();
-      });
-      console.log("Saving " + allContent.length + " files back to github");
-      recSave = function() {
-        var model, saving;
-        if (allContent.length === 0) {
-          return AtcModels.ALL_CONTENT.trigger('sync');
-        } else {
-          model = allContent.shift();
-          saving = model.save(null, {
-            success: recSave
-          });
-          if (!saving) {
-            console.log("Skipping " + model.id + " because it is not valid");
-            return recSave();
+    AtcModels.SearchResults = AtcModels.SearchResults.extend({
+      initialize: function() {
+        var model, _i, _len, _ref,
+          _this = this;
+        _ref = AtcModels.ALL_CONTENT.models;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          model = _ref[_i];
+          if (model.get('mediaType') !== 'text/x-module') {
+            this.add(model, {
+              at: 0
+            });
+          } else {
+            this.add(model);
           }
         }
-      };
-      return recSave();
-    };
-    Views.AuthView = Marionette.ItemView.extend({
-      template: SIGN_IN_OUT,
-      events: {
-        'click #sign-in': 'signIn',
-        'click #sign-out': 'signOut',
-        'click #save-settings': 'saveSettings',
-        'click #save-content': 'saveContent',
-        'click #fork-book': 'forkBook'
-      },
-      initialize: function() {
-        var disableSave,
-          _this = this;
-        this.listenTo(AtcModels.ALL_CONTENT, 'change', function() {
-          var $save;
-          $save = _this.$el.find('#save-content');
-          $save.removeClass('disabled');
-          return $save.addClass('btn-primary');
+        AtcModels.ALL_CONTENT.on('reset', function() {
+          return _this.reset();
         });
-        disableSave = function() {
-          var $save;
-          $save = _this.$el.find('#save-content');
-          $save.addClass('disabled');
-          return $save.removeClass('btn-primary');
-        };
-        this.listenTo(AtcModels.ALL_CONTENT, 'sync', disableSave);
-        return this.listenTo(AtcModels.ALL_CONTENT, 'reset', disableSave);
-      },
-      onRender: function() {
-        var _this = this;
-        this.$el.find('*[title]').tooltip();
-        return this.listenTo(this.model, 'change', function() {
-          return _this.render();
+        AtcModels.ALL_CONTENT.on('add', function(model) {
+          return _this.add(model);
         });
-      },
-      signIn: function() {
-        return this.model.set({
-          username: this.$el.find('#github-username').val(),
-          password: this.$el.find('#github-password').val()
+        return AtcModels.ALL_CONTENT.on('remove', function(model) {
+          return _this.remove(model);
         });
-      },
-      signOut: function() {
-        return this.model.signOut();
-      },
-      forkBook: function() {
-        var $fork, forkHandler;
-        if (!this.model.get('password')) {
-          return alert('Please log in to fork or just go to the github page and fork the book!');
-        }
-        $fork = this.$el.find('#fork-book-modal');
-        forkHandler = function(org) {
-          return function() {
-            return Auth.getRepo().fork(function(err, resp) {
-              $fork.modal('hide');
-              if (err) {
-                throw "Problem forking: " + err;
-              }
-              alert('Thanks for forking!\nThe current repo (in settings) has been updated to point to your fork. \nThe next time you click Save the changes will (hopefully) be saved to your forked book.\nIf not, refresh the page and change the Repo User in Settings.');
-              return Auth.set('repoUser', org);
-            });
-          };
-        };
-        return Auth.getUser().orgs(function(err, orgs) {
-          var $item, $list;
-          $list = $fork.find('.modal-body').empty();
-          $item = this.$(FORK_BOOK_ITEM({
-            login: Auth.get('username')
-          }));
-          $item.find('button').on('click', forkHandler(null));
-          $list.append($item);
-          _.each(orgs, function(org) {
-            $item = this.$(FORK_BOOK_ITEM({
-              login: "" + org.login + " (Organization)"
-            }));
-            $item.addClass('disabled');
-            return $list.append($item);
-          });
-          return $fork.modal('show');
-        });
-      },
-      saveSettings: function() {
-        var rootPath;
-        rootPath = this.$el.find('#github-rootPath').val();
-        if (rootPath && rootPath[rootPath.length - 2] !== '/') {
-          rootPath += '/';
-        }
-        return this.model.set({
-          repoUser: this.$el.find('#github-repoUser').val(),
-          repoName: this.$el.find('#github-repoName').val(),
-          branch: this.$el.find('#github-branch').val(),
-          rootPath: rootPath
-        });
-      },
-      saveContent: function() {
-        return _saveContent();
       }
     });
     resetDesktop = function() {
+      AtcModels.ALL_CONTENT.reset();
+      EpubModels.EPUB_CONTAINER.reset();
+      EpubModels.EPUB_CONTAINER._promise = null;
       return EpubModels.EPUB_CONTAINER.loaded().then(function() {
-        AtcModels.SearchResults = AtcModels.SearchResults.extend({
-          initialize: function() {
-            var model, _i, _len, _ref, _results;
-            _ref = AtcModels.ALL_CONTENT.models;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              model = _ref[_i];
-              if (model.get('mediaType') !== 'text/x-module') {
-                _results.push(this.add(model, {
-                  at: 0
-                }));
-              } else {
-                _results.push(this.add(model));
-              }
-            }
-            return _results;
-          }
+        EpubModels.EPUB_CONTAINER.each(function(book) {
+          return book.loaded().then(function() {
+            return console.log(book.id);
+          });
         });
-        return Controller.start();
+        if (!Backbone.History.started) {
+          Controller.start();
+        }
+        return Backbone.history.navigate('workspace');
       });
     };
+    Auth.on('change', function() {
+      if (!_.isEmpty(_.pick(Auth.changed, 'repoUser', 'repoName', 'branch', 'rootPath'))) {
+        return resetDesktop();
+      }
+    });
     Auth.set('password', prompt('Enter password'));
     return resetDesktop();
   });
