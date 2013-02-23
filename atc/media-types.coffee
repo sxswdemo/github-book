@@ -36,7 +36,10 @@ define ['backbone'], (Backbone) ->
 
     get: (mediaType) ->
       type = MEDIA_TYPES.get mediaType
-      throw 'BUG: mediaType not found' if not type
+      if not type
+        console.error "ERROR: No editor for media type '#{mediaType}'. Help out by writing one!"
+        return MEDIA_TYPES.models[0]
+        #     throw 'BUG: mediaType not found'
       return _.omit(type.toJSON(), 'id')
 
     # Provides a list of all registered media types
