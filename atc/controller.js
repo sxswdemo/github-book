@@ -19,7 +19,7 @@
       template: LAYOUT_MAIN,
       regionType: HidingRegion,
       regions: {
-        back: '#layout-main-back',
+        home: '#layout-main-home',
         toolbar: '#layout-main-toolbar',
         auth: '#layout-main-auth',
         sidebar: '#layout-main-sidebar',
@@ -42,23 +42,27 @@
     contentLayout = new ContentLayout();
     mainController = {
       start: function() {
+        var _this = this;
         mainRegion.show(mainLayout);
         mainLayout.auth.show(new Views.AuthView({
           model: Auth
         }));
-        mainLayout.back.ensureEl();
-        mainLayout.back.$el.on('click', function() {
-          return Backbone.history.history.back();
+        mainLayout.home.ensureEl();
+        mainLayout.home.$el.on('click', function() {
+          return _this.workspace();
         });
         mainSidebar.onClose();
         mainArea.onClose();
-        return Backbone.history.start();
+        if (!Backbone.History.started) {
+          return Backbone.history.start();
+        }
       },
       getRegion: function() {
         return mainRegion;
       },
       workspace: function() {
         var view, workspace;
+        window.scrollTo(0);
         mainToolbar.close();
         workspace = new Models.SearchResults();
         workspace = new Models.FilteredCollection(null, {
@@ -77,17 +81,11 @@
           return view.render();
         });
       },
-      createContent: function() {
-        var content;
-        content = new Models.Content();
-        this._editContent(content);
-        return Backbone.history.navigate('content');
-      },
       editModelId: function(id) {
         var model;
         model = Models.ALL_CONTENT.get(id);
         if (!model) {
-          return console.warn('Could not find content with that id');
+          return this.workspace();
         }
         return this.editModel(model);
       },
@@ -104,6 +102,7 @@
       },
       showBook: function(model) {
         var _this = this;
+        window.scrollTo(0);
         return model.loaded().then(function() {
           var view;
           mainToolbar.close();
@@ -116,6 +115,7 @@
       },
       editBook: function(model) {
         var _this = this;
+        window.scrollTo(0);
         return model.loaded().then(function() {
           var view;
           mainToolbar.close();
@@ -131,6 +131,7 @@
       },
       editContent: function(content) {
         var _this = this;
+        window.scrollTo(0);
         mainArea.show(contentLayout);
         return content.loaded().then(function() {
           var configAccordionDialog, view;
@@ -180,7 +181,6 @@
       appRoutes: {
         '': 'workspace',
         'workspace': 'workspace',
-        'content': 'createContent',
         'content/:id': 'editModelId'
       }
     });

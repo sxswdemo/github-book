@@ -31,7 +31,8 @@
         var type;
         type = MEDIA_TYPES.get(mediaType);
         if (!type) {
-          throw 'BUG: mediaType not found';
+          console.error("ERROR: No editor for media type '" + mediaType + "'. Help out by writing one!");
+          return MEDIA_TYPES.models[0];
         }
         return _.omit(type.toJSON(), 'id');
       },
