@@ -38,7 +38,7 @@ define [
     template: LAYOUT_MAIN
     regionType: HidingRegion
     regions:
-      back:         '#layout-main-back'
+      home:         '#layout-main-home'
       toolbar:      '#layout-main-toolbar'
       auth:         '#layout-main-auth'
       sidebar:      '#layout-main-sidebar'
@@ -78,15 +78,15 @@ define [
       mainRegion.show mainLayout
       mainLayout.auth.show new Views.AuthView {model: Auth}
 
-      mainLayout.back.ensureEl() # Not sure why this particular region needs this...
-      mainLayout.back.$el.on 'click', -> Backbone.history.history.back()
+      mainLayout.home.ensureEl() # Not sure why this particular region needs this...
+      mainLayout.home.$el.on 'click', => @workspace()
 
 
       # Hide the regions if they are not being used
       mainSidebar.onClose()
       mainArea.onClose()
-      # Start URL Routing
-      Backbone.history.start()
+      # Start URL Routing if it has not already started
+      Backbone.history.start() if not Backbone.History.started
 
     # Provide the main region that this controller uses.
     # Useful for applications that want to extend this editor.
@@ -95,6 +95,9 @@ define [
     # ### Show Workspace
     # Shows the workspace listing and updates the URL
     workspace: ->
+      # Always scroll to the top of the page
+      window.scrollTo(0)
+
       mainToolbar.close()
       # List the workspace
       workspace = new Models.SearchResults()
@@ -112,21 +115,14 @@ define [
       workspace.on 'change', ->
         view.render()
 
-    # ### Create new content
-    # Calling this method directly will start editing a new piece of content
-    # and will update the URL
-    createContent: ->
-      content = new Models.Content()
-      @_editContent content
-      # Update the URL
-      Backbone.history.navigate 'content'
-
     # ### Edit existing content
     # Calling this method directly will start editing an existing piece of content
     # and will update the URL.
     editModelId: (id) ->
       model = Models.ALL_CONTENT.get id
-      return console.warn 'Could not find content with that id' if not model
+      # If we cannot find a piece of content redirect to the workspace
+      # (maybe the user refreshed the page)
+      return @workspace() if not model
       @editModel model
 
     # Edit a piece of content.
@@ -141,6 +137,9 @@ define [
 
     # Show a book TOC in the left sidebar
     showBook: (model) ->
+      # Always scroll to the top of the page
+      window.scrollTo(0)
+
       model.loaded().then =>
         mainToolbar.close()
         mainArea.close()
@@ -151,6 +150,9 @@ define [
 
     # Edit a book in the main area
     editBook: (model) ->
+      # Always scroll to the top of the page
+      window.scrollTo(0)
+
       model.loaded().then =>
         mainToolbar.close()
 
@@ -162,6 +164,9 @@ define [
 
     # Edit a piece of HTML content
     editContent: (content) ->
+      # Always scroll to the top of the page
+      window.scrollTo(0)
+
       # ## Bind Metadata Dialogs
       mainArea.show contentLayout
 
@@ -209,7 +214,6 @@ define [
     appRoutes:
       '':             'workspace' # Show the workspace list of content
       'workspace':    'workspace'
-      'content':      'createContent' # Create a new piece of content
       'content/:id':  'editModelId' # Edit an existing piece of content
 
   # ## Attach mediaType edit views
