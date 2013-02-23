@@ -80,7 +80,7 @@
       itemView: exports.SearchResultsItemView,
       initialize: function() {
         var _this = this;
-        return this.listenTo(this.collection, 'all', function() {
+        return this.listenTo(this.collection, 'reset', function() {
           return _this.render();
         });
       }
@@ -449,12 +449,13 @@
         return Controller.editBook(this.model);
       },
       editModel: function(evt) {
-        var id, model;
+        var href, id, model, path, _ref1;
         evt.preventDefault();
         evt.stopPropagation();
-        id = jQuery(evt.target).attr('data-id');
-        model = this.model.manifest.get(id);
-        return Controller.editModel(model);
+        href = jQuery(evt.target).attr('data-id');
+        _ref1 = href.split('#'), path = _ref1[0], id = _ref1[1];
+        model = this.model.manifest.get(path);
+        return Controller.editModel(model, id);
       },
       initialize: function() {
         var _this = this;
