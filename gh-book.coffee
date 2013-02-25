@@ -124,5 +124,4 @@ define [
   #Auth.on 'change:rootPath', resetDesktop
 
 
-  # Auth.set 'password', prompt('Enter password')
   resetDesktop()

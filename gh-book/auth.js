@@ -11,8 +11,8 @@
         password: '',
         auth: 'basic',
         repoUser: 'philschatz',
-        repoName: 'gh-book',
-        branch: 'dummy-book',
+        repoName: 'github-book',
+        branch: 'sample-book',
         rootPath: ''
       },
       _update: function() {
