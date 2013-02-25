@@ -113,7 +113,6 @@
         return resetDesktop();
       }
     });
-    Auth.set('password', prompt('Enter password'));
     return resetDesktop();
   });
 
