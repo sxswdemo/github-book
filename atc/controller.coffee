@@ -92,6 +92,8 @@ define [
     # Useful for applications that want to extend this editor.
     getRegion: -> mainRegion
 
+    hideSidebar: -> mainSidebar.close()
+
     # ### Show Workspace
     # Shows the workspace listing and updates the URL
     workspace: ->
@@ -135,19 +137,6 @@ define [
       throw 'BUG: no way to edit this model' if not editAction
       editAction(model)
 
-    # Show a book TOC in the left sidebar
-    showBook: (model) ->
-      # Always scroll to the top of the page
-      window.scrollTo(0)
-
-      model.loaded().then =>
-        mainToolbar.close()
-        mainArea.close()
-
-
-        view = new Views.BookView {model: model}
-        mainSidebar.show view
-
     # Edit a book in the main area
     editBook: (model) ->
       # Always scroll to the top of the page
@@ -156,11 +145,8 @@ define [
       model.loaded().then =>
         mainToolbar.close()
 
-        view = new Views.BookAddContentView {model: model}
-        mainSidebar.show view
-
         view = new Views.BookEditView {model: model}
-        mainArea.show view
+        mainSidebar.show view
 
     # Edit a piece of HTML content
     editContent: (content) ->
@@ -218,7 +204,7 @@ define [
 
   # ## Attach mediaType edit views
   MEDIA_TYPES.add 'text/x-module',     {editAction: (model) -> mainController.editContent model}
-  MEDIA_TYPES.add 'text/x-collection', {editAction: (model) -> mainController.showBook model}
+  MEDIA_TYPES.add 'text/x-collection', {editAction: (model) -> mainController.editBook model}
 
 
   # Start listening to URL changes
