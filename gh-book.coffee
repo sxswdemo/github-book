@@ -95,6 +95,12 @@ define [
     EpubModels.EPUB_CONTAINER.reset()
     EpubModels.EPUB_CONTAINER._promise = null
 
+    # Begin listening to route changes
+    # and load the initial views based on the URL.
+    if not Backbone.History.started
+      Controller.start()
+    Backbone.history.navigate('workspace')
+
 
     # Change how the workspace is loaded (from `META-INF/content.xml`)
     #
@@ -102,15 +108,7 @@ define [
     EpubModels.EPUB_CONTAINER.loaded().then () ->
 
       # fetch all the book contents so the workspace is populated
-      EpubModels.EPUB_CONTAINER.each (book) -> book.loaded().then () ->
-        console.log book.id
-
-
-      # Begin listening to route changes
-      # and load the initial views based on the URL.
-      if not Backbone.History.started
-        Controller.start()
-      Backbone.history.navigate('workspace')
+      EpubModels.EPUB_CONTAINER.each (book) -> book.loaded()
 
 
 

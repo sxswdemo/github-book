@@ -96,16 +96,14 @@
       AtcModels.ALL_CONTENT.reset();
       EpubModels.EPUB_CONTAINER.reset();
       EpubModels.EPUB_CONTAINER._promise = null;
+      if (!Backbone.History.started) {
+        Controller.start();
+      }
+      Backbone.history.navigate('workspace');
       return EpubModels.EPUB_CONTAINER.loaded().then(function() {
-        EpubModels.EPUB_CONTAINER.each(function(book) {
-          return book.loaded().then(function() {
-            return console.log(book.id);
-          });
+        return EpubModels.EPUB_CONTAINER.each(function(book) {
+          return book.loaded();
         });
-        if (!Backbone.History.started) {
-          Controller.start();
-        }
-        return Backbone.history.navigate('workspace');
       });
     };
     Auth.on('change', function() {
