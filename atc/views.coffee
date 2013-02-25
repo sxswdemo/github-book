@@ -27,9 +27,7 @@ define [
   'hbs!atc/views/language-variants'
   'hbs!atc/views/aloha-toolbar'
   'hbs!atc/views/sign-in-out'
-  'hbs!atc/views/book-view'
   'hbs!atc/views/book-edit'
-  'hbs!atc/views/book-add-content'
   # Load internationalized strings
   'i18n!atc/nls/strings'
   # `bootstrap` and `select2` add to jQuery and don't export anything of their own
@@ -38,7 +36,7 @@ define [
   'select2'
   # Include CSS icons used by the toolbar
   'css!font-awesome'
-], (exports, _, Backbone, Marionette, jQuery, Aloha, Controller, Languages, SEARCH_BOX, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_VIEW, BOOK_EDIT, BOOK_ADD_CONTENT, __) ->
+], (exports, _, Backbone, Marionette, jQuery, Aloha, Controller, Languages, SEARCH_BOX, SEARCH_RESULT, SEARCH_RESULT_ITEM, DIALOG_WRAPPER, EDIT_METADATA, EDIT_ROLES, LANGUAGE_VARIANTS, ALOHA_TOOLBAR, SIGN_IN_OUT, BOOK_EDIT, __) ->
 
   # **FIXME:** Move this delay into a common module so the mock AJAX code can use them too
   DELAY_BEFORE_SAVING = 3000
@@ -416,34 +414,6 @@ define [
 
   # ## Book Editing
 
-  # When editing a `Book` this provides buttons to add new content into the tree
-  exports.BookAddContentView = Marionette.ItemView.extend
-    template: BOOK_ADD_CONTENT
-    events:
-      'click .add-section': 'prependSection'
-      'click .add-content': 'prependContent'
-
-    prependSection: -> @model.prependNewContent {title: 'Untitled Section'}
-    prependContent: -> @model.prependNewContent {title: 'Untitled Content'}, 'text/x-module'
-
-
-  # When viewing a `Book` in the sidebar render it as a tree and provide an "Edit" button.
-  exports.BookView = Marionette.ItemView.extend
-    template: BOOK_VIEW
-    events:
-      'click .edit': 'editBook'
-      'click a': 'editModel'
-    editBook: -> Controller.editBook @model
-    editModel: (evt) ->
-      evt.preventDefault()
-      evt.stopPropagation()
-      href = jQuery(evt.target).attr 'data-id'
-      # The id may point to an element inside the HTML document
-      [path, id] = href.split('#')
-      model = @model.manifest.get path
-      Controller.editModel model, id
-    initialize: ->
-      @listenTo @model, 'all', => @render()
 
   # Use this to generate HTML with extra divs for Drag-and-Drop zones.
   #
@@ -451,12 +421,28 @@ define [
   # a JSON tree and set it on the model.
   #
   # **FIXME:** Instead of a JSON tree this Model should be implemented using a Tree-Like Collection that has a `.toJSON()` and methods like `.insertBefore()`
-  exports.BookEditView = exports.BookView.extend
+  exports.BookEditView = Marionette.ItemView.extend
     template: BOOK_EDIT
     events:
-      'click .save': 'showBook'
-      'click a': 'editModel'
-    showBook: -> Controller.showBook @model
+      'click .edit-content': 'editModel'
+      'click #nav-close': 'closeView'
+      'click #add-section': 'prependSection'
+      'click #add-content': 'prependContent'
+
+    initialize: ->
+      @listenTo @model, 'all', => @render()
+    prependSection: -> @model.prependNewContent {title: 'Untitled Section'}
+    prependContent: -> @model.prependNewContent {title: 'Untitled Content'}, 'text/x-module'
+
+    closeView: -> Controller.hideSidebar()
+
+    editModel: (evt) ->
+      evt.preventDefault()
+      href = jQuery(evt.target).parent().children('span').attr 'data-id'
+      # The id may point to an element inside the HTML document
+      [path, id] = href.split('#')
+      model = @model.manifest.get path
+      Controller.editModel model, id
     onRender: ->
       # Since we use jqueryui's draggable which is loaded when Aloha loads
       # delay until Aloha is finished loading
@@ -502,10 +488,10 @@ define [
               # Serialize it back to HTML
               # Remove the drag node (a clone of the element that's being dragged)
               $root.find('.ui-draggable-dragging').remove()
+              $root.find('*').removeClass('editor-drop-zone-in ui-droppable ui-draggable')
 
               @model.set 'navTreeStr', JSON.stringify @model.parseNavTree($root).children
 
             setTimeout delay, 10
-
 
   return exports

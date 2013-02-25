@@ -1,4 +1,20 @@
-<button class="btn btn-primary save">Done</button>
+<button id="nav-close" class="btn pull-right close"><i class="icon-remove-sign"></i></button>
+
+<div class="btn-group">
+  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    Action
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><button class="btn btn-link" id="add-section" href="#"><i class="icon-folder-close-alt"></i> Chapter</button></li>
+    <li><button class="btn btn-link" id="add-content" href="#"><i class="icon-file-alt"></i> Content</button></li>
+  </ul>
+</div>
+
+
+
+<h3>Book Contents</h3>
+
 <nav data-type="toc">
 {{#with navTree}}
   <ol>
@@ -6,7 +22,7 @@
     <li class="editor-node {{class}}">
       <div class="editor-drop-zone editor-drop-zone-before"></div>
       {{#if id}}
-        <span class="editor-drop-zone editor-drop-zone-in" data-id="{{id}}" data-class="{{class}}">{{title}}</span>
+        <button class="btn btn-mini pull-right edit-content" title="Edit Content">...</button><span class="editor-drop-zone editor-drop-zone-in" data-id="{{id}}" data-class="{{class}}">{{title}}</span>
       {{else}}
         <span class="editor-drop-zone editor-drop-zone-in" data-class="{{class}}">{{title}}</span>
       {{/if}}
