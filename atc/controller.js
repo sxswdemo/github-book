@@ -60,6 +60,9 @@
       getRegion: function() {
         return mainRegion;
       },
+      hideSidebar: function() {
+        return mainSidebar.close();
+      },
       workspace: function() {
         var view, workspace;
         window.scrollTo(0);
@@ -100,33 +103,16 @@
         }
         return editAction(model);
       },
-      showBook: function(model) {
-        var _this = this;
-        window.scrollTo(0);
-        return model.loaded().then(function() {
-          var view;
-          mainToolbar.close();
-          mainArea.close();
-          view = new Views.BookView({
-            model: model
-          });
-          return mainSidebar.show(view);
-        });
-      },
       editBook: function(model) {
         var _this = this;
         window.scrollTo(0);
         return model.loaded().then(function() {
           var view;
           mainToolbar.close();
-          view = new Views.BookAddContentView({
-            model: model
-          });
-          mainSidebar.show(view);
           view = new Views.BookEditView({
             model: model
           });
-          return mainArea.show(view);
+          return mainSidebar.show(view);
         });
       },
       editContent: function(content) {
@@ -191,7 +177,7 @@
     });
     MEDIA_TYPES.add('text/x-collection', {
       editAction: function(model) {
-        return mainController.showBook(model);
+        return mainController.editBook(model);
       }
     });
     new ContentRouter();

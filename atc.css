@@ -88,13 +88,24 @@
 
 .editor-drop-zone-hover {
   background-color: #ccc;
+  min-height: 1em;
 }
 .editor-drop-zone-before {
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+#nav-close {
+  position: relative;
+  right: -5px;
+  line-height: 20px;
+}
 
-
+.editor-node > .edit-content {
+  visibility: hidden;
+}
+.editor-node:hover > .edit-content {
+  visibility: visible;
+}
 
 
 
