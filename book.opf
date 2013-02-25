@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<package version="3.0"
+         xml:lang="en"
+         xmlns="http://www.idpf.org/2007/opf"
+         unique-identifier="pub-id">
+
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <dc:identifier
+              id="pub-id">book.opf</dc:identifier>
+        <meta refines="#pub-id"
+              property="identifier-type"
+              scheme="xsd:string">uuid</meta>
+
+        <dc:language>en</dc:language>
+        <dc:title></dc:title>
+
+        <dc:creator id="creator"></dc:creator>
+        <meta refines="#creator"
+              property="role"
+              scheme="marc:relators">aut</meta>
+
+        <meta property="dcterms:modified"></meta>
+
+        <dc:publisher></dc:publisher>
+
+        <dc:date></dc:date>
+
+        <meta property="dcterms:dateCopyrighted"></meta>
+
+    </metadata>
+
+    <manifest>
+    
+        <item id="id-navigation"
+          
+              properties="nav"
+          
+              href="navigation.html"
+              media-type="application/xhtml+xml"/>
+    
+        <item id="id-2-introduction"
+          
+              href="introduction.html"
+              media-type="application/xhtml+xml"/>
+    
+        <item id="id-1-background"
+          
+              href="background.html"
+              media-type="application/xhtml+xml"/>
+    
+    </manifest>
+
+    <spine>
+    
+      <itemref idref="id-1-background"/>
+    
+      <itemref idref="id-2-introduction"/>
+    
+    </spine>
+</package>
