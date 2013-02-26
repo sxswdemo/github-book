@@ -99,6 +99,7 @@ define [
       # Always scroll to the top of the page
       window.scrollTo(0)
 
+      mainSidebar.close()
       mainToolbar.close()
       # List the workspace
       workspace = new Models.SearchResults()

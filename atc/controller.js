@@ -66,6 +66,7 @@
       workspace: function() {
         var view, workspace;
         window.scrollTo(0);
+        mainSidebar.close();
         mainToolbar.close();
         workspace = new Models.SearchResults();
         workspace = new Models.FilteredCollection(null, {
