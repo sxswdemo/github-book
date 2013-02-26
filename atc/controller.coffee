@@ -16,12 +16,11 @@ define [
   # so we use the `exports` module to get around that problem.
   'atc/views'
   'hbs!atc/layouts/main'
-  'hbs!atc/layouts/book-view'
   'hbs!atc/layouts/content'
   'hbs!atc/layouts/workspace'
   'exports'
   'i18n!atc/nls/strings'
-], (jQuery, Backbone, Marionette, MEDIA_TYPES, Auth, Models, Views, LAYOUT_MAIN, LAYOUT_BOOK_VIEW, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) ->
+], (jQuery, Backbone, Marionette, MEDIA_TYPES, Auth, Models, Views, LAYOUT_MAIN, LAYOUT_CONTENT, LAYOUT_WORKSPACE, exports, __) ->
 
   mainRegion = new Marionette.Region
     el: '#main'
@@ -100,6 +99,7 @@ define [
       # Always scroll to the top of the page
       window.scrollTo(0)
 
+      mainSidebar.close()
       mainToolbar.close()
       # List the workspace
       workspace = new Models.SearchResults()

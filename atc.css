@@ -61,8 +61,11 @@
  * Show the document icon by default.
  */
 .search-results *[data-media-type]                     .icon-content { margin-right: 0.5em; }
+.search-results *[data-media-type='application/xhtml+xml'],
 .search-results *[data-media-type='text/x-module']     .icon-content:before { content:"\f0f6"; /* icon-file-alt */ }
 .search-results *[data-media-type='text/x-collection'] .icon-content:before { content:"\f02d"; /* icon-book */ }
+
+.search-results > tbody > tr { cursor: pointer; }
 
 
 /* Style TOC sections different from content */
