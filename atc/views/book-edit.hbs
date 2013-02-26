@@ -2,7 +2,7 @@
 
 <div class="btn-group">
   <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-    Action
+    Add
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu">
@@ -22,7 +22,7 @@
     <li class="editor-node {{class}}">
       <div class="editor-drop-zone editor-drop-zone-before"></div>
       {{#if id}}
-        <button class="btn btn-mini pull-right edit-content" title="Edit Content">...</button><span class="editor-drop-zone editor-drop-zone-in" data-id="{{id}}" data-class="{{class}}">{{title}}</span>
+        <button class="btn btn-mini pull-right edit-content" title="Edit Content"><i class="icon-edit"></i></button><span class="editor-drop-zone editor-drop-zone-in" data-id="{{id}}" data-class="{{class}}">{{title}}</span>
       {{else}}
         <span class="editor-drop-zone editor-drop-zone-in" data-class="{{class}}">{{title}}</span>
       {{/if}}
