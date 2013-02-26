@@ -249,6 +249,19 @@ define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/string
   SearchResults = DeferrableCollection.extend
     defaults:
       parameters: []
+    # Compare by `mediaType` (Collections/Books 1st), then by title/URL
+    comparator: (a, b) ->
+      A = a.mediaType or ''
+      B = b.mediaType or ''
+      return 1 if B < A
+      return -1  if A < B
+
+      A = a.get('title') or a.id or ''
+      B = b.get('title') or b.id or ''
+      return -1 if B < A
+      return 1  if A < B
+
+      return 0
 
   # Add the 2 basic Media Types already defined above
   MEDIA_TYPES.add 'text/x-module',

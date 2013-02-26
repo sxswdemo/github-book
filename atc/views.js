@@ -452,7 +452,7 @@
       editModel: function(evt) {
         var href, id, model, path, _ref1;
         evt.preventDefault();
-        href = jQuery(evt.target).parent().children('span').attr('data-id');
+        href = jQuery(evt.target).parents('li').first().children('span').attr('data-id');
         _ref1 = href.split('#'), path = _ref1[0], id = _ref1[1];
         model = this.model.manifest.get(path);
         return Controller.editModel(model, id);

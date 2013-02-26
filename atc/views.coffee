@@ -438,7 +438,7 @@ define [
 
     editModel: (evt) ->
       evt.preventDefault()
-      href = jQuery(evt.target).parent().children('span').attr 'data-id'
+      href = jQuery(evt.target).parents('li').first().children('span').attr 'data-id'
       # The id may point to an element inside the HTML document
       [path, id] = href.split('#')
       model = @model.manifest.get path
