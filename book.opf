@@ -12,7 +12,7 @@
               scheme="xsd:string">uuid</meta>
 
         <dc:language>en</dc:language>
-        <dc:title></dc:title>
+        <dc:title>Sample Book</dc:title>
 
         <dc:creator id="creator"></dc:creator>
         <meta refines="#creator"
@@ -30,31 +30,31 @@
     </metadata>
 
     <manifest>
-    
+
         <item id="id-navigation"
-          
+
               properties="nav"
-          
+
               href="navigation.html"
               media-type="application/xhtml+xml"/>
-    
-        <item id="id-2-introduction"
-          
-              href="introduction.html"
+
+        <item id="id-preface"
+
+              href="preface.html"
               media-type="application/xhtml+xml"/>
-    
-        <item id="id-1-background"
-          
-              href="background.html"
+
+        <item id="id-introduction"
+
+              href="ontroduction.html"
               media-type="application/xhtml+xml"/>
-    
+
     </manifest>
 
     <spine>
-    
-      <itemref idref="id-1-background"/>
-    
-      <itemref idref="id-2-introduction"/>
-    
+
+      <itemref idref="id-preface"/>
+
+      <itemref idref="id-introduction"/>
+
     </spine>
 </package>
