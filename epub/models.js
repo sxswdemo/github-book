@@ -223,8 +223,7 @@
           var href;
           href = jQuery(el).attr('full-path');
           return ret.push({
-            id: href,
-            title: 'Loading Book Title...'
+            id: href
           });
         });
         return ret;
