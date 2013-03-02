@@ -1,33 +1,67 @@
-TEMP="temp.zip"
 
-curl -o jquery-1.8.3.js http://code.jquery.com/jquery-1.8.3.js
-curl -o require-2.1.2.js http://requirejs.org/docs/release/2.1.2/comments/require.js
+# Downloads a single file (like jQuery) from a remote URL
+function singleFile () {
+  URL=$1
+  DESTINATION_NAME=$2
 
-git clone https://github.com/requirejs/text.git require-text
-git clone https://github.com/guybedford/require-css.git
-git clone https://github.com/guybedford/require-less.git
-git clone https://github.com/SlexAxton/require-handlebars-plugin.git
-git clone https://github.com/millermedeiros/requirejs-plugins.git
+  if [ -s ${DESTINATION_NAME} ]; then
+    echo "---- Skipping ${DESTINATION_NAME}"
+  else
+    echo "---- Downloading ${URL} into ${DESTINATION_NAME}"
+    curl --location -o ${DESTINATION_NAME} ${URL}
+  fi
+}
 
-echo "Downloading backbone.marionette"
-##git clone https://github.com/marionettejs/backbone.marionette.git
-curl -o backbone.marionette.js http://marionettejs.com/downloads/backbone.marionette.js
+# Downloads and unzips a snapshot of a github repo into DESTINATION_NAME
+function fromGithub () {
+  PROJECT_ROOT_URL=$1
+  PROJECT_BRANCH=$2
+  DESTINATION_NAME=$3
 
-echo "Downloading Twitter Bootstrap"
-##git clone https://github.com/twitter/bootstrap.git
-curl -o ${TEMP} http://twitter.github.com/bootstrap/assets/bootstrap.zip && unzip ${TEMP}
+  PROJECT_NAME=${PROJECT_ROOT_URL##*/}
 
-echo "Downloading Font-Awesome"
-##git clone https://github.com/FortAwesome/Font-Awesome.git
-curl -o ${TEMP} https://nodeload.github.com/FortAwesome/Font-Awesome/zip/master && unzip ${TEMP} && mv Font-Awesome-master Font-Awesome
+  [ -z ${PROJECT_BRANCH} ] && PROJECT_BRANCH="master"
+  [ -z ${DESTINATION_NAME} ] && DESTINATION_NAME=${PROJECT_NAME}
 
-git clone https://github.com/ivaynberg/select2.git
-git clone https://github.com/pivotal/jasmine.git
-git clone https://github.com/appendto/jquery-mockjax.git
+  if [ -d ${DESTINATION_NAME} ]; then
+    echo "---- Skipping ${DESTINATION_NAME} because it already exists"
+  else
+    echo "---- Downloading a copy of ${PROJECT_ROOT_URL}#${PROJECT_BRANCH} into ${DESTINATION_NAME}"
+    curl --location "${PROJECT_ROOT_URL}/archive/${PROJECT_BRANCH}.tar.gz" | tar -xzf -
+    mv "${PROJECT_NAME}-${PROJECT_BRANCH}" ${DESTINATION_NAME}
+  fi
+}
 
-git clone https://github.com/wysiwhat/Aloha-Editor.git
+
+fromGithub "https://github.com/requirejs/text" "" "require-text"
+
+fromGithub "https://github.com/guybedford/require-css"
+fromGithub "https://github.com/guybedford/require-less"
+fromGithub "https://github.com/SlexAxton/require-handlebars-plugin"
+fromGithub "https://github.com/millermedeiros/requirejs-plugins"
+
+fromGithub "https://github.com/FortAwesome/Font-Awesome"
+
+fromGithub "https://github.com/ivaynberg/select2"
+fromGithub "https://github.com/pivotal/jasmine"
+fromGithub "https://github.com/appendto/jquery-mockjax"
+
+fromGithub "https://github.com/wysiwhat/Aloha-Editor" "dev"
 
 # For github-hosted ebooks
-git clone https://github.com/michael/github.git
+fromGithub "https://github.com/michael/github"
 
-rm ${TEMP}
+
+singleFile "http://code.jquery.com/jquery-1.8.3.js" "jquery-1.8.3.js"
+singleFile "http://requirejs.org/docs/release/2.1.2/comments/require.js" "require-2.1.2.js"
+singleFile "http://marionettejs.com/downloads/backbone.marionette.js" "backbone.marionette.js"
+
+##fromGithub "https://github.com/twitter/bootstrap"
+TEMP="bootstrap.zip"
+if [ -d "bootstrap" ]; then
+  echo "---- Skipping bootstrap"
+else
+  echo "---- Downloading bootstrap"
+  curl --location -o ${TEMP} http://twitter.github.com/bootstrap/assets/bootstrap.zip && unzip ${TEMP} && rm ${TEMP}
+fi
+
