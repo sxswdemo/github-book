@@ -68,7 +68,8 @@
         text: 'lib/require-text/text',
         css: 'lib/require-css/css',
         less: 'lib/require-less/less',
-        json: 'lib/requirejs-plugins/src/json'
+        json: 'lib/requirejs-plugins/src/json',
+        Handlebars: 'handlebars'
       }
     },
     hbs: {
