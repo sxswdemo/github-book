@@ -27,10 +27,10 @@
     <item id="style" href="css/stylesheet.css" media-type="text/css"/>
     <item id="aMoby-Dick_FE_title_page" href="images/Moby-Dick_FE_title_page.jpg"
       media-type="image/jpeg"/>
--->
     <item id="xpreface_001" href="preface_001.xhtml" media-type="application/xhtml+xml"/>
     <item id="xintroduction_001" href="introduction_001.xhtml" media-type="application/xhtml+xml"/>
     <item id="xepigraph_001" href="epigraph_001.xhtml" media-type="application/xhtml+xml"/>
+-->
     <item id="xchapter_001" href="chapter_001.xhtml" media-type="application/xhtml+xml"/>
     <item id="xchapter_002" href="chapter_002.xhtml" media-type="application/xhtml+xml"/>
     <item id="xchapter_003" href="chapter_003.xhtml" media-type="application/xhtml+xml"/>
@@ -43,8 +43,9 @@
     <item id="xchapter_134" href="chapter_134.xhtml" media-type="application/xhtml+xml"/>
     <item id="xchapter_135" href="chapter_135.xhtml" media-type="application/xhtml+xml"/>
     <item id="xchapter_136" href="chapter_136.xhtml" media-type="application/xhtml+xml"/>
+<!--
     <item id="brief-toc" href="toc-short.xhtml" media-type="application/xhtml+xml"/>
-
+-->
     <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
 
   </manifest>
@@ -53,10 +54,10 @@
     <itemref idref="cover" linear="no"/>
     <itemref idref="titlepage" linear="yes"/>
     <itemref idref="brief-toc" linear="yes"/>
--->
     <itemref linear="yes" idref="xpreface_001"/>
     <itemref linear="yes" idref="xintroduction_001"/>
     <itemref linear="yes" idref="xepigraph_001"/>
+-->
     <itemref linear="yes" idref="xchapter_001"/>
     <itemref linear="yes" idref="xchapter_002"/>
     <itemref linear="yes" idref="xchapter_003"/>
