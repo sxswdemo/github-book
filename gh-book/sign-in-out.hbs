@@ -31,15 +31,17 @@
   </div>
 
 
-<button id="fork-book" class="btn btn-success" title="Derive a copy of this book and save it into your account!" data-placement="bottom"><i class="icon-github-alt"></i> Copy this Book!</button>
-
 {{#if password}}
   <!-- Person IS logged in -->
+  <button id="fork-book" class="btn btn-success" title="Derive a copy of this book and save it into your account!" data-placement="bottom"><i class="icon-github-alt"></i> Copy this Book!</button>
+
   <button type="button" id="sign-out" class="btn btn-link">Sign Out</button>
 
 
 {{else}}
   <!-- Person is NOT logged in -->
+  <button id="fork-book" class="btn btn-success disabled" title="Sign in to derive a copy of this book and save it into your account!" data-placement="bottom"><i class="icon-github-alt"></i> Copy this Book!</button>
+
   <button type="button" class="btn btn-primary" data-target="#sign-in-modal" data-toggle="modal"><i class="icon-signin"></i> Sign In</button>
 
   <!-- Sign in Modal -->
