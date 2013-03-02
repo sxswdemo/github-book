@@ -93,6 +93,8 @@ require.config
       css: 'lib/require-css/css'
       less: 'lib/require-less/less'
       json: 'lib/requirejs-plugins/src/json'
+      # Newer versions of the `hbs` plugin refer to uppercase handlebars...
+      Handlebars: 'handlebars'
 
   # ## Module and requirejs Plugin Configuration
   # This configures `requirejs` plugins (like `'hbs!...'`) and our modules (like `'atc/views'`).
