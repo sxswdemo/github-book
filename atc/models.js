@@ -87,12 +87,17 @@
         return this.reset(models);
       },
       isMatch: function(model) {
-        var title;
+        var body, bodyText, found, title;
         if (!this.filterStr) {
           return true;
         }
         title = model.get('title') || '';
-        return title.toLowerCase().search(this.filterStr.toLowerCase()) >= 0;
+        found = title.toLowerCase().search(this.filterStr.toLowerCase()) >= 0;
+        if (found) {
+          return true;
+        }
+        body = model.get('body') || '';
+        return bodyText = body.replace(/\<(\/?[^\\>]+)\\>/, ' ').replace(/\s+/, ' ').trim();
       },
       initialize: function(models, options) {
         var _this = this;

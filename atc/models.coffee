@@ -81,7 +81,11 @@ define ['exports', 'jquery', 'backbone', 'atc/media-types', 'i18n!atc/nls/string
     isMatch: (model) ->
       return true if not @filterStr
       title = model.get('title') or ''
-      title.toLowerCase().search(@filterStr.toLowerCase()) >= 0
+      found = title.toLowerCase().search(@filterStr.toLowerCase()) >= 0
+      return true if found
+
+      body = model.get('body') or ''
+      bodyText = body.replace(/\<(\/?[^\\>]+)\\>/, ' ').replace(/\s+/, ' ').trim()
 
     initialize: (models, options) ->
       @filterStr = options.filterStr or ''
