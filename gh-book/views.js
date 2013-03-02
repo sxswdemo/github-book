@@ -15,11 +15,31 @@
       initialize: function() {
         var disableSave,
           _this = this;
-        this.listenTo(AtcModels.ALL_CONTENT, 'change', function() {
-          var $save;
+        this.listenTo(AtcModels.ALL_CONTENT, 'change', function(model, b, c) {
+          var $save, attribute, changes, checkIfContentActuallyChanged;
           $save = _this.$el.find('#save-content');
-          $save.removeClass('disabled');
-          return $save.addClass('btn-primary');
+          checkIfContentActuallyChanged = function() {
+            if (model.hasChanged()) {
+              $save.removeClass('disabled');
+              return $save.addClass('btn-primary');
+            }
+          };
+          setTimeout((function() {
+            return checkIfContentActuallyChanged();
+          }), 100);
+          if (false) {
+            changes = model.changedAttributes();
+            for (attribute in changes) {
+              if (!model.previous(attribute)) {
+                delete changes[attribute];
+              }
+            }
+            if (_.keys(changes).length) {
+              $save = _this.$el.find('#save-content');
+              $save.removeClass('disabled');
+              return $save.addClass('btn-primary');
+            }
+          }
         });
         disableSave = function() {
           var $save;

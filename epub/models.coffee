@@ -222,7 +222,7 @@ define [
       ret = []
       $xml.find('rootfiles > rootfile').each (i, el) =>
         href = jQuery(el).attr 'full-path'
-        ret.push {id: href, title: 'Loading Book Title...'}
+        ret.push {id: href}
       return ret
 
 

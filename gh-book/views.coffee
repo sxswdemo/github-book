@@ -32,10 +32,28 @@ define [
 
     initialize: ->
       # Listen to all changes made on Content so we can update the save button
-      @listenTo AtcModels.ALL_CONTENT, 'change', =>
+      @listenTo AtcModels.ALL_CONTENT, 'change', (model, b,c) =>
+        # Figure out if the model was just fetched (all the changed attributes used to be 'undefined')
+        # or if the attributes did actually change
+
         $save = @$el.find '#save-content'
-        $save.removeClass('disabled')
-        $save.addClass('btn-primary')
+        checkIfContentActuallyChanged = =>
+          if model.hasChanged()
+            $save.removeClass('disabled')
+            $save.addClass('btn-primary')
+
+        setTimeout (=> checkIfContentActuallyChanged()), 100
+
+        if false
+          # Delete any properties that were null before
+          changes = model.changedAttributes()
+          (delete changes[attribute] if not model.previous(attribute)) for attribute of changes
+
+          # If there was anything that was actually changed (not null before) then mark the save button.
+          if _.keys(changes).length
+            $save = @$el.find '#save-content'
+            $save.removeClass('disabled')
+            $save.addClass('btn-primary')
 
       # If the repo changes and all of the content is reset, update the button
       disableSave = =>
