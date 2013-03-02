@@ -26,7 +26,7 @@ function fromGithub () {
   if [ -d ${DESTINATION_NAME} ]; then
     echo "---- Skipping ${DESTINATION_NAME} because it already exists"
   else
-    echo "---- Downloading a copy of ${PROJECT_ROOT_URL}#${PROJECT_BRANCH} into ${DESTINATION_NAME}"
+    echo "---- Downloading a copy of ${DESTINATION_NAME} from ${PROJECT_ROOT_URL}#${PROJECT_BRANCH}"
     curl --location "${PROJECT_ROOT_URL}/archive/${PROJECT_BRANCH}.tar.gz" | tar -xzf -
     mv "${PROJECT_NAME}-${PROJECT_BRANCH}" ${DESTINATION_NAME}
   fi
