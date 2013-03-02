@@ -17,14 +17,6 @@
     <meta property="cc:attributionURL">http://code.google.com/p/epub-samples/</meta>
   </metadata>
   <manifest>
-    <item id="font.stix.regular" href="fonts/STIXGeneral.otf"
-      media-type="application/vnd.ms-opentype"/>
-    <item id="font.stix.italic" href="fonts/STIXGeneralItalic.otf"
-      media-type="application/vnd.ms-opentype"/>
-    <item id="font.stix.bold" href="fonts/STIXGeneralBol.otf"
-      media-type="application/vnd.ms-opentype"/>
-    <item id="font.stix.bold.italic" href="fonts/STIXGeneralBolIta.otf"
-      media-type="application/vnd.ms-opentype"/>
     <item id="toc" properties="nav" href="toc.xhtml" media-type="application/xhtml+xml"/>
     <item id="copyright" href="copyright.xhtml" media-type="application/xhtml+xml"/>
     <item id="titlepage" href="titlepage.xhtml" media-type="application/xhtml+xml"/>
