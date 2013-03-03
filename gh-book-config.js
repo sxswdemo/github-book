@@ -6,7 +6,7 @@
       'atc/auth': 'gh-book/auth',
       base64: 'lib/github/lib/base64',
       github: 'lib/github/github',
-      angular: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular'
+      angular: 'lib/angular'
     },
     shim: {
       github: {
