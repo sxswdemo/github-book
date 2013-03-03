@@ -6,11 +6,12 @@
       aloha: 'http://wysiwhat.github.com/Aloha-Editor/src/lib/aloha',
       'atc/auth': 'gh-book/auth',
       base64: 'lib/github/lib/base64',
-      github: 'lib/github/github'
+      github: 'lib/github/github',
+      angular: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular'
     },
     shim: {
       github: {
-        deps: ['underscore', 'base64'],
+        deps: ['underscore', 'base64', 'angular'],
         exports: 'Github'
       }
     }

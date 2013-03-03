@@ -14,6 +14,8 @@ require.config
     base64: 'lib/github/lib/base64'
     github: 'lib/github/github'
 
+    angular: 'https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular'
+
 
   # # Shims
   # To support libraries that were not written for AMD
@@ -25,5 +27,5 @@ require.config
 
     # ## Github-Specific libraries
     github:
-      deps: ['underscore', 'base64']
+      deps: ['underscore', 'base64', 'angular']
       exports: 'Github'
