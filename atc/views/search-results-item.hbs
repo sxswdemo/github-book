@@ -6,4 +6,8 @@
   {{else}}
     {{id}}
   {{/if}}
-</a></td><td><!-- modified --></td>
+</a>
+{{#if hasChanged}}
+  <span class="has-changed" title="This has unsaved changes">*</span>
+{{/if}}
+</td><td><!-- modified --></td>

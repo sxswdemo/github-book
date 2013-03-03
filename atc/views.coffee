@@ -98,6 +98,20 @@ define [
     onRender: ->
       @$el.on 'click', => Controller.editModel(@model)
 
+    # Add the hasChanged bit to the resulting JSON so the template can render an asterisk
+    # if this piece of content has unsaved changes
+    templateHelpers: ->
+      # Figure out if the model was just fetched (all the changed attributes used to be 'undefined')
+      # or if the attributes did actually change
+
+      # Delete any properties that were null before
+      changes = @model.changedAttributes() or {}
+      (delete changes[attribute] if not @model.previous(attribute)) for attribute of changes
+
+      # If there was anything that was actually changed (not null before) then mark the save button.
+      return {hasChanged: _.keys(changes).length}
+
+
   # This can also be thought of as the Workspace view
   exports.SearchResultsView = Marionette.CompositeView.extend
     template: SEARCH_RESULT
