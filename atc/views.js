@@ -72,6 +72,18 @@
         return this.$el.on('click', function() {
           return Controller.editModel(_this.model);
         });
+      },
+      templateHelpers: function() {
+        var attribute, changes;
+        changes = this.model.changedAttributes() || {};
+        for (attribute in changes) {
+          if (!this.model.previous(attribute)) {
+            delete changes[attribute];
+          }
+        }
+        return {
+          hasChanged: _.keys(changes).length
+        };
       }
     });
     exports.SearchResultsView = Marionette.CompositeView.extend({
