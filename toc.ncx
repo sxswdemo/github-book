@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ncx PUBLIC '-//NISO//DTD ncx 2005-1//EN' 'http://www.daisy.org/z3986/2005/ncx-2005-1.dtd'>
+
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+  <head>
+    <meta content="http://www.gutenberg.org/ebooks/2701" name="dtb:uid"/>
+    <meta content="2" name="dtb:depth"/>
+    <meta content="0" name="dtb:totalPageCount"/>
+    <meta content="0" name="dtb:maxPageNumber"/>
+  </head>
+  <docTitle>
+    <text>Moby Dick</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="np-1" playOrder="1"><content src="chapter_001.xhtml"/><navLabel><text>Loomings</text></navLabel></navPoint>
+    <navPoint id="np-2" playOrder="2"><content src="chapter_002.xhtml"/><navLabel><text>The Carpet Bag</text></navLabel></navPoint>
+    <navPoint id="np-3" playOrder="3"><content src="chapter_003.xhtml"/><navLabel><text>The Sprouter-Inn</text></navLabel></navPoint>
+    <navPoint id="np-4" playOrder="4"><content src="chapter_004.xhtml"/><navLabel><text>The Counterpane</text></navLabel></navPoint>
+    <navPoint id="np-5" playOrder="5"><content src="chapter_005.xhtml"/><navLabel><text>Breakfast</text></navLabel></navPoint>
+    <navPoint id="np-6" playOrder="6"><content src="chapter_130.xhtml"/><navLabel><text>The Hat</text></navLabel></navPoint>
+    <navPoint id="np-7" playOrder="7"><content src="chapter_131.xhtml"/><navLabel><text>The Pequod Meets The Delight</text></navLabel></navPoint>
+    <navPoint id="np-8" playOrder="8"><content src="chapter_132.xhtml"/><navLabel><text>The Symphony</text></navLabel></navPoint>
+    <navPoint id="np-9" playOrder="9"><content src="chapter_133.xhtml"/><navLabel><text>The Chase - First Day</text></navLabel></navPoint>
+    <navPoint id="np-10" playOrder="10"><content src="chapter_134.xhtml"/><navLabel><text>The Chase - Second Day</text></navLabel></navPoint>
+    <navPoint id="np-11" playOrder="11"><content src="chapter_135.xhtml"/><navLabel><text>The Chase. - Third Day</text></navLabel></navPoint>
+    <navPoint id="np-12" playOrder="12"><content src="chapter_136.xhtml"/><navLabel><text>Epilogue</text></navLabel></navPoint>
+    <navPoint id="np-13" playOrder="13"><content src="copyright.xhtml"/><navLabel><text>Copyright</text></navLabel></navPoint>
+  </navMap>
+</ncx>
