@@ -122,4 +122,13 @@ define [
   #Auth.on 'change:rootPath', resetDesktop
 
 
-  resetDesktop()
+  # Load up the workspace and show the signin modal dialog
+  if not Backbone.History.started
+    Controller.start()
+  Backbone.history.navigate('workspace')
+
+  $signin = jQuery('#sign-in-modal')
+  $signin.modal('show')
+  $signin.on 'hide', ->
+    # Delay so we have a chance to save the login/password if the user clicked "Sign In"
+    setTimeout resetDesktop, 100

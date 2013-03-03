@@ -18,7 +18,7 @@
       },
       errorhandling: true,
       plugins: {
-        load: ['oer/toolbar', 'common/ui', 'common/format', 'common/paste', 'common/block', 'common/list', 'common/table', 'extra/draganddropfiles', 'common/image', 'oer/popover', 'oer/math', 'oer/assorted', 'oer/note'],
+        load: ['oer/toolbar', 'common/ui', 'common/format', 'common/paste', 'common/block', 'common/list', 'common/table', 'extra/draganddropfiles', 'common/image', 'oer/popover', 'oer/math', 'oer/assorted', 'oer/note', 'contrib/angular'],
         draganddropfiles: {
           upload: {
             config: {

@@ -3,7 +3,7 @@
   var __slice = [].slice;
 
   define(['underscore', 'backbone', 'atc/controller', 'atc/models', 'epub/models', 'atc/auth', 'gh-book/views', 'css!atc'], function(_, Backbone, Controller, AtcModels, EpubModels, Auth, Views) {
-    var DEBUG, b, defer, readDir, readFile, resetDesktop, uuid, writeFile;
+    var $signin, DEBUG, b, defer, readDir, readFile, resetDesktop, uuid, writeFile;
     DEBUG = true;
     uuid = b = function(a) {
       if (a) {
@@ -111,7 +111,15 @@
         return resetDesktop();
       }
     });
-    return resetDesktop();
+    if (!Backbone.History.started) {
+      Controller.start();
+    }
+    Backbone.history.navigate('workspace');
+    $signin = jQuery('#sign-in-modal');
+    $signin.modal('show');
+    return $signin.on('hide', function() {
+      return setTimeout(resetDesktop, 100);
+    });
   });
 
 }).call(this);
