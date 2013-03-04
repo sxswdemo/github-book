@@ -145,7 +145,9 @@ define [
     alohaOptions: null
 
     initialize: ->
-      @listenTo @model, "change:#{@modelKey}", (model, value) =>
+      @listenTo @model, "change:#{@modelKey}", (model, value, options) =>
+        return if options.internalAlohaUpdate
+
         alohaId = @$el.attr('id')
         # Sometimes Aloha hasn't loaded up yet
         if alohaId and @$el.parents()[0]
@@ -178,7 +180,8 @@ define [
         if alohaId
           alohaEditable = Aloha.getEditableById(alohaId)
           editableBody = alohaEditable.getContents()
-          @model.set @modelKey, editableBody
+          # Change the contents but do not update the Aloha editable area
+          @model.set @modelKey, editableBody, {internalAlohaUpdate: true}
 
       # Grr, the `aloha-smart-content-changed` can only be listened to globally
       # (via `Aloha.bind`) instead of on each editable.
