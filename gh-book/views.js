@@ -50,6 +50,11 @@
         this.listenTo(AtcModels.ALL_CONTENT, 'sync', disableSave);
         return this.listenTo(AtcModels.ALL_CONTENT, 'reset', disableSave);
       },
+      templateHelpers: function() {
+        return {
+          canFork: this.model.get('username') !== this.model.get('repoUser') || !this.model.get('password')
+        };
+      },
       onRender: function() {
         var _this = this;
         this.$el.find('*[title]').tooltip();
@@ -79,10 +84,10 @@
               if (err) {
                 throw "Problem forking: " + err;
               }
-              alert('Thanks for forking!\nThe current repo (in settings) has been updated to point to your fork. \nThe next time you click Save the changes will (hopefully) be saved to your forked book.\nIf not, refresh the page and change the Repo User in Settings.');
-              return setTimeout(function() {
+              setTimeout(function() {
                 return Auth.set('repoUser', org || Auth.get('username'));
               }, 30000);
+              return alert('Thanks for copying!\nThe current repository (in settings) will be updated to point to your copy of the book. \nThe next time you click Save the changes will be saved to your copied book.\nIf not, refresh the page and change the Repo User in Settings.');
             });
           };
         };
