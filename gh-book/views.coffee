@@ -103,7 +103,7 @@ define [
 
           setTimeout(->
             Auth.set 'repoUser', (org or Auth.get('username'))
-          , 30000)
+          , 10000)
 
           alert 'Thanks for copying!\nThe current repository (in settings) will be updated to point to your copy of the book. \nThe next time you click Save the changes will be saved to your copied book.\nIf not, refresh the page and change the Repo User in Settings.'
 
