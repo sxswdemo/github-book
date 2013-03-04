@@ -64,6 +64,11 @@ define [
       @listenTo AtcModels.ALL_CONTENT, 'sync', disableSave
       @listenTo AtcModels.ALL_CONTENT, 'reset', disableSave
 
+    # Add the `canFork` bit to the resulting JSON so the template knows if the
+    # current user is the same as the current `repoUser` (Do not show the fork button).
+    templateHelpers: ->
+      return {canFork: @model.get('username') != @model.get('repoUser') or not @model.get('password')}
+
     onRender: ->
       # Enable tooltips
       @$el.find('*[title]').tooltip()
@@ -95,11 +100,12 @@ define [
           $fork.modal('hide')
 
           throw "Problem forking: #{err}" if err
-          alert 'Thanks for forking!\nThe current repo (in settings) has been updated to point to your fork. \nThe next time you click Save the changes will (hopefully) be saved to your forked book.\nIf not, refresh the page and change the Repo User in Settings.'
 
           setTimeout(->
-            Auth.set 'repoUser', org or Auth.get('username')
+            Auth.set 'repoUser', (org or Auth.get('username'))
           , 30000)
+
+          alert 'Thanks for copying!\nThe current repository (in settings) will be updated to point to your copy of the book. \nThe next time you click Save the changes will be saved to your copied book.\nIf not, refresh the page and change the Repo User in Settings.'
 
 
       Auth.getUser().orgs (err, orgs) ->
