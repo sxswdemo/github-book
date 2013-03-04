@@ -72,6 +72,18 @@
         return this.$el.on('click', function() {
           return Controller.editModel(_this.model);
         });
+      },
+      templateHelpers: function() {
+        var attribute, changes;
+        changes = this.model.changedAttributes() || {};
+        for (attribute in changes) {
+          if (!this.model.previous(attribute)) {
+            delete changes[attribute];
+          }
+        }
+        return {
+          hasChanged: _.keys(changes).length
+        };
       }
     });
     exports.SearchResultsView = Marionette.CompositeView.extend({
@@ -114,8 +126,11 @@
       alohaOptions: null,
       initialize: function() {
         var _this = this;
-        return this.listenTo(this.model, "change:" + this.modelKey, function(model, value) {
+        return this.listenTo(this.model, "change:" + this.modelKey, function(model, value, options) {
           var alohaEditable, alohaId, editableBody;
+          if (options.internalAlohaUpdate) {
+            return;
+          }
           alohaId = _this.$el.attr('id');
           if (alohaId && _this.$el.parents()[0]) {
             alohaEditable = Aloha.getEditableById(alohaId);
@@ -146,7 +161,9 @@
           if (alohaId) {
             alohaEditable = Aloha.getEditableById(alohaId);
             editableBody = alohaEditable.getContents();
-            return _this.model.set(_this.modelKey, editableBody);
+            return _this.model.set(_this.modelKey, editableBody, {
+              internalAlohaUpdate: true
+            });
           }
         };
         return this.$el.on('blur', updateModelAndSave);

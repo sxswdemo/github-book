@@ -38,6 +38,7 @@ define ['jquery'], (jQuery) ->
         'oer/math'
         'oer/assorted'
         'oer/note'
+        'contrib/angular'
       ]
 
       # This whole thing is what's needed to:
