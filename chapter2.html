@@ -24,15 +24,15 @@
 
 <h3>Interactive Example</h3>
 
-<p>u = (<input type="number" data-model="u1" value="1"/>, <input type="number" data-model="u2" value="2"/>, ..., <input type="number" data-model="um" value="3"/>)</p>
-<p>v = (<input type="number" data-model="v1" value="4"/>, <input type="number" data-model="v2" value="5"/>, ..., <input type="number" data-model="vn" value="6"/>)</p>
+<p>u = (<input type="number" ng-model="u1" value="1"/>, <input type="number" ng-model="u2" value="2"/>, ..., <input type="number" ng-model="um" value="3"/>)</p>
+<p>v = (<input type="number" ng-model="v1" value="4"/>, <input type="number" ng-model="v2" value="5"/>, ..., <input type="number" ng-model="vn" value="6"/>)</p>
 
 <p>their outer product <strong>u ⊗ v</strong> is defined as the <em>m × n</em> matrix <strong>A</strong> obtained by multiplying each element of <strong>u</strong> by each element of <strong>v</strong></p>
 
 <table>
-  <tr><td><span data-bind="u1*v1">4</span></td><td><span data-bind="u1*v2">5</span></td><td>...</td><td><span data-bind="u1*vn">6</span></td></tr>
-  <tr><td><span data-bind="u2*v1">8</span></td><td><span data-bind="u2*v2">10</span></td><td>...</td><td><span data-bind="u2*vn">12</span></td></tr>
+  <tr><td><span ng-bind="u1*v1">4</span></td><td><span ng-bind="u1*v2">5</span></td><td>...</td><td><span ng-bind="u1*vn">6</span></td></tr>
+  <tr><td><span ng-bind="u2*v1">8</span></td><td><span ng-bind="u2*v2">10</span></td><td>...</td><td><span ng-bind="u2*vn">12</span></td></tr>
   <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
-  <tr><td><span data-bind="um*v1">12</span></td><td><span data-bind="um*v2">15</span></td><td>...</td><td><span data-bind="um*vn">18</span></td></tr>
+  <tr><td><span ng-bind="um*v1">12</span></td><td><span ng-bind="um*v2">15</span></td><td>...</td><td><span ng-bind="um*vn">18</span></td></tr>
 </table>
 
