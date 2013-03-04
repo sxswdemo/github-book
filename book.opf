@@ -38,23 +38,23 @@
               href="navigation.html"
               media-type="application/xhtml+xml"/>
 
-        <item id="id-preface"
+        <item id="id-chapter1"
 
-              href="preface.html"
+              href="chapter1.html"
               media-type="application/xhtml+xml"/>
 
-        <item id="id-introduction"
+        <item id="id-chapter2"
 
-              href="introduction.html"
+              href="chapter2.html"
               media-type="application/xhtml+xml"/>
 
     </manifest>
 
     <spine>
 
-      <itemref idref="id-preface"/>
+      <itemref idref="id-chapter1"/>
 
-      <itemref idref="id-introduction"/>
+      <itemref idref="id-chapter2"/>
 
     </spine>
 </package>
